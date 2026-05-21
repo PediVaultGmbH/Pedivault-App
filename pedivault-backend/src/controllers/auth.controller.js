@@ -165,7 +165,6 @@ async function forgotPassword(req, res, next) {
     if (!email) return res.status(400).json({ success: false, error: 'Email is required' });
 
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
-    // Always return 200 — never reveal if email exists
     if (user) await emailSvc.sendPasswordReset(user);
     res.json({ success: true, message: 'If an account exists for that email, a reset link has been sent.' });
   } catch (err) { next(err); }
@@ -203,4 +202,69 @@ async function getMe(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { register, sendOTP, verifyOTP, resendOTP, signIn, refreshToken, signOut, forgotPassword, resetPassword, getMe };
+// ── PUT /api/auth/me ──────────────────────────────────────────────────────────
+async function updateMe(req, res, next) {
+  try {
+    const { firstName, lastName, phone } = req.body;
+    const updated = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        ...(firstName && { firstName }),
+        ...(lastName  && { lastName  }),
+        ...(phone     && { phone     }),
+      },
+    });
+    res.json({ success: true, data: safeUser(updated) });
+  } catch (err) { next(err); }
+}
+
+// ── POST /api/auth/change-password ───────────────────────────────────────────
+async function changePassword(req, res, next) {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ success: false, error: 'currentPassword and newPassword are required' });
+
+    if (newPassword.length < 8)
+      return res.status(400).json({ success: false, error: 'New password must be at least 8 characters' });
+
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const match = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!match)
+      return res.status(400).json({ success: false, error: 'Current password is incorrect' });
+
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    await prisma.user.update({ where: { id: req.user.id }, data: { passwordHash } });
+    await prisma.session.deleteMany({ where: { userId: req.user.id } });
+
+    res.json({ success: true, message: 'Password changed successfully. Please sign in again.' });
+  } catch (err) { next(err); }
+}
+
+// ── GET /api/auth/sessions ────────────────────────────────────────────────────
+async function getSessions(req, res, next) {
+  try {
+    const sessions = await prisma.session.findMany({
+      where: { userId: req.user.id },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ success: true, data: sessions });
+  } catch (err) { next(err); }
+}
+
+// ── DELETE /api/auth/sessions ─────────────────────────────────────────────────
+async function revokeAllSessions(req, res, next) {
+  try {
+    const { refreshToken: rt } = req.body;
+    await prisma.session.deleteMany({
+      where: { userId: req.user.id, NOT: { refreshToken: rt || '' } },
+    });
+    res.json({ success: true, message: 'All other sessions revoked' });
+  } catch (err) { next(err); }
+}
+
+module.exports = {
+  register, sendOTP, verifyOTP, resendOTP, signIn, refreshToken,
+  signOut, forgotPassword, resetPassword, getMe, updateMe,
+  changePassword, getSessions, revokeAllSessions,
+};
