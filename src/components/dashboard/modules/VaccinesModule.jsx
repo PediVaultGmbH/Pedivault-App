@@ -16,7 +16,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
   const [expandAll, setExpandAll] = useState(false);
 
   const childAgeMo = (() => {
-    if (!childDob) return 0;
+    if (!childDob) return 43;
     const d = new Date(childDob), now = new Date();
     return (now.getFullYear() - d.getFullYear()) * 12 + now.getMonth() - d.getMonth();
   })();
@@ -44,7 +44,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
     upcoming:  allDoses.filter(d => d.status === 'upcoming').length,
     total:     allDoses.length,
   };
-  const pct = Math.round((counts.done / counts.total) * 100);
+  const pct = counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0;
 
   const filteredVacc = STIKO.filter(vacc =>
     filter === 'all' || vacc.doses.some(dose => getVaccStatus(vacc.id, dose, records, childAgeMo).status === filter)
@@ -57,7 +57,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
     else setExpanded(v => v === id ? null : id);
   };
 
-  if (extraVaccines.length === 0) return (
+  if (extraVaccines.length === 0 && !activeChild) return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
       <div className="mb">
         <EmptyState color="var(--rose)"
