@@ -306,7 +306,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           const saved = { ...(res.data || entry), _id: (res.data || entry).id || `booking-${Date.now()}` };
           setBookings(prev => ({ ...prev, [activeChild]: [...(prev[activeChild] || []), saved] }));
           showToast('Appointment booked ✓');
-        } catch (err) { console.error('BookVisit error:', err); showToast(err.message || 'Failed to book appointment'); }
+        } catch (err) { showToast(err.message || 'Failed to book appointment'); }
       }} />
 
       <LogVaccineModal open={modal === 'vaccine'} onClose={closeModal} onSuccess={async (entry) => {

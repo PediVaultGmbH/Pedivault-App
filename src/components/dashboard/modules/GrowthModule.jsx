@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import EmptyState from '../ui/EmptyState';
 import { WHO } from '../../../data/growthData';
 import Modal from '../ui/Modal';
@@ -86,30 +86,6 @@ function GrowthChart({ history, field, color, bandKey }) {
   );
 }
 
-function PctBadge({ pct, label, color, delay = 0 }) {
-  const [drawn, setDrawn] = useState(false);
-  const r = 28, circ = 2 * Math.PI * r;
-  useEffect(() => {
-    const t = setTimeout(() => setDrawn(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
-  const dash = drawn ? (pct / 100) * circ : 0;
-  return (
-    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6 }}>
-      <svg width="72" height="72" viewBox="0 0 72 72">
-        <circle cx="36" cy="36" r={r} fill="none" stroke="var(--line2)" strokeWidth="5"/>
-        <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth="5"
-          strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
-          transform="rotate(-90 36 36)"
-          style={{ transition:'stroke-dasharray .9s cubic-bezier(.22,1,.36,1)' }}/>
-        <text x="36" y="37" fontSize="13" fontWeight="600" fill={color} textAnchor="middle" dominantBaseline="middle" fontFamily="'Playfair Display',serif">{pct}</text>
-        <text x="36" y="50" fontSize="7.5" fill="var(--ink-3)" textAnchor="middle">%ile</text>
-      </svg>
-      <div style={{ fontSize:'.52rem', fontWeight:500, color:'var(--ink-2)', textAlign:'center' }}>{label}</div>
-    </div>
-  );
-}
-
 function calcTrend(history, field) {
   const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date));
   if (sorted.length < 2) return null;
@@ -139,7 +115,6 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
     }, 50);
   }, []);
 
-  // ── All history from API only ─────────────────────────────────────────────
   const allHistory = [...extraEntries]
     .map(e => ({
       date:   e.date,
@@ -192,10 +167,10 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         {[
-          { cls:'sc-healthy', lbl:'Weight',     val:curr.weight, unit:'kg', sub:'Current',        subC:'var(--green)',   t:'weight', trend:wTrend },
-          { cls:'sc-info',    lbl:'Height',     val:curr.height, unit:'cm', sub:'Current',        subC:'var(--blue)',    t:'height', trend:hTrend },
-          { cls:'sc-normal',  lbl:'Head Circ.', val:curr.head,   unit:'cm', sub:'Current',        subC:'var(--rose-mid)',t:'head',   trend:null  },
-          { cls:'sc-warning', lbl:'BMI',        val:bmi,         unit:'',   sub:bmiStatus,        subC:'var(--amber)',   t:null,     trend:null  },
+          { cls:'sc-healthy', lbl:'Weight',     val:curr.weight, unit:'kg', sub:'Current', subC:'var(--green)',    t:'weight', trend:wTrend },
+          { cls:'sc-info',    lbl:'Height',     val:curr.height, unit:'cm', sub:'Current', subC:'var(--blue)',     t:'height', trend:hTrend },
+          { cls:'sc-normal',  lbl:'Head Circ.', val:curr.head,   unit:'cm', sub:'Current', subC:'var(--rose-mid)', t:'head',   trend:null   },
+          { cls:'sc-warning', lbl:'BMI',        val:bmi,         unit:'',   sub:bmiStatus, subC:'var(--amber)',    t:null,     trend:null   },
         ].map((s, i) => (
           <div key={i} className={`stat-card ${s.cls}`}
             style={{ cursor: s.t || i === 3 ? 'pointer' : 'default' }}
@@ -315,10 +290,10 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
         <div className="pv-mbody">
           <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
             {[
-              { range:'Below 13', label:'Underweight',   color:'var(--blue)',  desc:'May need nutritional support. Talk to your paediatrician.' },
+              { range:'Below 13', label:'Underweight',    color:'var(--blue)',  desc:'May need nutritional support. Talk to your paediatrician.' },
               { range:'13 – 17',  label:'Healthy weight', color:'var(--green)', desc:'This is the ideal range for most children aged 1–5 years.' },
-              { range:'17 – 19',  label:'Overweight',    color:'var(--amber)', desc:'Monitor diet and activity. No cause for alarm at this stage.' },
-              { range:'Above 19', label:'Obese',         color:'var(--red)',   desc:'Consult your paediatrician for a personalised health plan.' },
+              { range:'17 – 19',  label:'Overweight',     color:'var(--amber)', desc:'Monitor diet and activity. No cause for alarm at this stage.' },
+              { range:'Above 19', label:'Obese',          color:'var(--red)',   desc:'Consult your paediatrician for a personalised health plan.' },
             ].map((b, i) => (
               <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 13px', background:'var(--cream-2)', borderRadius:10, border:'1px solid var(--line2)' }}>
                 <div style={{ width:4, height:36, borderRadius:2, background:b.color, flexShrink:0 }}/>

@@ -96,7 +96,7 @@ GUIDELINES:
 - Never diagnose — guide, inform and reassure
 - If urgent symptoms are described (breathing difficulty, high fever >40°C, rash, seizures), advise contacting a doctor or calling 112 immediately
 - Respond in the same language the parent writes in (English or German)`;
-  }, [activeChild, activeChildData, growthData, vaccineEntries, medications]);
+  }, [activeChild, activeChildData, childName, growthData, vaccineEntries, medications]);
 
   const sendMessage = async (text) => {
     const trimmed = (text || input).trim();
