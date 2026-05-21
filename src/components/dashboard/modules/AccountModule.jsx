@@ -10,40 +10,28 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const CARD_STYLE = {
   style: {
-    base: {
-      fontSize: '13px',
-      color: 'var(--ink)',
-      fontFamily: "'DM Sans', sans-serif",
-      '::placeholder': { color: 'var(--ink-3)' },
-    },
-    invalid: { color: 'var(--red)' },
+    base: { fontSize:'13px', color:'var(--ink)', fontFamily:"'DM Sans', sans-serif", '::placeholder':{ color:'var(--ink-3)' } },
+    invalid: { color:'var(--red)' },
   },
 };
 
-function StripePaymentForm({ plan, onSuccess, onBack }) {
+function StripePaymentForm({ plan, onSuccess }) {
   const stripe   = useStripe();
   const elements = useElements();
-  const [paying, setPaying]   = useState(false);
-  const [error, setError]     = useState('');
+  const [paying, setPaying] = useState(false);
+  const [error, setError]   = useState('');
 
   const handlePay = async () => {
     if (!stripe || !elements) return;
-    setPaying(true);
-    setError('');
+    setPaying(true); setError('');
     try {
       const cardElement = elements.getElement(CardElement);
-      const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
+      const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({ type:'card', card:cardElement });
       if (pmError) { setError(pmError.message); setPaying(false); return; }
       await createSubscription({ plan, paymentMethodId: paymentMethod.id });
       onSuccess();
-    } catch (err) {
-      setError(err.message || 'Payment failed. Please try again.');
-    } finally {
-      setPaying(false);
-    }
+    } catch (err) { setError(err.message || 'Payment failed. Please try again.'); }
+    finally { setPaying(false); }
   };
 
   return (
@@ -59,10 +47,10 @@ function StripePaymentForm({ plan, onSuccess, onBack }) {
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
         <span style={{fontSize:'.5rem',color:'var(--green)',fontWeight:500}}>Encrypted payment · Stripe · PCI DSS compliant</span>
       </div>
-      <div style={{marginTop:10,fontSize:'.46rem',color:'var(--ink-3)'}}>Test card: 4242 4242 4242 4242 · Any future date · Any CVV</div>
+      <div style={{marginTop:10,fontSize:'.46rem',color:'var(--ink-3)'}}>Test card: 4242 4242 4242 4242 · Any future date · Any CVV · Any ZIP</div>
       <button type="button" onClick={handlePay} disabled={paying||!stripe}
         style={{width:'100%',height:44,marginTop:14,borderRadius:12,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.66rem',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,boxShadow:'0 4px 16px rgba(155,58,86,.28)',opacity:paying?.7:1}}>
-        {paying ? <><div style={{width:14,height:14,borderRadius:'50%',border:'2px solid rgba(255,255,255,.3)',borderTopColor:'#fff',animation:'pvSpin .7s linear infinite'}}/> Processing…</> : <>Subscribe {plan==='monthly'?'€4.99/mo':'€44.99/yr'} →</>}
+        {paying?<><div style={{width:14,height:14,borderRadius:'50%',border:'2px solid rgba(255,255,255,.3)',borderTopColor:'#fff',animation:'pvSpin .7s linear infinite'}}/> Processing…</>:<>Subscribe {plan==='monthly'?'€4.99/mo':'€44.99/yr'} →</>}
       </button>
     </div>
   );
@@ -84,6 +72,7 @@ function ToggleSwitch({on, onChange, label, sub, color='var(--rose)'}) {
 
 export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
   const [tab, setTab] = useState('profile');
+  const [userPlan, setUserPlan] = useState(userProfile?.plan || 'FREE');
 
   const [profile, setProfile] = useState({
     firstName: userProfile?.firstName || userName || 'Lena',
@@ -152,6 +141,13 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
     try { await revokeAllSessions(); const res = await getSessions(); setSessions(res?.data || []); } catch (_) {}
     finally { setRevokingAll(false); }
   };
+
+  const handleUpgradeSuccess = () => {
+    setUserPlan('PREMIUM');
+    setUpgradeStep(3);
+  };
+
+  const isPremium = userPlan === 'PREMIUM';
 
   const tabs = [
     {k:'profile',      icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0112 0v1"/></svg>, label:'Profile'},
@@ -266,7 +262,7 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)',marginBottom:4}}>Payment details</div>
             <div style={{fontSize:'.52rem',color:'var(--ink-3)',marginBottom:18}}>{plan==='monthly'?'€4.99/month · cancel anytime':'€44.99/year · 25% saving vs monthly'}</div>
             <Elements stripe={stripePromise}>
-              <StripePaymentForm plan={plan} onSuccess={()=>setUpgradeStep(3)} onBack={()=>setUpgradeStep(1)}/>
+              <StripePaymentForm plan={plan} onSuccess={handleUpgradeSuccess}/>
             </Elements>
           </div>
         )}
@@ -277,6 +273,11 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
             </div>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.3rem',color:'var(--ink)'}}>Welcome to Premium!</div>
             <div style={{fontSize:'.56rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.8,maxWidth:280}}>Your account has been upgraded. All Premium features are now active. Thank you for supporting PediVault! 🌸</div>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center'}}>
+              {['5 children','50 GB storage','Unlimited AI','Certificates','Priority support'].map(f=>(
+                <span key={f} style={{fontSize:'.46rem',fontWeight:500,color:'var(--rose)',background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',borderRadius:20,padding:'3px 10px'}}>{f}</span>
+              ))}
+            </div>
             <button type="button" onClick={()=>setUpgradeStep(0)} style={{height:40,padding:'0 28px',borderRadius:12,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.62rem',fontWeight:600,cursor:'pointer',boxShadow:'0 4px 16px rgba(155,58,86,.28)',marginTop:4}}>
               Start exploring Premium →
             </button>
@@ -285,16 +286,18 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
       </Modal>
 
       {/* HERO */}
-      <div style={{background:'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.8))',border:'1.5px solid var(--rose-lt)',borderRadius:20,padding:'24px',marginBottom:22,display:'flex',alignItems:'center',gap:18,position:'relative',overflow:'hidden'}}>
-        <div style={{position:'absolute',right:-30,top:-30,width:120,height:120,borderRadius:'50%',background:'var(--rose-lt)',opacity:.3,pointerEvents:'none'}}/>
-        <div style={{width:70,height:70,borderRadius:20,flexShrink:0,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'2px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Playfair Display',serif",fontSize:'1.8rem',color:'var(--rose)',boxShadow:'0 4px 20px rgba(155,58,86,.2)',position:'relative',zIndex:1}}>
+      <div style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.08),rgba(255,255,255,.9))':'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.8))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'24px',marginBottom:22,display:'flex',alignItems:'center',gap:18,position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',right:-30,top:-30,width:120,height:120,borderRadius:'50%',background:isPremium?'var(--green-lt)':'var(--rose-lt)',opacity:.3,pointerEvents:'none'}}/>
+        <div style={{width:70,height:70,borderRadius:20,flexShrink:0,background:isPremium?'linear-gradient(135deg,var(--green-bg),var(--green-lt))':'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:`2px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Playfair Display',serif",fontSize:'1.8rem',color:isPremium?'var(--green)':'var(--rose)',boxShadow:`0 4px 20px ${isPremium?'rgba(42,158,98,.2)':'rgba(155,58,86,.2)'}`,position:'relative',zIndex:1}}>
           {(profile.firstName||userName||'L')[0]}
         </div>
         <div style={{position:'relative',zIndex:1}}>
           <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.3rem',fontWeight:400,color:'var(--ink)',marginBottom:3}}>{profile.firstName} {profile.lastName}</div>
           <div style={{fontSize:'.56rem',color:'var(--ink-3)',marginBottom:8}}>{profile.email}</div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-            <span style={{fontSize:'.46rem',fontWeight:600,color:'var(--rose)',background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',borderRadius:20,padding:'2px 8px'}}>FREE PLAN</span>
+            <span style={{fontSize:'.46rem',fontWeight:600,color:isPremium?'var(--green)':'var(--rose)',background:isPremium?'var(--green-bg)':'var(--rose-pale)',border:`1px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'2px 8px'}}>
+              {isPremium?'✨ PREMIUM':'FREE PLAN'}
+            </span>
             <span style={{fontSize:'.46rem',fontWeight:500,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:20,padding:'2px 8px',display:'flex',alignItems:'center',gap:4}}>
               <div style={{width:5,height:5,borderRadius:'50%',background:'var(--green)'}}/>Active
             </span>
@@ -356,7 +359,7 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
               {profileError && <div style={{fontSize:'.52rem',color:'var(--red)'}}>{profileError}</div>}
               {profileSaved && <div style={{display:'flex',alignItems:'center',gap:6,fontSize:'.54rem',color:'var(--green)'}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>Changes saved</div>}
               <button type="button" onClick={handleSaveProfile} disabled={profileSaving} style={{height:36,padding:'0 20px',borderRadius:10,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.6rem',fontWeight:500,cursor:'pointer',boxShadow:'0 2px 10px rgba(155,58,86,.28)',opacity:profileSaving?.6:1}}>
-                {profileSaving ? 'Saving…' : 'Save changes'}
+                {profileSaving?'Saving…':'Save changes'}
               </button>
             </div>
           </div>
@@ -389,9 +392,7 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
             {pwdMsg&&<div style={{fontSize:'.52rem',color:'var(--green)',marginBottom:8}}>{pwdMsg}</div>}
             <div style={{display:'flex',justifyContent:'flex-end',marginTop:4}}>
               <button type="button" onClick={handleChangePassword} disabled={pwdSaving||!pwd.current||!pwd.next||pwd.next!==pwd.confirm}
-                style={{height:36,padding:'0 20px',borderRadius:10,border:'none',fontSize:'.6rem',fontWeight:500,cursor:'pointer',transition:'all .2s',opacity:pwdSaving?.6:1,
-                  background:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'var(--rose)':'var(--cream-2)',
-                  color:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'#fff':'var(--ink-3)'}}>
+                style={{height:36,padding:'0 20px',borderRadius:10,border:'none',fontSize:'.6rem',fontWeight:500,cursor:'pointer',transition:'all .2s',opacity:pwdSaving?.6:1,background:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'var(--rose)':'var(--cream-2)',color:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'#fff':'var(--ink-3)'}}>
                 {pwdSaving?'Updating…':'Update password'}
               </button>
             </div>
@@ -456,57 +457,71 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
       {/* PLAN TAB */}
       {tab==='plan' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
-          <div className="card" style={{background:'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.9))',border:'1.5px solid var(--rose-lt)'}}>
+          <div className="card" style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.06),rgba(255,255,255,.9))':'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.9))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`}}>
             <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12,marginBottom:16}}>
               <div>
                 <div style={{fontSize:'.48rem',fontWeight:600,letterSpacing:'.2em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:4}}>Current plan</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.5rem',color:'var(--ink)',lineHeight:1,marginBottom:6}}>Free</div>
-                <div style={{fontSize:'.54rem',color:'var(--ink-3)'}}>Up to 2 children · 500 MB storage · Basic features</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.5rem',color:'var(--ink)',lineHeight:1,marginBottom:6}}>{isPremium?'Premium':'Free'}</div>
+                <div style={{fontSize:'.54rem',color:'var(--ink-3)'}}>{isPremium?'Unlimited children · 50 GB storage · All features':'Up to 2 children · 500 MB storage · Basic features'}</div>
               </div>
-              <span style={{fontSize:'.46rem',fontWeight:700,color:'var(--rose)',background:'var(--rose-pale)',border:'1.5px solid var(--rose-lt)',borderRadius:20,padding:'3px 10px',flexShrink:0}}>FREE</span>
+              <span style={{fontSize:'.46rem',fontWeight:700,color:isPremium?'var(--green)':'var(--rose)',background:isPremium?'var(--green-bg)':'var(--rose-pale)',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'3px 10px',flexShrink:0}}>{isPremium?'✨ PREMIUM':'FREE'}</span>
             </div>
-            <div style={{marginBottom:16}}>
-              <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
-                <span style={{fontSize:'.5rem',color:'var(--ink-3)'}}>Storage used</span>
-                <span style={{fontSize:'.5rem',fontWeight:500,color:'var(--ink)'}}>12.4 MB of 500 MB</span>
+            {!isPremium && (
+              <>
+                <div style={{marginBottom:16}}>
+                  <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
+                    <span style={{fontSize:'.5rem',color:'var(--ink-3)'}}>Storage used</span>
+                    <span style={{fontSize:'.5rem',fontWeight:500,color:'var(--ink)'}}>12.4 MB of 500 MB</span>
+                  </div>
+                  <div style={{height:6,borderRadius:3,background:'var(--line2)',overflow:'hidden'}}>
+                    <div style={{height:'100%',width:'2.5%',borderRadius:3,background:'linear-gradient(90deg,var(--rose),var(--rose-mid))',transition:'width .6s ease'}}/>
+                  </div>
+                  <div style={{fontSize:'.46rem',color:'var(--ink-3)',marginTop:4}}>487.6 MB remaining</div>
+                </div>
+                <button type="button" onClick={()=>setUpgradeStep(1)} style={{width:'100%',height:42,borderRadius:12,border:'none',background:'var(--rose)',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'.66rem',fontWeight:600,cursor:'pointer',transition:'opacity .15s',boxShadow:'0 4px 16px rgba(155,58,86,.32)',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                  Upgrade to Premium — €4.99/mo
+                </button>
+              </>
+            )}
+            {isPremium && (
+              <div style={{padding:'12px',background:'var(--green-bg)',borderRadius:10,border:'1px solid var(--green-lt)',display:'flex',alignItems:'center',gap:8}}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>All Premium features are active on your account.</span>
               </div>
-              <div style={{height:6,borderRadius:3,background:'var(--line2)',overflow:'hidden'}}>
-                <div style={{height:'100%',width:'2.5%',borderRadius:3,background:'linear-gradient(90deg,var(--rose),var(--rose-mid))',transition:'width .6s ease'}}/>
-              </div>
-              <div style={{fontSize:'.46rem',color:'var(--ink-3)',marginTop:4}}>487.6 MB remaining</div>
-            </div>
-            <button type="button" onClick={()=>setUpgradeStep(1)} style={{width:'100%',height:42,borderRadius:12,border:'none',background:'var(--rose)',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'.66rem',fontWeight:600,cursor:'pointer',transition:'opacity .15s',boxShadow:'0 4px 16px rgba(155,58,86,.32)',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              Upgrade to Premium — €4.99/mo
-            </button>
+            )}
           </div>
-          <div className="card">
-            <div className="sh" style={{marginBottom:14}}><div className="sh-title">Free vs Premium</div></div>
-            {[
-              {feature:'Children profiles',free:'Up to 2',premium:'Unlimited'},
-              {feature:'Storage',free:'500 MB',premium:'10 GB'},
-              {feature:'AI Assistant',free:'Basic',premium:'Full context, history'},
-              {feature:'Record export',free:'PDF only',premium:'PDF, CSV, HL7 FHIR'},
-              {feature:'Doctor sharing',free:'Manual PDF',premium:'Direct secure link'},
-              {feature:'Vaccine reminders',free:'Email',premium:'Email + SMS + Push'},
-              {feature:'Priority support',free:false,premium:true},
-              {feature:'Family plan sharing',free:false,premium:true},
-            ].map((r,i)=>(
-              <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,padding:'9px 0',borderBottom:i<7?'1px solid var(--line2)':'none',alignItems:'center'}}>
-                <div style={{fontSize:'.58rem',color:'var(--ink)',fontWeight:400}}>{r.feature}</div>
-                <div style={{fontSize:'.54rem',color:'var(--ink-3)',textAlign:'center'}}>{r.free===false?<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>:r.free}</div>
-                <div style={{fontSize:'.54rem',color:'var(--rose)',textAlign:'center',fontWeight:500}}>{r.premium===true?<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>:r.premium}</div>
+          {!isPremium && (
+            <div className="card">
+              <div className="sh" style={{marginBottom:14}}><div className="sh-title">Free vs Premium</div></div>
+              {[
+                {feature:'Children profiles',free:'Up to 2',premium:'Unlimited'},
+                {feature:'Storage',free:'500 MB',premium:'10 GB'},
+                {feature:'AI Assistant',free:'Basic',premium:'Full context, history'},
+                {feature:'Record export',free:'PDF only',premium:'PDF, CSV, HL7 FHIR'},
+                {feature:'Doctor sharing',free:'Manual PDF',premium:'Direct secure link'},
+                {feature:'Vaccine reminders',free:'Email',premium:'Email + SMS + Push'},
+                {feature:'Priority support',free:false,premium:true},
+                {feature:'Family plan sharing',free:false,premium:true},
+              ].map((r,i)=>(
+                <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,padding:'9px 0',borderBottom:i<7?'1px solid var(--line2)':'none',alignItems:'center'}}>
+                  <div style={{fontSize:'.58rem',color:'var(--ink)',fontWeight:400}}>{r.feature}</div>
+                  <div style={{fontSize:'.54rem',color:'var(--ink-3)',textAlign:'center'}}>{r.free===false?<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>:r.free}</div>
+                  <div style={{fontSize:'.54rem',color:'var(--rose)',textAlign:'center',fontWeight:500}}>{r.premium===true?<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>:r.premium}</div>
+                </div>
+              ))}
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginTop:6,paddingTop:6}}>
+                <div/><div style={{fontSize:'.5rem',fontWeight:600,color:'var(--ink-3)',textAlign:'center',letterSpacing:'.08em'}}>FREE</div>
+                <div style={{fontSize:'.5rem',fontWeight:600,color:'var(--rose)',textAlign:'center',letterSpacing:'.08em'}}>PREMIUM</div>
               </div>
-            ))}
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginTop:6,paddingTop:6}}>
-              <div/><div style={{fontSize:'.5rem',fontWeight:600,color:'var(--ink-3)',textAlign:'center',letterSpacing:'.08em'}}>FREE</div>
-              <div style={{fontSize:'.5rem',fontWeight:600,color:'var(--rose)',textAlign:'center',letterSpacing:'.08em'}}>PREMIUM</div>
             </div>
-          </div>
+          )}
           <div className="card">
             <div className="sh" style={{marginBottom:12}}><div className="sh-title">Billing Information</div></div>
             <div style={{padding:'14px',background:'var(--cream-2)',borderRadius:12,border:'1px solid var(--line2)',textAlign:'center'}}>
-              <div style={{fontSize:'.56rem',color:'var(--ink-3)',lineHeight:1.7}}>You are on the free plan.<br/>No billing information on file.</div>
+              <div style={{fontSize:'.56rem',color:'var(--ink-3)',lineHeight:1.7}}>
+                {isPremium?'You are on the Premium plan.\nManage your subscription via your payment provider.':'You are on the free plan.\nNo billing information on file.'}
+              </div>
             </div>
           </div>
         </div>
