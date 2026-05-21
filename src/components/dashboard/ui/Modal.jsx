@@ -6,34 +6,28 @@ export function Modal({open,onClose,maxWidth=480,children}) {
   const initializedRef = useRef(false);
   const cleanupRef     = useRef(null);
 
-  /* Synchronous ref update — no useEffect, no render cycle, zero side-effects */
   onCloseRef.current = onClose;
 
   useEffect(()=>{
-    /* ── CLOSING ── */
     if(!open){
       if(cleanupRef.current){ cleanupRef.current(); cleanupRef.current=null; }
       initializedRef.current = false;
       return;
     }
 
-    /* ── ALREADY OPEN — do absolutely nothing (user is typing) ── */
     if(initializedRef.current) return;
     initializedRef.current = true;
 
-    /* Lock page scroll */
     const page = document.querySelector('.pv-page');
     const prevOverflow = page ? page.style.overflowY : '';
     if(page) page.style.overflowY = 'hidden';
 
-    /* Block mouse-wheel / touch scroll passing through overlay */
     const blockScroll = e => {
       if(!modalRef.current?.contains(e.target)) e.preventDefault();
     };
     document.addEventListener('wheel',     blockScroll, {passive:false});
     document.addEventListener('touchmove', blockScroll, {passive:false});
 
-    /* Focus first element once */
     const prevFocus = document.activeElement;
     const t = setTimeout(()=>{
       const els = modalRef.current?.querySelectorAll(
@@ -42,7 +36,6 @@ export function Modal({open,onClose,maxWidth=480,children}) {
       els?.[0]?.focus();
     }, 60);
 
-    /* Keyboard: Escape + Tab-trap */
     const onKey = e => {
       if(e.key==='Escape'){ onCloseRef.current(); return; }
       if(e.key==='Tab' && modalRef.current){
@@ -57,7 +50,6 @@ export function Modal({open,onClose,maxWidth=480,children}) {
     };
     document.addEventListener('keydown', onKey);
 
-    /* Store cleanup so it runs exactly once on close */
     cleanupRef.current = ()=>{
       clearTimeout(t);
       document.removeEventListener('keydown',   onKey);
@@ -66,13 +58,13 @@ export function Modal({open,onClose,maxWidth=480,children}) {
       if(page) page.style.overflowY = prevOverflow;
       if(prevFocus?.focus) prevFocus.focus();
     };
-  }); /* No deps — runs every render, gated by initializedRef */
+  });
 
   return (
     <div className={`pv-overlay${open?' open':''}`}
       onClick={e=>{ if(e.target===e.currentTarget) onCloseRef.current(); }}
       role="dialog" aria-modal="true">
-      <div className="pv-modal" style={{maxWidth}} ref={modalRef}>{children}</div>
+      <div className="pv-modal" style={{maxWidth, borderRadius:20}} ref={modalRef}>{children}</div>
     </div>
   );
 }

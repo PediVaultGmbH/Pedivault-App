@@ -32,6 +32,8 @@ export function Header({
     })),
   ];
 
+  const activeChildName = allChildren.find(c => c.id === activeChild)?.name?.split(' ')[0] || 'there';
+
   return (
     <header className="pv-header">
 
@@ -47,7 +49,7 @@ export function Header({
       {isHome
         ? <div className="pv-hdr-greeting">
             <div className="pv-hdr-hi">{greeting}</div>
-            <div className="pv-hdr-name">Hello, <em>there</em> 👋</div>
+            <div className="pv-hdr-name">Hello, <em>{activeChildName}</em> 👋</div>
           </div>
         : <div className="pv-hdr-title">{titles[active] || active}</div>
       }
@@ -59,7 +61,7 @@ export function Header({
             className={`pv-ctab${activeChild === c.id ? ' sel' : ''}`}
             {...a11yClick(() => onChildSelect(c.id))}
             role="tab" aria-selected={activeChild === c.id} aria-label={c.name}>
-            <div className="pv-ctab-av" style={{background: c.color + '22', color: c.color}}>{c.lbl}</div>
+            <div className="pv-ctab-av" style={{background: c.color + '33', color: c.color, fontWeight:700}}>{c.lbl}</div>
             <span className="pv-ctab-name">{c.name}</span>
             <div className="pv-ctab-dot" style={{background: c.color}}/>
           </div>
@@ -77,9 +79,9 @@ export function Header({
           <button key={c.id} type="button" onClick={() => onChildSelect(c.id)} aria-label={c.name}
             style={{
               height:28, padding:'0 10px', borderRadius:20, flexShrink:0,
-              border:`1.5px solid ${activeChild === c.id ? c.color : 'var(--line2)'}`,
-              background: activeChild === c.id ? c.color + '18' : 'var(--cream-2)',
-              color: activeChild === c.id ? c.color : 'var(--ink-3)',
+              border:`1.5px solid ${activeChild === c.id ? c.color : 'var(--line)'}`,
+              background: activeChild === c.id ? c.color + '22' : 'var(--white)',
+              color: activeChild === c.id ? c.color : 'var(--ink-2)',
               fontFamily:"'DM Sans',sans-serif", fontSize:'.62rem', fontWeight:600,
               cursor:'pointer', transition:'all .15s',
               display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5,

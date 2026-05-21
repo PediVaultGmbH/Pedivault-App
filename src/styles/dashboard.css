@@ -754,19 +754,19 @@ select.fi{
   .pv-med-card { padding: 12px 14px; }
 
   /* ── Modal fills screen ── */
-  .pv-modal {
+ .pv-modal {
     max-width: calc(100vw - 16px) !important;
     max-height: 92vh !important;
     margin: 0 8px;
-    border-radius: 18px !important;
+    border-radius: 20px !important;
   }
   .pv-overlay { align-items: flex-end; padding-bottom: 0; }
   .pv-overlay .pv-modal {
-    border-radius: 22px 22px 0 0 !important;
+    border-radius: 22px !important;
     max-height: 94vh !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0;
+    margin: 0 8px;
   }
 
   /* ── Hide logout text, show icon only on tiny screens ── */
@@ -878,4 +878,10 @@ input, select, textarea {
   .pv-in, .pv-sel {
     font-size: .67rem !important;
   }
+}
+
+/* ── Modal success rounded corners fix ── */
+.pv-modal-success {
+  border-radius: 20px;
+  overflow: hidden;
 }
