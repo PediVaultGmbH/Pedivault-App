@@ -18,7 +18,8 @@ async function createSubscription(req, res, next) {
       await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethodId } });
     }
     const subscription = await stripe.subscriptions.create({ customer: customerId, items: [{ price: PRICES[plan] }], expand: ['latest_invoice.payment_intent'] });
-    await prisma.user.update({ where: { id: user.id }, data: { stripeSubscriptionId: subscription.id, plan: 'PREMIUM', planExpiresAt: new Date(subscription.current_period_end * 1000) } });
+    const periodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
+    await prisma.user.update({ where: { id: user.id }, data: { stripeSubscriptionId: subscription.id, plan: 'PREMIUM', planExpiresAt: periodEnd } });
     const clientSecret = subscription.latest_invoice && subscription.latest_invoice.payment_intent ? subscription.latest_invoice.payment_intent.client_secret : null;
     res.json({ success: true, subscriptionId: subscription.id, status: subscription.status, clientSecret: clientSecret });
   } catch (err) { next(err); }
@@ -29,7 +30,8 @@ async function getSubscription(req, res, next) {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     if (!user.stripeSubscriptionId) return res.json({ success: true, data: { plan: 'FREE', status: 'none' } });
     const sub = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-    res.json({ success: true, data: { plan: user.plan || 'FREE', status: sub.status, currentPeriodEnd: new Date(sub.current_period_end * 1000), cancelAtPeriodEnd: sub.cancel_at_period_end } });
+    const periodEnd = sub.current_period_end ? new Date(sub.current_period_end * 1000) : null;
+    res.json({ success: true, data: { plan: user.plan || 'FREE', status: sub.status, currentPeriodEnd: periodEnd, cancelAtPeriodEnd: sub.cancel_at_period_end } });
   } catch (err) { next(err); }
 }
 
@@ -54,7 +56,8 @@ async function webhook(req, res) {
     await prisma.user.updateMany({ where: { stripeSubscriptionId: event.data.object.id }, data: { plan: 'FREE', stripeSubscriptionId: null, planExpiresAt: null } });
   }
   if (event.type === 'invoice.payment_succeeded') {
-    await prisma.user.updateMany({ where: { stripeCustomerId: event.data.object.customer }, data: { plan: 'PREMIUM', planExpiresAt: new Date(event.data.object.period_end * 1000) } });
+    const periodEnd = event.data.object.period_end ? new Date(event.data.object.period_end * 1000) : null;
+    await prisma.user.updateMany({ where: { stripeCustomerId: event.data.object.customer }, data: { plan: 'PREMIUM', planExpiresAt: periodEnd } });
   }
   res.json({ received: true });
 }
