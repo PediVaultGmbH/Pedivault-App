@@ -140,7 +140,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
 
   const handleChildAdded = useCallback((childData) => {
     const id = childData.id || (childData.name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now());
-    setApiChildren(prev => [...prev, { id, name: childData.name, color: childData.color || '#C47A92', gender: childData.gender }]);
+    setApiChildren(prev => [...prev, { id, name: childData.name, color: childData.color || '#C47A92', gender: childData.gender, dateOfBirth: childData.dob || childData.dateOfBirth }]);
     setChildIdMap(prev => ({ ...prev, [id]: id }));
     onChildSelect(id);
     showToast(`${childData.name} added — switched to their records`);
