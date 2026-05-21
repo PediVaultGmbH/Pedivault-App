@@ -180,13 +180,13 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
   })();
 
   const transformedVacc = vaccineEntries[`${activeChild}_transformed`] || {};
-  const allDoses = STIKO.flatMap(v => v.doses.map(d => ({ vacc: v, dose: d, ...getVaccStatus(v.id, d, transformedVacc, childAgeMo) })));
+  const allDoses = apiChildren.length > 0 ? STIKO.flatMap(v => v.doses.map(d => ({ vacc: v, dose: d, ...getVaccStatus(v.id, d, transformedVacc, childAgeMo) }))) : [];
   const vaccStats = {
     done:    allDoses.filter(d => d.status === 'done').length,
     overdue: allDoses.filter(d => d.status === 'overdue').length,
     dueSoon: allDoses.filter(d => d.status === 'due-soon').length,
     total:   allDoses.length,
-    pct:     Math.round(allDoses.filter(d => d.status === 'done').length / allDoses.length * 100),
+    pct:     allDoses.length > 0 ? Math.round(allDoses.filter(d => d.status === 'done').length / allDoses.length * 100) : 0,
   };
   const overdueList = allDoses.filter(d => d.status === 'overdue').map(d => ({ name: d.vacc.name, dose: d.dose.dose }));
 
