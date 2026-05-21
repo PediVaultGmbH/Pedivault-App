@@ -287,7 +287,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           />
         ) : active === 'support' ? (
           <SupportModule onNav={navigate} showToast={showToast} />
-        ) ) : active === 'account' ? (
+        ) : active === 'account' ? (
           <AccountModule userName={userName} userProfile={userProfile} onSignOut={() => showModal('signout')} />
         ) : (
           <ComingSoon module={active} />
