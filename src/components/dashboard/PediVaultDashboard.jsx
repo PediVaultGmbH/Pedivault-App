@@ -222,7 +222,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
       <div className={`pv-sb-overlay${sidebarOpen ? ' open' : ''}`} onClick={() => setSidebarOpen(false)} />
       {(searchOpen || notifOpen) && <div style={{ position: 'fixed', inset: 0, zIndex: 25 }} onClick={() => { setSearchOpen(false); setNotifOpen(false); }} />}
 
-      <Sidebar active={active} onNav={navigate} onSignOut={() => showModal('signout')} open={sidebarOpen} extraChildren={extraChildren} userName={userName} />
+      <Sidebar active={active} onNav={navigate} onSignOut={() => showModal('signout')} open={sidebarOpen} extraChildren={extraChildren} apiChildren={apiChildren} userName={userName} />
 
       <div className="pv-main">
         <Header

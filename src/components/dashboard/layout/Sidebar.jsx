@@ -3,8 +3,8 @@ import { NAV } from '../../../data/navConfig';
 import FlowerLogo from '../ui/FlowerLogo';
 import { a11yClick } from '../../../utils/a11y';
 
-export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],userName='Lena'}) {
-  const childCount = 2 + extraChildren.length;
+export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildren=[],userName='Lena'}) {
+  const childCount = apiChildren.length + extraChildren.length;
   const [ripple, setRipple] = useState(null);
   const handleNav = (id) => {
     setRipple(id);
