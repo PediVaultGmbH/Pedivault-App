@@ -1,0 +1,216 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USERS ────────────────────────────────────────────────────────────────────
+model User {
+  id            String    @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String    @unique
+  phone         String    @unique
+  countryCode   String    @default("+49")
+  passwordHash  String
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  children      Child[]
+  otps          Otp[]
+  sessions      Session[]
+
+  @@map("users")
+}
+
+// ─── OTP ──────────────────────────────────────────────────────────────────────
+model Otp {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  type      OtpType
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("otps")
+}
+
+enum OtpType {
+  REGISTRATION
+  PASSWORD_RESET
+  LOGIN_2FA
+}
+
+// ─── SESSIONS ─────────────────────────────────────────────────────────────────
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  refreshToken String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// ─── CHILDREN ─────────────────────────────────────────────────────────────────
+model Child {
+  id          String    @id @default(uuid())
+  userId      String
+  name        String
+  dateOfBirth DateTime
+  gender      Gender
+  bloodType   String?
+  allergies   String[]  @default([])
+  color       String    @default("#C47A92")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vaccines        VaccineRecord[]
+  growthEntries   GrowthEntry[]
+  records         MedicalRecord[]
+  appointments    Appointment[]
+  medications     Medication[]
+
+  @@map("children")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// ─── VACCINES ─────────────────────────────────────────────────────────────────
+model VaccineRecord {
+  id          String   @id @default(uuid())
+  childId     String
+  vaccineId   String
+  vaccineName String
+  dose        String
+  date        DateTime
+  doctor      String?
+  clinic      String?
+  notes       String?
+  batchNumber String?
+  createdAt   DateTime @default(now())
+
+  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("vaccine_records")
+}
+
+// ─── GROWTH ───────────────────────────────────────────────────────────────────
+model GrowthEntry {
+  id          String   @id @default(uuid())
+  childId     String
+  date        DateTime
+  weightKg    Float
+  heightCm    Float?
+  headCm      Float?
+  measuredBy  String?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("growth_entries")
+}
+
+// ─── MEDICAL RECORDS ──────────────────────────────────────────────────────────
+model MedicalRecord {
+  id          String       @id @default(uuid())
+  childId     String
+  name        String
+  type        RecordType
+  source      String?
+  date        DateTime     @default(now())
+  fileUrl     String?
+  fileKey     String?
+  notes       String?
+  createdAt   DateTime     @default(now())
+
+  child       Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("medical_records")
+}
+
+enum RecordType {
+  LAB_REPORT
+  PRESCRIPTION
+  SCAN
+  VACCINATION_CARD
+  GROWTH_CHART
+  OTHER
+}
+
+// ─── APPOINTMENTS ─────────────────────────────────────────────────────────────
+model Appointment {
+  id          String            @id @default(uuid())
+  childId     String
+  type        String
+  doctor      String?
+  clinic      String?
+  date        DateTime
+  time        String?
+  notes       String?
+  status      AppointmentStatus @default(UPCOMING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  child       Child             @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  UPCOMING
+  COMPLETED
+  CANCELLED
+}
+
+// ─── MEDICATIONS ──────────────────────────────────────────────────────────────
+model Medication {
+  id          String           @id @default(uuid())
+  childId     String
+  name        String
+  dosage      String
+  frequency   String
+  startDate   DateTime
+  endDate     DateTime?
+  prescribedBy String?
+  type        MedicationType   @default(OTHER)
+  status      MedicationStatus @default(ACTIVE)
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  child       Child            @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("medications")
+}
+
+enum MedicationType {
+  ANTIBIOTIC
+  VITAMIN
+  PAINKILLER
+  ALLERGY
+  CHRONIC
+  OTHER
+}
+
+enum MedicationStatus {
+  ACTIVE
+  COMPLETED
+  DISCONTINUED
+}

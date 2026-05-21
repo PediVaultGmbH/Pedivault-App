@@ -1,0 +1,29 @@
+{
+  "name": "PediVault",
+  "short_name": "PediVault",
+  "description": "Your child's complete health record — vaccines, growth, appointments and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#9B3A56",
+  "background_color": "#FFFCF8",
+  "lang": "en",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-72.png",  "sizes": "72x72",   "type": "image/png" },
+    { "src": "/icons/icon-96.png",  "sizes": "96x96",   "type": "image/png" },
+    { "src": "/icons/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/icons/icon-144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/icons/icon-152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Home Dashboard",  "url": "/",            "description": "View today's health summary" },
+    { "name": "Vaccines",        "url": "/?module=vaccines",     "description": "Check vaccine schedule" },
+    { "name": "Appointments",    "url": "/?module=appointments", "description": "View upcoming visits" },
+    { "name": "AI Assistant",    "url": "/?module=ai-assist",    "description": "Ask health questions" }
+  ],
+  "prefer_related_applications": false
+}

@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    // ── Formatting & Linting ────────────────────────────────────────────────
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+
+    // ── React / JSX ─────────────────────────────────────────────────────────
+    "dsznajder.es7-react-js-snippets",
+    "formulahendry.auto-rename-tag",
+    "steoates.autoimport",
+
+    // ── CSS ──────────────────────────────────────────────────────────────────
+    "ecmel.vscode-html-css",
+    "pranaygp.vscode-css-peek",
+
+    // ── Git ───────────────────────────────────────────────────────────────────
+    "eamodio.gitlens",
+
+    // ── Utilities ─────────────────────────────────────────────────────────────
+    "christian-kohler.path-intellisense",
+    "usernamehw.errorlens",
+    "wayou.vscode-todo-highlight",
+    "pkief.material-icon-theme"
+  ]
+}
