@@ -42,7 +42,7 @@ import { SupportModule } from './modules/SupportModule';
 import { AccountModule } from './modules/AccountModule';
 import ComingSoon from './modules/ComingSoon';
 
-export default function PediVaultDashboard({ onSignOut, activeChild, onChildSelect, userName = 'Lena' }) {
+export default function PediVaultDashboard({ onSignOut, activeChild, onChildSelect, userName = 'Lena', userProfile = null }) {
   const [active, setActive]           = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen]   = useState(false);
@@ -287,8 +287,8 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           />
         ) : active === 'support' ? (
           <SupportModule onNav={navigate} showToast={showToast} />
-        ) : active === 'account' ? (
-          <AccountModule userName={userName} onSignOut={() => showModal('signout')} />
+        ) ) : active === 'account' ? (
+          <AccountModule userName={userName} userProfile={userProfile} onSignOut={() => showModal('signout')} />
         ) : (
           <ComingSoon module={active} />
         )}

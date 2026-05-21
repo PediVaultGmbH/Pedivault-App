@@ -9,6 +9,7 @@ export default function App() {
   const [authed, setAuthed]           = useState(false);
   const [activeChild, setActiveChild] = useState('');
   const [userName, setUserName]       = useState('');
+  const [userProfile, setUserProfile] = useState(null);
   const [checking, setChecking]       = useState(true);
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function App() {
       .then(res => {
         const user = res.data || res;
         if (user?.firstName) setUserName(user.firstName);
+        setUserProfile(user);
         return getChildren();
       })
       .then(res => {
@@ -38,6 +40,12 @@ export default function App() {
     if (name) setUserName(name);
 
     try {
+      const meRes = await getMe();
+      const user = meRes.data || meRes;
+      setUserProfile(user);
+    } catch (_) {}
+
+    try {
       const res = await getChildren();
       const list = res?.data || [];
       if (list.length > 0) setActiveChild(list[0].id);
@@ -55,6 +63,7 @@ export default function App() {
     setAuthed(false);
     setActiveChild('');
     setUserName('');
+    setUserProfile(null);
   }, []);
 
   if (checking) return null;
@@ -65,6 +74,7 @@ export default function App() {
       activeChild={activeChild}
       onChildSelect={setActiveChild}
       userName={userName}
+      userProfile={userProfile}
     />
   ) : (
     <PediVaultAuth onLogin={handleLogin} />

@@ -27,15 +27,15 @@ function ToggleSwitch({on, onChange, label, sub, color='var(--rose)'}) {
   );
 }
 
-export function AccountModule({userName='Lena', onSignOut}) {
+export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
   const [tab, setTab] = useState('profile');
 
   /* ── Profile state ── */
   const [profile, setProfile] = useState({
-    firstName: userName || 'Lena',
-    lastName:  'Müller',
-    email:     'lena.mueller@email.de',
-    phone:     '+49 151 0001 0001',
+    firstName: userProfile?.firstName || userName || 'Lena',
+    lastName:  userProfile?.lastName  || '',
+    email:     userProfile?.email     || '',
+    phone:     userProfile?.phone     || '',
     language:  'English',
     timezone:  'Europe/Berlin (CET)',
   });
