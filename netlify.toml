@@ -42,7 +42,7 @@
       style-src   'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src    'self' https://fonts.gstatic.com;
       img-src     'self' data: blob: https:;
-      connect-src 'self' https://api.anthropic.com https://*.netlify.app https://localhost:5000;
+      connect-src 'self' https://api.anthropic.com https://*.netlify.app https://*.railway.app https://localhost:8000;
       frame-src   'none';
       object-src  'none';
     """
