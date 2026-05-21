@@ -15,6 +15,7 @@ const recordsRoutes      = require('./routes/records.routes');
 const appointmentsRoutes = require('./routes/appointments.routes');
 const medicationsRoutes  = require('./routes/medications.routes');
 const aiRoutes           = require('./routes/ai.routes');
+const paymentsRoutes     = require('./routes/payments.routes');
 
 const app = express();
 
@@ -28,7 +29,16 @@ app.use(cors({
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
 }));
-app.use(express.json({ limit: '10mb' }));
+
+// ── Raw body for Stripe webhook ───────────────────────────────────────────────
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/payments/webhook') {
+    express.raw({ type: 'application/json' })(req, res, next);
+  } else {
+    express.json({ limit: '10mb' })(req, res, next);
+  }
+});
+
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
 
@@ -64,6 +74,9 @@ app.use('/api/children/:childId/medications',  medicationsRoutes);
 
 // ── AI ────────────────────────────────────────────────────────────────────────
 app.use('/api/ai', aiRoutes);
+
+// ── Payments ──────────────────────────────────────────────────────────────────
+app.use('/api/payments', paymentsRoutes);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((req, res) => {

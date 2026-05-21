@@ -10,16 +10,20 @@ datasource db {
 
 // ─── USERS ────────────────────────────────────────────────────────────────────
 model User {
-  id            String    @id @default(uuid())
-  firstName     String
-  lastName      String
-  email         String    @unique
-  phone         String    @unique
-  countryCode   String    @default("+49")
-  passwordHash  String
-  isVerified    Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                   String    @id @default(uuid())
+  firstName            String
+  lastName             String
+  email                String    @unique
+  phone                String    @unique
+  countryCode          String    @default("+49")
+  passwordHash         String
+  isVerified           Boolean   @default(false)
+  plan                 String    @default("FREE")
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  planExpiresAt        DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   children      Child[]
   otps          Otp[]
@@ -181,21 +185,21 @@ enum AppointmentStatus {
 
 // ─── MEDICATIONS ──────────────────────────────────────────────────────────────
 model Medication {
-  id          String           @id @default(uuid())
-  childId     String
-  name        String
-  dosage      String
-  frequency   String
-  startDate   DateTime
-  endDate     DateTime?
+  id           String           @id @default(uuid())
+  childId      String
+  name         String
+  dosage       String
+  frequency    String
+  startDate    DateTime
+  endDate      DateTime?
   prescribedBy String?
-  type        MedicationType   @default(OTHER)
-  status      MedicationStatus @default(ACTIVE)
-  notes       String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  type         MedicationType   @default(OTHER)
+  status       MedicationStatus @default(ACTIVE)
+  notes        String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  child       Child            @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child        Child            @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("medications")
 }
