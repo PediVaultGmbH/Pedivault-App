@@ -1,8 +1,5 @@
 /**
  * src/api/auth.api.js
- * ─────────────────────────────────────────────────────────────────────────────
- * All authentication endpoints.
- * Wire these up by replacing the mock logic in auth screens.
  */
 import api, { setToken, setRefreshToken, removeToken, removeRefreshToken, getRefreshToken } from './client';
 
@@ -55,3 +52,19 @@ export const signOut = async () => {
 /** Get current authenticated user */
 export const getMe = () =>
   api.get('/auth/me');
+
+/** Update profile (firstName, lastName, phone) */
+export const updateMe = (data) =>
+  api.put('/auth/me', data);
+
+/** Change password */
+export const changePassword = ({ currentPassword, newPassword }) =>
+  api.post('/auth/change-password', { currentPassword, newPassword });
+
+/** Get active sessions */
+export const getSessions = () =>
+  api.get('/auth/sessions');
+
+/** Revoke all other sessions */
+export const revokeAllSessions = () =>
+  api.delete('/auth/sessions', { refreshToken: getRefreshToken() });
