@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════
-   PediVault Service Worker v1.0
+   PediVault Service Worker v3.0
    Strategy: Cache-first for assets,
    Network-first for API calls,
    Offline shell fallback for navigation
    ═══════════════════════════════════════════ */
 
-const CACHE_NAME    = 'pedivault-v1';
+const CACHE_NAME    = 'pedivault-v3';
 const OFFLINE_URL   = '/offline.html';
 
 /* Assets to pre-cache on install */
@@ -48,6 +48,7 @@ self.addEventListener('fetch', event => {
   /* Skip non-GET and cross-origin API requests */
   if(request.method !== 'GET') return;
   if(url.hostname === 'api.anthropic.com') return; /* Never cache AI responses */
+  if(url.hostname.includes('railway.app')) return; /* Never cache API calls */
 
   /* Navigation requests → serve app shell */
   if(request.mode === 'navigate') {
