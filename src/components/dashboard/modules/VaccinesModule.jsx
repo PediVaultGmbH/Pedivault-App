@@ -10,10 +10,31 @@ const STATUS_CFG = {
   upcoming:  { label:'Upcoming', color:'var(--blue)',  bg:'var(--blue-bg)',  border:'var(--blue-lt)',      icon:'○' },
 };
 
+const POLYGONSCAN = 'https://amoy.polygonscan.com';
+
+function BlockchainBadge({ txHash }) {
+  if (!txHash) return null;
+  const short = txHash.slice(0, 8) + '...' + txHash.slice(-6);
+  return (
+    <a href={`${POLYGONSCAN}/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      style={{ display:'inline-flex', alignItems:'center', gap:4, fontSize:'.42rem', fontWeight:500,
+        color:'#7B3FE4', background:'rgba(124,63,228,.08)', border:'1px solid rgba(124,63,228,.2)',
+        borderRadius:20, padding:'2px 7px', textDecoration:'none', transition:'all .15s' }}>
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+      </svg>
+      ⛓ {short}
+    </a>
+  );
+}
+
 export function VaccinesModule({ activeChild, showModal, extraVaccines = [], childDob }) {
   const [filter, setFilter]       = useState('all');
   const [expanded, setExpanded]   = useState(null);
   const [expandAll, setExpandAll] = useState(false);
+  const [showBlockchain, setShowBlockchain] = useState(false);
 
   const childAgeMo = (() => {
     if (!childDob) return 43;
@@ -26,9 +47,12 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
     const id = ev.vaccineId || findVaccId(ev.vaccineName) || findVaccId(ev.name);
     if (id) {
       records[id] = [...(records[id] || []), {
-        dose: ev.dose,
-        date: ev.date,
-        by:   ev.doctor || ev.by || 'Self-recorded',
+        dose:    ev.dose,
+        date:    ev.date,
+        by:      ev.doctor || ev.by || 'Self-recorded',
+        txHash:  ev.blockchainTx || null,
+        rawId:   ev.id,
+        name:    ev.vaccineName || ev.name,
       }];
     }
   });
@@ -45,6 +69,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
     total:     allDoses.length,
   };
   const pct = counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0;
+  const onChainCount = extraVaccines.filter(v => v.blockchainTx).length;
 
   const filteredVacc = STIKO.filter(vacc =>
     filter === 'all' || vacc.doses.some(dose => getVaccStatus(vacc.id, dose, records, childAgeMo).status === filter)
@@ -57,7 +82,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
     else setExpanded(v => v === id ? null : id);
   };
 
-  if (extraVaccines.length === 0 && !activeChild) return (
+  if (extraVaccines.length === 0) return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
       <div className="mb">
         <EmptyState color="var(--rose)"
@@ -72,6 +97,79 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
 
   return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
+
+      {/* Blockchain banner */}
+      {counts.done > 0 && (
+        <div style={{ marginBottom:14, padding:'10px 16px', background:'linear-gradient(135deg,rgba(124,63,228,.08),rgba(124,63,228,.04))', border:'1px solid rgba(124,63,228,.2)', borderRadius:12, display:'flex', alignItems:'center', gap:10, cursor:'pointer' }}
+          onClick={() => setShowBlockchain(v => !v)}>
+          <div style={{ width:28, height:28, borderRadius:8, background:'rgba(124,63,228,.12)', border:'1px solid rgba(124,63,228,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round">
+              <rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="7" width="6" height="10" rx="1"/>
+              <path d="M8 12h1M15 12h1"/>
+            </svg>
+          </div>
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4', marginBottom:1 }}>
+              Polygon Blockchain — {counts.done} certificate{counts.done > 1 ? 's' : ''} issued
+            </div>
+            <div style={{ fontSize:'.48rem', color:'rgba(124,63,228,.7)' }}>
+              Vaccine records are tamper-proof and verifiable on Polygon Amoy · Click to {showBlockchain ? 'hide' : 'view'} certificates
+            </div>
+          </div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2.2"
+            style={{ flexShrink:0, transform:showBlockchain ? 'rotate(180deg)' : 'none', transition:'transform .2s' }}>
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      )}
+
+      {/* Blockchain certificates panel */}
+      {showBlockchain && (
+        <div className="card" style={{ marginBottom:14, padding:0, overflow:'hidden', border:'1px solid rgba(124,63,228,.2)' }}>
+          <div style={{ padding:'12px 16px', background:'rgba(124,63,228,.06)', borderBottom:'1px solid rgba(124,63,228,.12)', display:'flex', alignItems:'center', gap:8 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4' }}>On-Chain Vaccine Certificates</span>
+            <a href={`${POLYGONSCAN}/address/${process.env.REACT_APP_VACCINE_CONTRACT || '0xB9A1FceE143AbeFF003787bd5A68139CA5df6c5E'}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ marginLeft:'auto', fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', display:'flex', alignItems:'center', gap:4 }}
+              onClick={e => e.stopPropagation()}>
+              View contract ↗
+            </a>
+          </div>
+          {extraVaccines.map((ev, i) => (
+            <div key={ev.id || i} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 16px', borderBottom:i < extraVaccines.length-1 ? '1px solid var(--line2)' : 'none' }}>
+              <div style={{ width:28, height:28, borderRadius:8, background:'rgba(42,158,98,.1)', border:'1px solid var(--green-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ fontSize:'.58rem', fontWeight:500, color:'var(--ink)', marginBottom:2 }}>
+                  {ev.vaccineName || ev.name} — {ev.dose}
+                </div>
+                <div style={{ fontSize:'.46rem', color:'var(--ink-3)' }}>
+                  {fmtDate(ev.date)} · {ev.doctor || 'Self-recorded'}
+                </div>
+              </div>
+              <div style={{ flexShrink:0 }}>
+                {ev.blockchainTx ? (
+                  <BlockchainBadge txHash={ev.blockchainTx}/>
+                ) : (
+                  <span style={{ fontSize:'.42rem', color:'var(--ink-3)', background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:20, padding:'2px 7px' }}>
+                    Pending chain
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+          <div style={{ padding:'10px 16px', background:'rgba(124,63,228,.04)', display:'flex', alignItems:'center', gap:6 }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style={{ fontSize:'.46rem', color:'rgba(124,63,228,.7)' }}>
+              Certificates are permanently recorded on Polygon Amoy and cannot be altered or deleted.
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
@@ -212,6 +310,11 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
                     <div style={{ display:'flex', alignItems:'center', gap:7, flexWrap:'wrap', marginBottom:2 }}>
                       <span style={{ fontSize:'.7rem', fontWeight:600, color:'var(--ink)' }}>{vacc.name}</span>
                       <span style={{ fontSize:'.43rem', color:'var(--ink-3)', background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:20, padding:'1px 6px' }}>{vacc.short}</span>
+                      {doneCnt > 0 && (
+                        <span style={{ fontSize:'.42rem', color:'#7B3FE4', background:'rgba(124,63,228,.08)', border:'1px solid rgba(124,63,228,.2)', borderRadius:20, padding:'1px 6px', display:'flex', alignItems:'center', gap:3 }}>
+                          ⛓ On-chain
+                        </span>
+                      )}
                     </div>
                     <div style={{ display:'flex', alignItems:'center', gap:9, flexWrap:'wrap' }}>
                       <span style={{ fontSize:'.49rem', fontWeight:300, color:'var(--ink-3)' }}>{vacc.protects}</span>
@@ -280,6 +383,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
                               <div>
                                 <div style={{ fontWeight:500, color:'var(--ink)' }}>{fmtDate(ds.date)}</div>
                                 <div style={{ fontSize:'.44rem', color:'var(--ink-3)', marginTop:1 }}>{ds.by}</div>
+                                {ds.txHash && <div style={{ marginTop:4 }}><BlockchainBadge txHash={ds.txHash}/></div>}
                               </div>
                             ) : (
                               <span style={{ color:sc.color, fontWeight:ds.status === 'overdue' ? 500 : 400 }}>{dueText}</span>
