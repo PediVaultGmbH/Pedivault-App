@@ -416,9 +416,13 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
             :sessions.length===0?<div style={{fontSize:'.56rem',color:'var(--ink-3)',padding:'12px 0'}}>No active sessions found.</div>
             :sessions.map((s,i)=>(
               <div key={s.id||i} style={{display:'flex',alignItems:'center',gap:12,padding:'11px 0',borderBottom:i<sessions.length-1?'1px solid var(--line2)':'none'}}>
-                <div style={{width:36,height:36,borderRadius:10,background:'var(--cream-2)',border:'1px solid var(--line2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1rem',flexShrink:0}}>💻</div>
+                <div style={{width:36,height:36,borderRadius:10,background:'var(--cream-2)',border:'1px solid var(--line2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1rem',flexShrink:0}}>
+  {(()=>{const ua=(s.userAgent||'').toLowerCase();if(ua.includes('iphone'))return'📱';if(ua.includes('android')&&ua.includes('mobile'))return'📱';if(ua.includes('ipad'))return'📟';if(ua.includes('android'))return'📟';if(ua.includes('mac'))return'🖥️';if(ua.includes('windows'))return'💻';if(ua.includes('linux'))return'🐧';return'💻';})()}
+</div>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:'.62rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>Session</div>
+                  <div style={{fontSize:'.62rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>
+  {(()=>{const ua=(s.userAgent||'').toLowerCase();if(ua.includes('iphone'))return'iPhone';if(ua.includes('android')&&ua.includes('mobile'))return'Android Phone';if(ua.includes('ipad'))return'iPad';if(ua.includes('android'))return'Android Tablet';if(ua.includes('mac'))return'Mac';if(ua.includes('windows'))return'Windows PC';if(ua.includes('linux'))return'Linux';return'Unknown Device';})()}
+</div>
                   <div style={{fontSize:'.48rem',color:'var(--ink-3)'}}>Created {fmtDate(s.createdAt)} · Expires {fmtDate(s.expiresAt)}</div>
                 </div>
                 <span style={{fontSize:'.44rem',fontWeight:600,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:20,padding:'2px 8px'}}>Active</span>

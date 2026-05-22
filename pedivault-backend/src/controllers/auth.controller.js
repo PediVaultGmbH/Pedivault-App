@@ -74,7 +74,12 @@ async function verifyOTP(req, res, next) {
     const accessToken  = issueAccess(user.id);
     const refreshToken = issueRefresh(user.id, '30d');
     await prisma.session.create({
-      data: { userId: user.id, refreshToken, expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) },
+      data: {
+        userId: user.id,
+        refreshToken,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        userAgent: req.headers['user-agent'] || 'Unknown',
+      },
     });
 
     res.json({ success: true, token: accessToken, refreshToken, user: { ...safeUser(user), isVerified: true } });
@@ -111,13 +116,18 @@ async function signIn(req, res, next) {
     if (!user.isVerified)
       return res.status(403).json({ success: false, error: 'Please verify your phone number before signing in' });
 
-    const accessToken     = issueAccess(user.id);
-    const refreshExpiry   = rememberMe ? '30d' : '1d';
-    const refreshMs       = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
-    const refreshToken    = issueRefresh(user.id, refreshExpiry);
+    const accessToken   = issueAccess(user.id);
+    const refreshExpiry = rememberMe ? '30d' : '1d';
+    const refreshMs     = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
+    const refreshToken  = issueRefresh(user.id, refreshExpiry);
 
     await prisma.session.create({
-      data: { userId: user.id, refreshToken, expiresAt: new Date(Date.now() + refreshMs) },
+      data: {
+        userId: user.id,
+        refreshToken,
+        expiresAt: new Date(Date.now() + refreshMs),
+        userAgent: req.headers['user-agent'] || 'Unknown',
+      },
     });
 
     res.json({ success: true, token: accessToken, refreshToken, user: safeUser(user) });
@@ -141,11 +151,15 @@ async function refreshToken(req, res, next) {
     if (!session || session.expiresAt < new Date())
       return res.status(401).json({ success: false, error: 'Session expired. Please sign in again.' });
 
-    const newAccess   = issueAccess(decoded.userId);
-    const newRefresh  = issueRefresh(decoded.userId, '30d');
+    const newAccess  = issueAccess(decoded.userId);
+    const newRefresh = issueRefresh(decoded.userId, '30d');
     await prisma.session.update({
       where: { id: session.id },
-      data: { refreshToken: newRefresh, expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) },
+      data: {
+        refreshToken: newRefresh,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        userAgent: req.headers['user-agent'] || session.userAgent || 'Unknown',
+      },
     });
 
     res.json({ success: true, token: newAccess, refreshToken: newRefresh });
