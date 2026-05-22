@@ -274,24 +274,25 @@ html{-webkit-text-size-adjust:100%;}
 .pv-mob-header{display:none;}
 
 /* ══ MOBILE ══ */
+/* ══ MOBILE ══ */
 @media(max-width:768px){
 
   html{height:auto!important;}
   body{height:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;}
 
- .pv-root{
+  .pv-root{
     position:relative!important;
     min-height:100vh;
     overflow:visible!important;
     height:auto!important;
     display:block;
-    background:#fff!important;
   }
 
   .pv-layout-desktop{display:none!important;}
   .pv-mob-layout{display:flex;flex-direction:column;width:100%;}
+  .pv-mob-layout::after{display:none;}
 
-  .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 52px;flex-shrink:0;position:relative;z-index:5;gap:10px;background:linear-gradient(145deg,var(--bg1) 0%,var(--bg2) 35%,var(--bg3) 65%,var(--bg4) 100%);}
+  .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 40px;flex-shrink:0;position:relative;z-index:5;gap:10px;}
   .pv-mob-brand{display:flex;align-items:center;gap:12px;}
   .pv-mob-logo-box{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.12);}
   .pv-mob-brand-name{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;color:#fff;letter-spacing:-.01em;}
@@ -303,33 +304,18 @@ html{-webkit-text-size-adjust:100%;}
   .pv-mob-chips span{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:4px 10px;font-size:.44rem;font-weight:500;letter-spacing:.08em;color:rgba(255,240,248,.75);}
   .pv-mob-chip-dot{width:5px;height:5px;border-radius:50%;background:rgba(100,240,160,.8);display:inline-block;}
 
-  /* ── Sheet card ── */
-  /* ── Sheet card ── */
-  .pv-mob-layout::after{display:none;}
- .pv-mob-sheet{
-    background:#fff;
+  .pv-mob-sheet{
+    background:rgba(255,255,255,.97);
     border-radius:28px 28px 0 0;
-    padding:10px 24px 60px;
+    padding:10px 24px 80px;
     position:relative;
     z-index:10;
+    box-shadow:0 -8px 24px rgba(0,0,0,.12);
+    min-height:60vh;
   }
+  .pv-mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,.1);margin:8px auto 20px;}
 
-  /* ── Old card layout (fallback) ── */
-  .pv-layout{display:block;padding:0;min-height:100vh;}
-  .pv-wrap{position:relative;z-index:10;width:100%;max-width:100%;margin:0;animation:none;margin-top:-26px;}
-  .pv-card{
-    border-radius:24px 24px 0 0;
-    min-height:calc(100vh - 196px);
-    max-height:none;
-    padding:28px 24px 60px;
-    box-shadow:0 -8px 40px rgba(0,0,0,.25),0 -2px 10px rgba(0,0,0,.1);
-    border:none;
-    overflow-y:visible;
-    display:flex;
-    flex-direction:column;
-  }
-  .pv-card::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(155,58,86,.2);margin:0 auto 22px;flex-shrink:0;}
-  .pv-si{flex:1;display:flex;flex-direction:column;}
+  .pv-layout{display:none;}
   .pv-brand{display:none;}
 
   .pv-h{font-size:1.6rem;text-align:left;margin-bottom:5px;letter-spacing:-.02em;}
@@ -350,15 +336,13 @@ html{-webkit-text-size-adjust:100%;}
   .pv-sb{height:50px;font-size:.67rem;border-radius:12px;}
   .pv-sg{gap:10px;margin-top:4px;}
   .pv-div{margin:16px 0;font-size:.58rem;}
-  .pv-sw{margin-top:18px;font-size:.62rem;}
-
-  .pv-trust{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;margin-top:auto;padding:14px 0 36px;border-top:1px solid rgba(155,58,86,.1);gap:0;flex-shrink:0;}
+  .pv-sw{margin-top:18px;font-size:.62rem;padding-bottom:8px;}
+  .pv-trust{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;margin-top:24px;padding:14px 0 0;border-top:1px solid rgba(155,58,86,.1);gap:0;}
   .pv-ts{display:flex;flex-direction:column;align-items:center;padding:8px 4px;text-align:center;gap:2px;}
   .pv-ts-ico{width:24px;height:24px;border-radius:7px;background:var(--rose-pale);border:1px solid var(--rose-lt);display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
   .pv-tv{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;color:var(--rose);line-height:1;margin-bottom:2px;letter-spacing:-.01em;}
   .pv-tl{font-size:.44rem;font-weight:300;color:var(--ink-3);line-height:1.4;letter-spacing:.02em;text-align:center;}
   .pv-td{display:block;width:1px;background:rgba(155,58,86,.1);margin:10px 0;align-self:stretch;}
-
   .pv-obs{gap:12px;margin:18px 0 10px;}
   .pv-ob{width:58px;height:54px;font-size:1.5rem;border-radius:12px;}
   .pv-otp-head{margin-bottom:14px;}
@@ -367,9 +351,7 @@ html{-webkit-text-size-adjust:100%;}
   .pv-on{font-size:.7rem;}
   .pv-r2{grid-template-columns:1fr 1fr;gap:10px;}
   .pv-steps{margin-bottom:20px;}
-  .pv-sw{margin-top:16px;font-size:.62rem;}
   .pv-lk{font-size:inherit;}
-  .pv-div{margin:14px 0;font-size:.6rem;}
   .pv-sg{gap:10px;}
   .pv-ring,.pv-glow,.pv-branch,.pv-dots{display:none;}
   .pv-petal{opacity:1;}
@@ -378,10 +360,9 @@ html{-webkit-text-size-adjust:100%;}
 
 /* ══ SMALL MOBILE ══ */
 @media(max-width:390px){
-  .pv-mob-header{padding:36px 20px 40px;}
+  .pv-mob-header{padding:36px 20px 36px;}
   .pv-mob-tagline{font-size:.95rem;}
-  .pv-mob-sheet{padding:10px 18px 60px;}
-  .pv-card{padding:28px 20px 60px;}
+  .pv-mob-sheet{padding:10px 18px 80px;}
   .pv-ob{width:54px;height:50px;font-size:1.42rem;}
   .pv-obs{gap:10px;}
   .pv-h{font-size:1.35rem;}
@@ -389,14 +370,12 @@ html{-webkit-text-size-adjust:100%;}
 
 /* ══ LANDSCAPE MOBILE ══ */
 @media(max-height:500px) and (max-width:768px){
-  .pv-mob-header{min-height:160px;padding:28px 24px 36px;}
-  .pv-mob-tagline{font-size:1.1rem;margin-bottom:5px;}
-  .pv-mob-chips{margin-top:8px;}
-  .pv-card{padding:24px 24px 60px;}
+  .pv-mob-header{padding:20px 24px 24px;}
+  .pv-mob-tagline{font-size:1rem;}
+  .pv-mob-sheet{padding:10px 24px 60px;}
   .pv-h{font-size:1.2rem;margin-bottom:2px;}
   .pv-s{margin-bottom:12px;}
   .pv-f{margin-bottom:10px;}
   .pv-in{height:44px;}
   .pv-btn{height:46px;margin-top:6px;}
-  .pv-trust{margin-top:12px;padding-top:12px;}
 }
