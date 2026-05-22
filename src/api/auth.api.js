@@ -4,8 +4,8 @@
 import api, { setToken, setRefreshToken, removeToken, removeRefreshToken, getRefreshToken } from './client';
 
 /** Sign in → saves tokens, returns user object */
-export const signIn = async ({ email, password }) => {
-  const data = await api.post('/auth/signin', { email, password });
+export const signIn = async ({ email, password, rememberMe = false }) => {
+  const data = await api.post('/auth/signin', { email, password, rememberMe });
   setToken(data.token);
   setRefreshToken(data.refreshToken);
   return data.user;

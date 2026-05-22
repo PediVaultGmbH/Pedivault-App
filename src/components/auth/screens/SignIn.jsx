@@ -4,12 +4,12 @@ import { Eye } from '../ui/Logo';
 import { signIn } from '../../../api/auth.api';
 
 export function SignIn({ goTo }) {
-  const [email, setEmail]       = useState('');
-  const [pwd, setPwd]           = useState('');
-  const [show, setShow]         = useState(false);
-  const [err, setErr]           = useState('');
+  const [email, setEmail]           = useState('');
+  const [pwd, setPwd]               = useState('');
+  const [show, setShow]             = useState(false);
+  const [err, setErr]               = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading]       = useState(false);
 
   const handleSignIn = async () => {
     if (!email || !pwd) { setErr('Please fill in all fields.'); return; }
@@ -18,7 +18,7 @@ export function SignIn({ goTo }) {
 
     setErr(''); setLoading(true);
     try {
-      const user = await signIn({ email, password: pwd });
+      const user = await signIn({ email, password: pwd, rememberMe });
       goTo('dashboard', user.firstName);
     } catch (err) {
       setErr(err.message || 'Sign in failed. Please try again.');
@@ -51,10 +51,16 @@ export function SignIn({ goTo }) {
         </div>
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:8}}>
           <label style={{display:'flex',alignItems:'center',gap:7,cursor:'pointer',userSelect:'none'}}>
-            <div className={`pv-ck${rememberMe ? ' on' : ''}`} style={{width:16,height:16,borderRadius:4,flexShrink:0}} onClick={() => setRememberMe(!rememberMe)}>
+            <div
+              className={`pv-ck${rememberMe ? ' on' : ''}`}
+              style={{width:16,height:16,borderRadius:4,flexShrink:0}}
+              onClick={() => setRememberMe(!rememberMe)}
+            >
               {rememberMe && <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.2"><path d="M20 6L9 17l-5-5"/></svg>}
             </div>
-            <span style={{fontSize:'.53rem',fontWeight:300,color:'var(--ink-3)'}}>Remember me</span>
+            <span style={{fontSize:'.53rem',fontWeight:300,color:'var(--ink-3)'}}>
+              Remember me {rememberMe ? '(30 days)' : '(1 day)'}
+            </span>
           </label>
           <span className="pv-lk" style={{fontSize:'.52rem',fontWeight:400}} onClick={() => goTo('forgot')}>Forgot password?</span>
         </div>
