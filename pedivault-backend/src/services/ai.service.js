@@ -16,7 +16,7 @@ class AIService {
         return;
       }
       this.client  = new GoogleGenerativeAI(apiKey);
-      this.model   = this.client.getGenerativeModel({ model: 'gemini-1.5-flash-8b' });
+      this.model = this.client.getGenerativeModel({ model: 'gemini-pro' });
       this.enabled = true;
       console.log('[AI] ✅ Connected to Google Gemini');
     } catch (err) {
