@@ -16,7 +16,7 @@ class AIService {
         return;
       }
       this.client  = new GoogleGenerativeAI(apiKey);
-      this.model = this.client.getGenerativeModel({ model: 'gemini-1.5-flash-8b' });
+      this.model   = this.client.getGenerativeModel({ model: 'gemini-1.5-flash-8b' });
       this.enabled = true;
       console.log('[AI] ✅ Connected to Google Gemini');
     } catch (err) {
@@ -27,28 +27,26 @@ class AIService {
   async chat(messages, childContext = null) {
     if (!this.enabled) return 'AI Assistant is not configured.';
     try {
-      const systemText = `You are PediVault AI, a helpful paediatric health assistant for parents.
-You help parents understand their child's health records, vaccine schedules, growth data, and medications.
-You are empathetic, clear, and always recommend consulting a real doctor for medical decisions.
-${childContext ? `\nCurrent child: ${childContext.name}, DOB: ${childContext.dateOfBirth}, Gender: ${childContext.gender}, Blood type: ${childContext.bloodType || 'unknown'}` : ''}
-Always respond in a friendly, concise way. Use simple language parents can understand.
-Never diagnose conditions. Always say "consult your paediatrician" for medical advice.`;
+      const systemText = `You are PediVault AI, a helpful paediatric health assistant for parents. You help parents understand their child's health records, vaccine schedules, growth data, and medications. You are empathetic, clear, and always recommend consulting a real doctor for medical decisions.${childContext ? ` Current child: ${childContext.name}, born ${childContext.dateOfBirth}, ${childContext.gender}, blood type ${childContext.bloodType || 'unknown'}.` : ''} Always respond in a friendly, concise way. Never diagnose conditions. Always recommend consulting a paediatrician for medical advice.`;
 
-      const history = messages.slice(0, -1).map(m => ({
+      // Build history with system context prepended to first message
+      const allMessages = [...messages];
+      const firstUserIdx = allMessages.findIndex(m => m.role === 'user');
+      if (firstUserIdx >= 0) {
+        allMessages[firstUserIdx] = {
+          ...allMessages[firstUserIdx],
+          content: `[Context: ${systemText}]\n\n${allMessages[firstUserIdx].content}`,
+        };
+      }
+
+      const history = allMessages.slice(0, -1).map(m => ({
         role:  m.role === 'user' ? 'user' : 'model',
         parts: [{ text: m.content }],
       }));
 
-      const chat = this.model.startChat({
-        history,
-        systemInstruction: {
-          role:  'user',
-          parts: [{ text: systemText }],
-        },
-      });
-
-      const lastMessage = messages[messages.length - 1];
-      const result      = await chat.sendMessage(lastMessage.content);
+      const chat   = this.model.startChat({ history });
+      const last   = allMessages[allMessages.length - 1];
+      const result = await chat.sendMessage(last.content);
       return result.response.text();
     } catch (err) {
       console.error('[AI] chat failed:', err.message);
