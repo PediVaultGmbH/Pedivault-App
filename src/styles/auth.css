@@ -307,11 +307,19 @@ html{-webkit-text-size-adjust:100%;}
     flex:1;
     background:rgba(255,255,255,.97);
     border-radius:28px 28px 0 0;
-    padding:10px 24px 60px;
-    position:relative;z-index:10;
+    padding:10px 24px 80px;
+    position:relative;
+    z-index:10;
     box-shadow:0 -12px 40px rgba(0,0,0,.18);
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+    min-height:calc(100vh - 200px);
+  }
+  .pv-mob-layout::after{
+    content:'';
+    display:block;
+    background:rgba(255,255,255,.97);
+    height:300px;
+    margin-top:-2px;
+    flex-shrink:0;
   }
   .pv-mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,.1);margin:8px auto 20px;}
 
