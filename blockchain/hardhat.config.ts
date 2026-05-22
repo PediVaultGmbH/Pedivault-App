@@ -16,13 +16,15 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {},
-    mumbai: {
-      url: process.env.POLYGON_MUMBAI_RPC || "https://rpc-mumbai.maticvigil.com",
+    amoy: {
+      url: "https://rpc-amoy.polygon.technology",
       accounts: PRIVATE_KEY,
+      chainId: 80002,
     },
     polygon: {
       url: "https://polygon-rpc.com",
       accounts: PRIVATE_KEY,
+      chainId: 137,
     },
   },
 };
