@@ -1,5 +1,3 @@
-cat > src/controllers/vaccines.controller.js << 'EOF'
-// src/controllers/vaccines.controller.js
 const prisma     = require('../config/database');
 const blockchain = require('../services/blockchain.service');
 
@@ -65,4 +63,3 @@ const deleteVaccineRecord = async (req, res, next) => {
 };
 
 module.exports = { getVaccineRecords, logVaccine, updateVaccineRecord, deleteVaccineRecord };
-EOF
