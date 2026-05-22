@@ -285,6 +285,7 @@ html{-webkit-text-size-adjust:100%;}
     overflow:visible!important;
     height:auto!important;
     display:block;
+    background:#fff!important;
   }
 
   .pv-layout-desktop{display:none!important;}
@@ -305,13 +306,12 @@ html{-webkit-text-size-adjust:100%;}
   /* ── Sheet card ── */
   /* ── Sheet card ── */
   .pv-mob-layout::after{display:none;}
-  .pv-mob-sheet{
-    background:rgba(255,255,255,.97);
+ .pv-mob-sheet{
+    background:#fff;
     border-radius:28px 28px 0 0;
     padding:10px 24px 60px;
     position:relative;
     z-index:10;
-    box-shadow:0 -12px 40px rgba(0,0,0,.18);
   }
 
   /* ── Old card layout (fallback) ── */
