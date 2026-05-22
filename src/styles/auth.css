@@ -10,6 +10,7 @@
   --bg1:#6B1F38;--bg2:#9B3A56;--bg3:#B04268;--bg4:#7A2640;
 }
 body{font-family:'DM Sans',sans-serif;overflow:hidden;}
+@media(max-width:768px){body{overflow:auto;-webkit-overflow-scrolling:touch;}}
 html{-webkit-text-size-adjust:100%;}
 
 @keyframes fall1{0%{transform:translateY(-80px) rotate(0deg) translateX(0);opacity:0}5%{opacity:.7}88%{opacity:.35}100%{transform:translateY(110vh) rotate(520deg) translateX(65px);opacity:0}}
@@ -277,11 +278,10 @@ html{-webkit-text-size-adjust:100%;}
 
   body{overflow:auto;}
 
-  .pv-root{
+ .pv-root{
     position:relative;
-    min-height:100vh;min-height:100svh;
-    overflow-y:auto;overflow-x:hidden;
-    -webkit-overflow-scrolling:touch;
+    min-height:100vh;
+    overflow:visible;
     display:block;
   }
 
