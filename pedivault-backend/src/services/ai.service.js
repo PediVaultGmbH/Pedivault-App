@@ -41,6 +41,12 @@ class AIService {
       return response.text;
     } catch (err) {
       console.error('[AI] chat failed:', err.message);
+      if (err.message?.includes('503') || err.message?.includes('UNAVAILABLE')) {
+        return 'The AI service is temporarily busy due to high demand. Please try again in a few seconds.';
+      }
+      if (err.message?.includes('429') || err.message?.includes('quota')) {
+        return 'AI rate limit reached. Please wait a moment and try again.';
+      }
       return 'Sorry, I could not process your request. Please try again.';
     }
   }
