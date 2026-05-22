@@ -303,6 +303,8 @@ html{-webkit-text-size-adjust:100%;}
   .pv-mob-chip-dot{width:5px;height:5px;border-radius:50%;background:rgba(100,240,160,.8);display:inline-block;}
 
   /* ── Sheet card ── */
+  /* ── Sheet card ── */
+  .pv-mob-layout::after{display:none;}
   .pv-mob-sheet{
     flex:1;
     background:rgba(255,255,255,.97);
@@ -311,17 +313,8 @@ html{-webkit-text-size-adjust:100%;}
     position:relative;
     z-index:10;
     box-shadow:0 -12px 40px rgba(0,0,0,.18);
-    min-height:calc(100vh - 200px);
+    min-height:100vh;
   }
- .pv-mob-layout::after{
-    content:'';
-    display:block;
-    background:rgba(255,255,255,.97);
-    height:40px;
-    margin-top:-2px;
-    flex-shrink:0;
-  }
-  .pv-mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,.1);margin:8px auto 20px;}
 
   /* ── Old card layout (fallback) ── */
   .pv-layout{display:block;padding:0;min-height:100vh;}
