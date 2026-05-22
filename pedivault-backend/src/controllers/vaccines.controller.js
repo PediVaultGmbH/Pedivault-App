@@ -1,3 +1,4 @@
+```javascript
 // src/controllers/vaccines.controller.js
 const prisma = require('../config/database');
 
@@ -53,3 +54,5 @@ const deleteVaccineRecord = async (req, res, next) => {
 };
 
 module.exports = { getVaccineRecords, logVaccine, updateVaccineRecord, deleteVaccineRecord };
+
+```
