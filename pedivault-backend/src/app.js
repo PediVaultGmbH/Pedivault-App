@@ -16,6 +16,7 @@ const appointmentsRoutes = require('./routes/appointments.routes');
 const medicationsRoutes  = require('./routes/medications.routes');
 const aiRoutes           = require('./routes/ai.routes');
 const paymentsRoutes     = require('./routes/payments.routes');
+const blockchainRoutes   = require('./services/blockchain.routes');
 
 const app = express();
 
@@ -77,6 +78,9 @@ app.use('/api/ai', aiRoutes);
 
 // ── Payments ──────────────────────────────────────────────────────────────────
 app.use('/api/payments', paymentsRoutes);
+
+// ── Blockchain ────────────────────────────────────────────────────────────────
+app.use('/api/blockchain', blockchainRoutes);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((req, res) => {
