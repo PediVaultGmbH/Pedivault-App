@@ -99,14 +99,13 @@ const COUNTRIES = [
 ];
 
 function CountryPicker({ value, onChange }) {
-  const [open, setOpen]       = useState(false);
-  const [search, setSearch]   = useState('');
-  const ref                   = useRef(null);
-  const searchRef             = useRef(null);
-  const selected              = COUNTRIES.find(c => c.code === value) || COUNTRIES[0];
-  const filtered              = COUNTRIES.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.code.includes(search)
+  const [open, setOpen]     = useState(false);
+  const [search, setSearch] = useState('');
+  const ref                 = useRef(null);
+  const searchRef           = useRef(null);
+  const selected            = COUNTRIES.find(c => c.code === value) || COUNTRIES[0];
+  const filtered            = COUNTRIES.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase()) || c.code.includes(search)
   );
 
   useEffect(() => {
@@ -126,28 +125,14 @@ function CountryPicker({ value, onChange }) {
         style={{ height:44, width:96, border:'1.5px solid var(--auth-line)', borderRadius:11, padding:'0 8px 0 10px', fontFamily:"'DM Sans',sans-serif", fontSize:'.65rem', color:'var(--ink)', background:'rgba(255,255,255,.8)', outline:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between', gap:4 }}>
         <span style={{ fontSize:'1rem' }}>{selected.flag}</span>
         <span style={{ fontSize:'.65rem', fontWeight:500 }}>{selected.code}</span>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.5" style={{ transform: open ? 'rotate(180deg)' : 'none', transition:'transform .2s', flexShrink:0 }}><polyline points="6 9 12 15 18 9"/></svg>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.5"
+          style={{ transform: open ? 'rotate(180deg)' : 'none', transition:'transform .2s', flexShrink:0 }}>
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
       </button>
 
       {open && (
-        <div style={{ position:'fixed', zIndex:9999, background:'#fff', border:'1.5px solid var(--auth-line)', borderRadius:12, boxShadow:'0 8px 32px rgba(0,0,0,.15)', width:220, maxHeight:280, display:'flex', flexDirection:'column', overflow:'hidden', top:'auto', left:'auto', marginTop:4 }}
-          ref={el => {
-            if (el) {
-              const btn = ref.current?.getBoundingClientRect();
-              if (btn) {
-                const spaceBelow = window.innerHeight - btn.bottom;
-                if (spaceBelow < 300) {
-                  el.style.bottom = (window.innerHeight - btn.top + 4) + 'px';
-                  el.style.top = 'auto';
-                  el.style.left = btn.left + 'px';
-                } else {
-                  el.style.top = (btn.bottom + 4) + 'px';
-                  el.style.bottom = 'auto';
-                  el.style.left = btn.left + 'px';
-                }
-              }
-            }
-          }}>
+        <div style={{ position:'absolute', top:'100%', left:0, zIndex:9999, background:'#fff', border:'1.5px solid var(--auth-line)', borderRadius:12, boxShadow:'0 8px 32px rgba(0,0,0,.15)', width:220, maxHeight:260, display:'flex', flexDirection:'column', overflow:'hidden', marginTop:4 }}>
           <div style={{ padding:'8px 10px', borderBottom:'1px solid var(--auth-line)' }}>
             <input ref={searchRef} value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search country…"
@@ -158,7 +143,8 @@ function CountryPicker({ value, onChange }) {
               <div style={{ padding:'12px', textAlign:'center', fontSize:'.56rem', color:'var(--ink-3)' }}>No results</div>
             ) : filtered.map(c => (
               <div key={c.code + c.name} onClick={() => { onChange(c.code); setOpen(false); }}
-                style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 12px', cursor:'pointer', background: c.code === value && c.name === selected.name ? 'var(--rose-pale)' : 'transparent', transition:'background .1s' }}
+                style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 12px', cursor:'pointer', transition:'background .1s',
+                  background: c.code === value && c.name === selected.name ? 'var(--rose-pale)' : 'transparent' }}
                 onMouseEnter={e => e.currentTarget.style.background = 'var(--cream-2)'}
                 onMouseLeave={e => e.currentTarget.style.background = c.code === value && c.name === selected.name ? 'var(--rose-pale)' : 'transparent'}>
                 <span style={{ fontSize:'1rem' }}>{c.flag}</span>
