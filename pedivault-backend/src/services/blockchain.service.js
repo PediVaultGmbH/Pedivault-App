@@ -1,6 +1,5 @@
 const { ethers } = require('ethers');
 
-// Contract ABIs (minimal - only functions we need)
 const RECORDS_ABI = [
   "function addRecord(string childId, string ipfsHash, string recordType) returns (bytes32)",
   "function getRecord(bytes32 recordId) view returns (tuple(string ipfsHash, string recordType, string childId, uint256 timestamp, address uploadedBy, bool isValid))",
@@ -33,22 +32,24 @@ const ACCESS_ABI = [
 
 class BlockchainService {
   constructor() {
-    this.provider = null;
-    this.wallet   = null;
+    this.provider  = null;
+    this.wallet    = null;
     this.contracts = {};
-    this.enabled = false;
+    this.enabled   = false;
     this.init();
   }
 
   init() {
     try {
       const rpc        = process.env.POLYGON_AMOY_RPC || 'https://rpc-amoy.polygon.technology';
-      const privateKey = process.env.BLOCKCHAIN_PRIVATE_KEY;
+      let privateKey   = process.env.BLOCKCHAIN_PRIVATE_KEY;
 
       if (!privateKey) {
         console.log('[Blockchain] No private key set — blockchain features disabled');
         return;
       }
+
+      if (!privateKey.startsWith('0x')) privateKey = '0x' + privateKey;
 
       this.provider = new ethers.JsonRpcProvider(rpc);
       this.wallet   = new ethers.Wallet(privateKey, this.provider);
@@ -79,7 +80,7 @@ class BlockchainService {
   async addRecord(childId, ipfsHash, recordType) {
     if (!this.enabled) return null;
     try {
-      const tx = await this.contracts.records.addRecord(childId, ipfsHash, recordType);
+      const tx      = await this.contracts.records.addRecord(childId, ipfsHash, recordType);
       const receipt = await tx.wait();
       console.log('[Blockchain] Record added:', receipt.hash);
       return receipt.hash;
@@ -114,7 +115,7 @@ class BlockchainService {
     if (!this.enabled) return null;
     try {
       const timestamp = Math.floor(new Date(dateAdministered).getTime() / 1000);
-      const tx = await this.contracts.vaccine.issueCertificate(
+      const tx        = await this.contracts.vaccine.issueCertificate(
         childId, vaccineName, dose, batchNumber || '', doctor || '', timestamp
       );
       const receipt = await tx.wait();
@@ -137,11 +138,10 @@ class BlockchainService {
   }
 
   // ── Audit Trail ────────────────────────────────────────────────────────────
-  // ActionType: 0=VIEW, 1=CREATE, 2=UPDATE, 3=DELETE, 4=SHARE, 5=REVOKE
   async logAction(childId, resourceType, resourceId, action, metadata = '') {
     if (!this.enabled) return null;
     try {
-      const tx = await this.contracts.audit.log(childId, resourceType, resourceId, action, metadata);
+      const tx      = await this.contracts.audit.log(childId, resourceType, resourceId, action, metadata);
       const receipt = await tx.wait();
       console.log('[Blockchain] Audit logged:', receipt.hash);
       return receipt.hash;
@@ -154,7 +154,19 @@ class BlockchainService {
   async getChildAuditLogs(childId) {
     if (!this.enabled) return [];
     try {
-      return await this.contracts.audit.getChildLogs(childId);
+      const indices = await this.contracts.audit.getChildLogs(childId);
+      const logs    = await Promise.all(
+        indices.map(idx => this.contracts.audit.getLog(idx))
+      );
+      return logs.map(l => ({
+        childId:      l.childId,
+        resourceType: l.resourceType,
+        resourceId:   l.resourceId,
+        action:       Number(l.action),
+        performedBy:  l.performedBy,
+        timestamp:    l.timestamp.toString(),
+        metadata:     l.metadata,
+      }));
     } catch (err) {
       console.error('[Blockchain] getChildAuditLogs failed:', err.message);
       return [];
@@ -165,7 +177,7 @@ class BlockchainService {
   async registerChild(childId) {
     if (!this.enabled) return null;
     try {
-      const tx = await this.contracts.access.registerChild(childId);
+      const tx      = await this.contracts.access.registerChild(childId);
       const receipt = await tx.wait();
       console.log('[Blockchain] Child registered:', receipt.hash);
       return receipt.hash;
@@ -178,7 +190,7 @@ class BlockchainService {
   async grantAccess(childId, granteeAddress, level, durationSeconds = 0) {
     if (!this.enabled) return null;
     try {
-      const tx = await this.contracts.access.grantAccess(childId, granteeAddress, level, durationSeconds);
+      const tx      = await this.contracts.access.grantAccess(childId, granteeAddress, level, durationSeconds);
       const receipt = await tx.wait();
       return receipt.hash;
     } catch (err) {
