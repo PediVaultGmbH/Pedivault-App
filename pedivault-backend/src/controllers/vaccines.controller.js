@@ -7,7 +7,7 @@ const getVaccineRecords = async (req, res, next) => {
       where: { childId: req.params.childId },
       orderBy: { date: 'desc' },
     });
-    blockchain.logAction(req.params.childId, 'vaccine', 'all', 0, 'Vaccine records viewed').catch(() => {});
+
     res.json({ success: true, data: records });
   } catch (err) { next(err); }
 };
