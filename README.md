@@ -1,190 +1,228 @@
-# PediVault — Child Health Records
+# PediVault 🌸
 
-A beautifully designed React app for tracking children's health records, vaccines, growth, appointments, and medications. Built for expat families in Germany with STIKO 2026 vaccine schedules and multilingual AI assistant.
+> Secure, blockchain-verified child health records for European families.
+
+**Live App:** https://pedi-vault.netlify.app
+**Backend API:** https://pedivault-app-production.up.railway.app
+**GitHub:** https://github.com/PediVaultGmbH/Pedivault-App
 
 ---
 
-## 📁 Project Structure
+## Overview
 
-```
-pedivault/
-├── .vscode/
-│   ├── extensions.json      # Recommended VS Code extensions
-│   ├── launch.json          # Chrome debug configuration
-│   └── settings.json        # Editor & formatting settings
-│
+PediVault is a full-stack health records platform that allows parents to digitally manage their children's medical history. Built with GDPR compliance, blockchain immutability, and AI assistance at its core.
+
+Parents can track vaccinations, growth milestones, medications, appointments, and medical records — all secured with end-to-end encryption, stored optionally on IPFS, and audited on the Polygon blockchain.
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React CRA, custom CSS design system |
+| Backend | Node.js, Express.js |
+| Database | PostgreSQL via Prisma ORM v5.22 |
+| Authentication | JWT + Refresh Tokens, Twilio SMS OTP |
+| Blockchain | Solidity, Hardhat, Polygon Amoy Testnet |
+| Decentralized Storage | Pinata IPFS (@pinata/sdk) |
+| AI Assistant | Google Gemini 2.5 Flash (@google/genai) |
+| Payments | Stripe (monthly + annual plans) |
+| Frontend Hosting | Netlify |
+| Backend Hosting | Railway |
+
+---
+
+## Features
+
+### 🔐 Authentication
+- Email + password registration
+- Real SMS OTP verification via Twilio
+- JWT access tokens (15min) + refresh tokens (30 days)
+- Session management with device tracking
+- Password change and account deletion
+
+### 👶 Children Management
+- Add multiple children with full profile
+- Date of birth, gender, photo
+- Per-child health dashboard
+
+### 💉 Vaccinations
+- STIKO vaccine schedule (German standard)
+- Track administered doses with dates
+- Issue on-chain vaccine certificates (Polygon Amoy)
+- Certificate tx hash stored and verifiable
+
+### 📈 Growth Tracking
+- Height, weight, head circumference logs
+- WHO growth chart visualization
+- Historical trend tracking
+
+### 📋 Medical Records
+- Upload documents and reports
+- IPFS storage via Pinata
+- Blockchain verification hash per record
+- IPFS badge display in UI
+
+### 💊 Medications
+- Track active and past medications
+- Dosage, frequency, start/end dates
+
+### 📅 Appointments
+- Schedule and track doctor visits
+- Notes and follow-up tracking
+
+### 🔗 Blockchain Audit Trail
+- Every action logged to Polygon Amoy
+- Audit log viewable in Profile → Audit Trail tab
+- 4 smart contracts: Records, Vaccine, Audit, Access
+
+### 🤖 AI Health Assistant
+- Powered by Google Gemini 2.5 Flash
+- Answers parenting and health questions
+- Context-aware responses
+
+### 💳 Payments
+- Stripe integration
+- Monthly and annual subscription plans
+- Webhook handling for subscription lifecycle
+
+### 🌍 Internationalisation
+- Custom country picker with 90+ countries
+- Phone number country code selection
+- Searchable dropdown
+
+---
+
+## Smart Contracts (Polygon Amoy Testnet)
+
+| Contract | Address |
+|---|---|
+| Records | ****** |
+| Vaccine | ******  |
+| Audit | ******  |
+| Access | ******  |
+
+> ⚠️ Testnet only. Wallet requires POL tokens for gas. Get from https://faucet.polygon.technology
+
+---
+
+## Project Structure
+pedivault Final/                    # React frontend
 ├── public/
-│   ├── index.html
-│   ├── manifest.json        # PWA manifest
-│   └── sw.js                # Service worker
-│
+└── src/
+├── api/                        # API call functions
+├── components/
+│   ├── auth/                   # Auth flow
+│   │   ├── screens/            # SignIn, CreateAccount, OTP, Forgot
+│   │   ├── panels/             # Desktop side panels
+│   │   └── ui/                 # Brand, Background, MobileHeader
+│   └── dashboard/
+│       └── modules/            # All dashboard feature modules
+├── styles/
+│   └── auth.css                # Full auth UI design system
+└── utils/
+└── passwordStrength.js
+pedivault-backend/                  # Node.js backend
 ├── src/
-│   ├── api/                 ← Backend service layer (wire up to your API)
-│   │   ├── client.js        # Base HTTP client (JWT, 401 handling)
-│   │   ├── auth.api.js      # Sign in, register, OTP, forgot password
-│   │   ├── children.api.js  # Child profiles CRUD
-│   │   ├── vaccines.api.js  # Vaccine records
-│   │   ├── growth.api.js    # Growth entries
-│   │   ├── records.api.js   # Medical records + file upload
-│   │   ├── appointments.api.js
-│   │   ├── medications.api.js
-│   │   └── ai.api.js        # AI assistant (proxied through your backend)
-│   │
-│   ├── contexts/
-│   │   └── AuthContext.jsx  ← Global JWT auth state
-│   │
-│   ├── hooks/
-│   │   ├── useAuth.js       ← useAuth() shortcut
-│   │   ├── useToast.js
-│   │   ├── useFormValidation.js
-│   │   ├── useLoading.js
-│   │   └── useTimer.js
-│   │
-│   ├── components/
-│   │   ├── auth/            ← Auth screens (Sign In, Register, OTP, Forgot)
-│   │   └── dashboard/       ← Dashboard modules + layout + modals
-│   │
-│   ├── data/                ← Local seed data (replace with API calls)
-│   ├── utils/               ← Pure utility functions
-│   ├── styles/              ← auth.css + dashboard.css
-│   ├── App.js
-│   └── index.js
-│
-├── .env.example             ← Copy to .env.local and fill values
-├── .eslintrc.json
-├── .gitignore
-├── .prettierrc
-├── jsconfig.json
-└── package.json
+│   ├── controllers/                # Request handlers
+│   ├── middleware/                 # Auth, error handling
+│   ├── routes/                     # Express routes
+│   └── services/
+│       ├── blockchain.service.js   # Polygon interactions
+│       ├── ipfs.service.js         # Pinata IPFS
+│       ├── ai.service.js           # Gemini AI
+│       └── twilio.service.js       # SMS OTP
+├── prisma/
+│   └── schema.prisma
+└── app.js
+
+---
+
+## Database Schema
+
+Key models: `User`, `Child`, `Vaccine`, `GrowthRecord`, `Medication`, `Appointment`, `MedicalRecord`, `Session`, `AuditLog`
+
+Run migrations:
+```bash
+npx prisma migrate dev
+npx prisma generate
 ```
 
 ---
 
-## 🚀 Getting Started
+## Environment Variables
 
-### 1. Install & Run
-
-```bash
-npm install
-cp .env.example .env.local   # fill in your values
-npm start
-```
-
-App opens at **http://localhost:3000**. API calls proxy to **http://localhost:5000**.
-
-### 2. Build for Production
-
-```bash
-npm run build
-```
-
----
-
-## 🔌 Backend Integration Guide
-
-### Environment Variables
+### Railway (Backend)
 
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
-REACT_APP_ANTHROPIC_API_KEY=sk-ant-...
+DATABASE_URL= *****
+JWT_SECRET= ******
+JWT_EXPIRES_IN=15m
+REFRESH_TOKEN_SECRET= ******
+REFRESH_TOKEN_EXPIRES_IN=30d
+FRONTEND_URL=https://pedi-vault.netlify.app
+STRIPE_SECRET_KEY= ******
+STRIPE_PRICE_MONTHLY= ******
+STRIPE_PRICE_ANNUAL= ******
+BLOCKCHAIN_PRIVATE_KEY= ******
+POLYGON_AMOY_RPC=https://rpc-amoy.polygon.technology
+RECORDS_CONTRACT= ******
+VACCINE_CONTRACT= ******
+AUDIT_CONTRACT= ******
+ACCESS_CONTRACT= ******
+PINATA_API_KEY= ******
+PINATA_SECRET_KEY= ******
+GEMINI_API_KEY= ******
+TWILIO_ACCOUNT_SID= ******
+TWILIO_AUTH_TOKEN= ******
+TWILIO_PHONE_NUMBER= ******
 ```
 
-### Dev Proxy
+### Netlify (Frontend)
 
-`package.json` includes `"proxy": "http://localhost:5000"`.  
-In development, `fetch('/api/...')` automatically forwards to your backend — no CORS issues.
-
-### Auth Flow
-
-1. **Wrap your app** with `<AuthProvider>` in `index.js`:
-   ```jsx
-   import { AuthProvider } from './contexts/AuthContext';
-   root.render(<AuthProvider><App /></AuthProvider>);
-   ```
-
-2. **Use the hook** anywhere:
-   ```jsx
-   const { user, signIn, signOut, loading } = useAuth();
-   ```
-
-3. **Token storage**: JWT stored in `localStorage` as `pv_token`.  
-   The API client auto-attaches it to every request.
-
-4. **401 handling**: Any 401 from the backend fires a `pv:unauthorised` event  
-   which `AuthContext` listens to and clears the session automatically.
-
-### Wiring a Screen to the Real API
-
-Example — Sign In screen (`src/components/auth/screens/SignIn.jsx`):
-
-```js
-// Replace the mock login logic with:
-import { signIn } from '../../../api/auth.api';
-
-const handleSignIn = async () => {
-  try {
-    const { token, user } = await signIn({ email, password });
-    goTo('dashboard', user.firstName);
-  } catch (err) {
-    setError(err.message);
-  }
-};
+```env
+REACT_APP_API_URL=https://pedivault-app-production.up.railway.app/api
+REACT_APP_STRIPE_PUBLISHABLE_KEY= ******
+REACT_APP_AUDIT_CONTRACT= ******
+REACT_APP_VACCINE_CONTRACT= ******
+GEMINI_API_KEY= ******
 ```
 
-### API Service Files
+---
 
-| File | Endpoints |
-|------|-----------|
-| `auth.api.js` | signIn, register, sendOTP, verifyOTP, forgotPassword, resetPassword, signOut, getMe |
-| `children.api.js` | getChildren, getChild, createChild, updateChild, deleteChild |
-| `vaccines.api.js` | getVaccineRecords, logVaccine, updateVaccineRecord, deleteVaccineRecord |
-| `growth.api.js` | getGrowthEntries, addGrowthEntry, deleteGrowthEntry |
-| `records.api.js` | getRecords, uploadRecord, uploadRecordFile, deleteRecord |
-| `appointments.api.js` | getAppointments, bookAppointment, updateAppointment, cancelAppointment |
-| `medications.api.js` | getMedications, addMedication, updateMedication, deleteMedication |
-| `ai.api.js` | chatWithAI (proxied through your backend — never call Anthropic from frontend) |
+## Development
+
+```bash
+# Frontend
+cd "pedivault Final"
+npm install
+npm start
+# Runs on http://localhost:3000
+
+# Backend
+cd pedivault-backend
+npm install
+npx prisma generate
+npx prisma migrate dev
+npm run dev
+# Runs on http://localhost:5000
+```
 
 ---
 
-## 🧑‍💻 VS Code Setup
+## Known Limitations
 
-1. Open: `code .`
-2. Install recommended extensions when prompted
-3. Format on save is pre-configured via Prettier
-
-### Recommended Extensions (auto-prompted)
-- **Prettier** — formatting
-- **ESLint** — linting
-- **ES7 React Snippets** — `rfce`, shortcuts
-- **Auto Rename Tag** — renames JSX closing tags
-- **Error Lens** — inline errors
-- **GitLens** — git history
+- Blockchain wallet requires POL tokens for gas fees. `addRecord`, `logAction`, and `issueCertificate` will fail silently if wallet balance is low.
+- IPFS upload works independently of blockchain — records are stored on IPFS even if blockchain tx fails.
+- Gemini AI uses `gemini-2.5-flash` model via `@google/genai` SDK.
 
 ---
 
-## 📌 Backend Checklist (Next Steps)
+## Compliance & Security
 
-- [ ] `POST /api/auth/register` — create user, send OTP
-- [ ] `POST /api/auth/otp/verify` — verify code, return JWT
-- [ ] `POST /api/auth/signin` — email+password → JWT
-- [ ] `POST /api/auth/forgot-password` — send reset email
-- [ ] `GET  /api/auth/me` — return current user from JWT
-- [ ] `GET/POST/PUT/DELETE /api/children/:id/*` — all child-scoped resources
-- [ ] `POST /api/ai/chat` — proxy to Anthropic (keep API key server-side)
-- [ ] File upload endpoint for medical records (S3 / local storage)
-- [ ] Push notifications for vaccine reminders (optional)
-
----
-
-## 🌐 PWA
-
-The app is a Progressive Web App with offline support via `sw.js`.
-
----
-
-## 🔒 Security Notes
-
-- JWT stored in `localStorage` — consider `httpOnly` cookies for production
-- Anthropic API key lives on the backend only (`ai.api.js` calls your backend, not Anthropic directly)
-- All health data must be transmitted over HTTPS in production
-- GDPR Article 9 applies to health data — ensure your backend has proper data processing agreements
+- All health data encrypted per **GDPR (EU) 2016/679**
+- Blockchain audit trail ensures tamper-proof record history
+- JWT tokens with short expiry + refresh token rotation
+- SMS OTP for registration verification
+- Session invalidation on password change
