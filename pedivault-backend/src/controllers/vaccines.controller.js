@@ -23,8 +23,15 @@ const logVaccine = async (req, res, next) => {
     });
 
     blockchain.issueCertificate(req.params.childId, vaccineName, dose, batchNumber || '', doctor || '', date)
-      .then(txHash => { if (txHash) console.log('[Blockchain] Cert issued:', txHash); })
-      .catch(() => {});
+      .then(async txHash => {
+        if (txHash) {
+          console.log('[Blockchain] Cert issued:', txHash);
+          await prisma.vaccineRecord.update({
+            where: { id: record.id },
+            data: { blockchainTx: txHash },
+          });
+        }
+      }).catch(() => {});
 
     blockchain.logAction(req.params.childId, 'vaccine', record.id, 1, vaccineName + ' ' + dose + ' logged').catch(() => {});
 

@@ -34,15 +34,15 @@ model User {
 
 // ─── OTP ──────────────────────────────────────────────────────────────────────
 model Otp {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   userId    String
   code      String
   type      OtpType
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("otps")
 }
@@ -97,54 +97,55 @@ enum Gender {
 
 // ─── VACCINES ─────────────────────────────────────────────────────────────────
 model VaccineRecord {
-  id          String   @id @default(uuid())
-  childId     String
-  vaccineId   String
-  vaccineName String
-  dose        String
-  date        DateTime
-  doctor      String?
-  clinic      String?
-  notes       String?
-  batchNumber String?
-  createdAt   DateTime @default(now())
+  id           String   @id @default(uuid())
+  childId      String
+  vaccineId    String
+  vaccineName  String
+  dose         String
+  date         DateTime
+  doctor       String?
+  clinic       String?
+  notes        String?
+  batchNumber  String?
+  blockchainTx String?
+  createdAt    DateTime @default(now())
 
-  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child        Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("vaccine_records")
 }
 
 // ─── GROWTH ───────────────────────────────────────────────────────────────────
 model GrowthEntry {
-  id          String   @id @default(uuid())
-  childId     String
-  date        DateTime
-  weightKg    Float
-  heightCm    Float?
-  headCm      Float?
-  measuredBy  String?
-  notes       String?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  childId    String
+  date       DateTime
+  weightKg   Float
+  heightCm   Float?
+  headCm     Float?
+  measuredBy String?
+  notes      String?
+  createdAt  DateTime @default(now())
 
-  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child      Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("growth_entries")
 }
 
 // ─── MEDICAL RECORDS ──────────────────────────────────────────────────────────
 model MedicalRecord {
-  id          String       @id @default(uuid())
-  childId     String
-  name        String
-  type        RecordType
-  source      String?
-  date        DateTime     @default(now())
-  fileUrl     String?
-  fileKey     String?
-  notes       String?
-  createdAt   DateTime     @default(now())
+  id        String     @id @default(uuid())
+  childId   String
+  name      String
+  type      RecordType
+  source    String?
+  date      DateTime   @default(now())
+  fileUrl   String?
+  fileKey   String?
+  notes     String?
+  createdAt DateTime   @default(now())
 
-  child       Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child     Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("medical_records")
 }
@@ -160,19 +161,19 @@ enum RecordType {
 
 // ─── APPOINTMENTS ─────────────────────────────────────────────────────────────
 model Appointment {
-  id          String            @id @default(uuid())
-  childId     String
-  type        String
-  doctor      String?
-  clinic      String?
-  date        DateTime
-  time        String?
-  notes       String?
-  status      AppointmentStatus @default(UPCOMING)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id        String            @id @default(uuid())
+  childId   String
+  type      String
+  doctor    String?
+  clinic    String?
+  date      DateTime
+  time      String?
+  notes     String?
+  status    AppointmentStatus @default(UPCOMING)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
-  child       Child             @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child     Child             @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("appointments")
 }
