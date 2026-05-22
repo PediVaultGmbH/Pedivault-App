@@ -10,7 +10,7 @@
   --bg1:#6B1F38;--bg2:#9B3A56;--bg3:#B04268;--bg4:#7A2640;
 }
 body{font-family:'DM Sans',sans-serif;overflow:hidden;}
-@media(max-width:768px){body{overflow:auto;-webkit-overflow-scrolling:touch;}}
+@media(max-width:768px){body{overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;}}
 html{-webkit-text-size-adjust:100%;}
 
 @keyframes fall1{0%{transform:translateY(-80px) rotate(0deg) translateX(0);opacity:0}5%{opacity:.7}88%{opacity:.35}100%{transform:translateY(110vh) rotate(520deg) translateX(65px);opacity:0}}
@@ -291,7 +291,7 @@ html{-webkit-text-size-adjust:100%;}
   .pv-layout-desktop{display:none!important;}
   .pv-mob-layout{display:flex;flex-direction:column;width:100%;}
 
-  .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 52px;flex-shrink:0;position:relative;z-index:5;gap:10px;}
+  .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 52px;flex-shrink:0;position:relative;z-index:5;gap:10px;background:linear-gradient(145deg,var(--bg1) 0%,var(--bg2) 35%,var(--bg3) 65%,var(--bg4) 100%);}
   .pv-mob-brand{display:flex;align-items:center;gap:12px;}
   .pv-mob-logo-box{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.12);}
   .pv-mob-brand-name{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;color:#fff;letter-spacing:-.01em;}
@@ -308,7 +308,7 @@ html{-webkit-text-size-adjust:100%;}
   .pv-mob-layout::after{display:none;}
  .pv-mob-sheet{
     background:#fff;
-    border-radius:28px 28px 0 0;
+    border-radius:0;
     padding:10px 24px 60px;
     position:relative;
     z-index:10;
