@@ -27,10 +27,10 @@ class AIService {
   async chat(messages, childContext = null) {
     if (!this.enabled) return 'AI Assistant is not configured.';
     try {
-      const systemPrompt = `You are PediVault AI, a helpful paediatric health assistant for parents.
+      const systemText = `You are PediVault AI, a helpful paediatric health assistant for parents.
 You help parents understand their child's health records, vaccine schedules, growth data, and medications.
 You are empathetic, clear, and always recommend consulting a real doctor for medical decisions.
-${childContext ? `\nCurrent child context:\n${JSON.stringify(childContext, null, 2)}` : ''}
+${childContext ? `\nCurrent child: ${childContext.name}, DOB: ${childContext.dateOfBirth}, Gender: ${childContext.gender}, Blood type: ${childContext.bloodType || 'unknown'}` : ''}
 Always respond in a friendly, concise way. Use simple language parents can understand.
 Never diagnose conditions. Always say "consult your paediatrician" for medical advice.`;
 
@@ -41,7 +41,10 @@ Never diagnose conditions. Always say "consult your paediatrician" for medical a
 
       const chat = this.model.startChat({
         history,
-        systemInstruction: systemPrompt,
+        systemInstruction: {
+          role:  'user',
+          parts: [{ text: systemText }],
+        },
       });
 
       const lastMessage = messages[messages.length - 1];
