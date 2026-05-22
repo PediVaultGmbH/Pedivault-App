@@ -12,8 +12,38 @@ const RECORD_TYPE_CFG = {
   'OTHER':            { icon:'📄', color:'var(--amber)',    bg:'rgba(186,112,24,.08)',  border:'rgba(186,112,24,.2)',  label:'Document' },
 };
 
+const IPFS_GATEWAY = 'https://gateway.pinata.cloud/ipfs';
+const POLYGONSCAN  = 'https://amoy.polygonscan.com';
+
 function getLabelFromType(type) {
   return RECORD_TYPE_CFG[type]?.label || type || 'Document';
+}
+
+function IPFSBadge({ hash }) {
+  if (!hash) return null;
+  return (
+    <a href={`${IPFS_GATEWAY}/${hash}`} target="_blank" rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      style={{ display:'inline-flex', alignItems:'center', gap:4, fontSize:'.42rem', fontWeight:500,
+        color:'#7B3FE4', background:'rgba(124,63,228,.08)', border:'1px solid rgba(124,63,228,.2)',
+        borderRadius:20, padding:'2px 7px', textDecoration:'none' }}>
+      🌐 IPFS
+    </a>
+  );
+}
+
+function BlockchainBadge({ txHash }) {
+  if (!txHash) return null;
+  const short = txHash.slice(0, 6) + '...' + txHash.slice(-4);
+  return (
+    <a href={`${POLYGONSCAN}/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      style={{ display:'inline-flex', alignItems:'center', gap:4, fontSize:'.42rem', fontWeight:500,
+        color:'#7B3FE4', background:'rgba(124,63,228,.08)', border:'1px solid rgba(124,63,228,.2)',
+        borderRadius:20, padding:'2px 7px', textDecoration:'none' }}>
+      ⛓ {short}
+    </a>
+  );
 }
 
 function RecordDetailModal({ open, onClose, record }) {
@@ -26,10 +56,7 @@ function RecordDetailModal({ open, onClose, record }) {
     e?.stopPropagation?.();
     if (record.fileUrl) {
       const a = document.createElement('a');
-      a.href     = record.fileUrl;
-      a.target   = '_blank';
-      a.download = record.name;
-      a.click();
+      a.href = record.fileUrl; a.target = '_blank'; a.download = record.name; a.click();
     }
   };
 
@@ -54,6 +81,7 @@ function RecordDetailModal({ open, onClose, record }) {
             </div>
           )}
         </div>
+
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:12 }}>
           {[
             { lbl:'Document type', val: cfg.label },
@@ -67,6 +95,37 @@ function RecordDetailModal({ open, onClose, record }) {
             </div>
           ))}
         </div>
+
+        {/* IPFS + Blockchain verification */}
+        {(record.ipfsHash || record.blockchainTx) && (
+          <div style={{ background:'rgba(124,63,228,.06)', border:'1px solid rgba(124,63,228,.18)', borderRadius:10, padding:'12px 14px', marginBottom:12 }}>
+            <div style={{ fontSize:'.5rem', fontWeight:600, color:'#7B3FE4', marginBottom:8, display:'flex', alignItems:'center', gap:6 }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Blockchain Verified
+            </div>
+            {record.ipfsHash && (
+              <div style={{ marginBottom:6 }}>
+                <div style={{ fontSize:'.42rem', color:'var(--ink-3)', marginBottom:3 }}>IPFS Hash</div>
+                <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                  <code style={{ fontSize:'.46rem', color:'#7B3FE4', wordBreak:'break-all' }}>{record.ipfsHash}</code>
+                  <a href={`${IPFS_GATEWAY}/${record.ipfsHash}`} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0 }}>↗</a>
+                </div>
+              </div>
+            )}
+            {record.blockchainTx && (
+              <div>
+                <div style={{ fontSize:'.42rem', color:'var(--ink-3)', marginBottom:3 }}>Blockchain TX</div>
+                <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                  <code style={{ fontSize:'.46rem', color:'#7B3FE4', wordBreak:'break-all' }}>{record.blockchainTx}</code>
+                  <a href={`${POLYGONSCAN}/tx/${record.blockchainTx}`} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0 }}>↗</a>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {record.notes && (
           <div style={{ background:'var(--cream-2)', borderRadius:9, padding:'10px 13px', border:'1px solid var(--line2)' }}>
             <div style={{ fontSize:'.42rem', fontWeight:600, letterSpacing:'.14em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:4 }}>Notes</div>
@@ -98,18 +157,14 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
 
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', { day:'numeric', month:'short', year:'numeric' }) : '—';
 
-  // ── All records from API only ─────────────────────────────────────────────
-  const allRecords = extraRecords.map((r, i) => ({
-    ...r,
-    id:   r.id || `rec-${i}`,
-    date: r.date || r.createdAt,
-  }));
+  const allRecords = extraRecords.map((r, i) => ({ ...r, id: r.id || `rec-${i}`, date: r.date || r.createdAt }));
 
   const counts = {
     total:  allRecords.length,
     lab:    allRecords.filter(r => r.type === 'LAB_REPORT').length,
     rx:     allRecords.filter(r => r.type === 'PRESCRIPTION').length,
     recent: allRecords.filter(r => { const d = new Date(r.date || r.createdAt); return !isNaN(d) && (Date.now() - d.getTime()) < 90 * 86400000; }).length,
+    ipfs:   allRecords.filter(r => r.ipfsHash).length,
   };
 
   const safeDate = d => { const dt = new Date(d); return isNaN(dt) ? new Date(0) : dt; };
@@ -145,6 +200,19 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
 
   return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
+
+      {/* IPFS banner */}
+      {counts.ipfs > 0 && (
+        <div style={{ marginBottom:14, padding:'10px 16px', background:'linear-gradient(135deg,rgba(124,63,228,.08),rgba(124,63,228,.04))', border:'1px solid rgba(124,63,228,.2)', borderRadius:12, display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:28, height:28, borderRadius:8, background:'rgba(124,63,228,.12)', border:'1px solid rgba(124,63,228,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'.9rem' }}>🌐</div>
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4', marginBottom:1 }}>IPFS + Blockchain Secured</div>
+            <div style={{ fontSize:'.46rem', color:'rgba(124,63,228,.7)' }}>
+              {counts.ipfs} of {counts.total} records stored on IPFS with blockchain verification
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
@@ -196,7 +264,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       {/* Filter tabs */}
       <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginBottom:12 }}>
         {filterTypes.map(t => {
-          const count = t === 'all' ? allRecords.length : allRecords.filter(r => r.type === t).length;
+          const count    = t === 'all' ? allRecords.length : allRecords.filter(r => r.type === t).length;
           if (t !== 'all' && count === 0) return null;
           const cfg      = t === 'all' ? null : RECORD_TYPE_CFG[t];
           const isActive = filter === t;
@@ -229,11 +297,13 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
                     <div style={{ width:38, height:38, borderRadius:10, flexShrink:0, background:cfg.bg, border:`1px solid ${cfg.border}`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.2rem' }}>{cfg.icon}</div>
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ fontSize:'.66rem', fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{rec.name}</div>
-                      <div style={{ display:'flex', alignItems:'center', gap:7, flexWrap:'wrap' }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
                         <span style={{ fontSize:'.46rem', fontWeight:500, color:cfg.color, background:cfg.bg, border:`1px solid ${cfg.border}`, borderRadius:20, padding:'1px 7px' }}>{cfg.label}</span>
                         {rec.source && <span style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>{rec.source}</span>}
                         <span style={{ fontSize:'.46rem', color:'var(--ink-3)' }}>·</span>
                         <span style={{ fontSize:'.48rem', color:'var(--ink-3)' }}>{fmtDate(rec.date || rec.createdAt)}</span>
+                        {rec.ipfsHash && <IPFSBadge hash={rec.ipfsHash}/>}
+                        {rec.blockchainTx && <BlockchainBadge txHash={rec.blockchainTx}/>}
                       </div>
                       {rec.notes && <div style={{ fontSize:'.48rem', color:'var(--ink-3)', marginTop:4 }}>{rec.notes}</div>}
                     </div>
@@ -261,11 +331,12 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:'.6rem', fontWeight:600, color:'var(--green)', marginBottom:2 }}>End-to-end encrypted</div>
-            <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.6 }}>All documents are encrypted with AES-256 and stored securely under DSGVO / GDPR.</div>
+            <div style={{ fontSize:'.6rem', fontWeight:600, color:'var(--green)', marginBottom:2 }}>End-to-end encrypted + IPFS stored</div>
+            <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.6 }}>All documents are encrypted with AES-256, stored on IPFS and verified on Polygon blockchain under DSGVO / GDPR.</div>
           </div>
           <div style={{ textAlign:'right', flexShrink:0 }}>
             <div style={{ fontSize:'.52rem', fontWeight:600, color:'var(--ink)' }}>{allRecords.length} files</div>
+            {counts.ipfs > 0 && <div style={{ fontSize:'.44rem', color:'#7B3FE4' }}>{counts.ipfs} on IPFS</div>}
           </div>
         </div>
       </div>
