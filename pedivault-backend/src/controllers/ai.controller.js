@@ -1,7 +1,5 @@
 // src/controllers/ai.controller.js
-const Anthropic = require('@anthropic-ai/sdk');
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const aiService = require('../services/ai.service');
 
 const SYSTEM_PROMPT = `You are PediVault's AI health assistant — a knowledgeable, empathetic guide for parents tracking their children's health in Germany.
 - You specialise in STIKO 2026 vaccine schedules, WHO growth charts, and German paediatric check-ups (U1–U14)
@@ -13,34 +11,19 @@ const SYSTEM_PROMPT = `You are PediVault's AI health assistant — a knowledgeab
 
 async function chat(req, res, next) {
   try {
-    const { messages, systemPrompt } = req.body;
+    const { messages, childContext } = req.body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0)
       return res.status(400).json({ success: false, error: 'messages array is required' });
 
-    // Validate message format
     const valid = messages.every(m => ['user','assistant'].includes(m.role) && typeof m.content === 'string');
     if (!valid)
       return res.status(400).json({ success: false, error: 'Each message must have role (user|assistant) and content (string)' });
 
-    const response = await client.messages.create({
-      model:      'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      system:     systemPrompt || SYSTEM_PROMPT,
-      messages:   messages.map(m => ({ role: m.role, content: m.content })),
-    });
+    const reply = await aiService.chat(messages, childContext);
 
-    const reply = response.content
-      .filter(b => b.type === 'text')
-      .map(b => b.text)
-      .join('');
-
-    res.json({ success: true, data: { reply, usage: response.usage } });
+    res.json({ success: true, data: { reply } });
   } catch (err) {
-    if (err.status === 401)
-      return res.status(500).json({ success: false, error: 'AI service is not configured correctly' });
-    if (err.status === 429)
-      return res.status(429).json({ success: false, error: 'AI service rate limit reached. Please wait a moment.' });
     next(err);
   }
 }
