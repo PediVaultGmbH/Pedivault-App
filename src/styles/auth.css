@@ -308,7 +308,7 @@ html{-webkit-text-size-adjust:100%;}
   .pv-mob-layout::after{display:none;}
  .pv-mob-sheet{
     background:#fff;
-    border-radius:0;
+    border-radius:28px 28px 0 0;
     padding:10px 24px 60px;
     position:relative;
     z-index:10;
@@ -372,7 +372,7 @@ html{-webkit-text-size-adjust:100%;}
   .pv-div{margin:14px 0;font-size:.6rem;}
   .pv-sg{gap:10px;}
   .pv-ring,.pv-glow,.pv-branch,.pv-dots{display:none;}
-  .pv-petal{opacity:0;}
+  .pv-petal{opacity:1;}
   .p1,.p3,.p5,.p7{display:block;}
 }
 
