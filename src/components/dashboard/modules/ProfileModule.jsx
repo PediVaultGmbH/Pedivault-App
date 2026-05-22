@@ -1,14 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import EmptyState from '../ui/EmptyState';
 import XBtn from '../ui/XBtn';
+import api from '../../../api/client';
+
+const ACTION_CFG = {
+  0: { label:'Viewed',  color:'var(--blue)',  bg:'var(--blue-bg)',  icon:'👁' },
+  1: { label:'Created', color:'var(--green)', bg:'var(--green-bg)', icon:'✚' },
+  2: { label:'Updated', color:'var(--amber)', bg:'var(--amber-bg)', icon:'✎' },
+  3: { label:'Deleted', color:'var(--red)',   bg:'var(--red-bg)',   icon:'✕' },
+  4: { label:'Shared',  color:'var(--blue)',  bg:'var(--blue-bg)',  icon:'⇗' },
+  5: { label:'Revoked', color:'var(--red)',   bg:'var(--red-bg)',   icon:'✕' },
+};
+
+const POLYGONSCAN = 'https://amoy.polygonscan.com';
 
 export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildren = [] }) {
   const [section,       setSection]       = useState('overview');
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [auditLogs,     setAuditLogs]     = useState([]);
+  const [auditLoading,  setAuditLoading]  = useState(false);
+  const [blockchainOn,  setBlockchainOn]  = useState(false);
 
-  // ── Get child data from API ───────────────────────────────────────────────
   const child = apiChildren.find(c => c.id === activeChild) || null;
+
+  useEffect(() => {
+    if (section !== 'audit' || !activeChild) return;
+    setAuditLoading(true);
+    api.get(`/blockchain/child/${activeChild}/audit`)
+      .then(res => {
+        setAuditLogs(res.data || []);
+        setBlockchainOn(true);
+      })
+      .catch(() => {
+        setAuditLogs([]);
+        setBlockchainOn(false);
+      })
+      .finally(() => setAuditLoading(false));
+  }, [section, activeChild]);
 
   const calcAge = dob => {
     if (!dob) return '—';
@@ -22,10 +51,12 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
   };
 
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', { day:'numeric', month:'long', year:'numeric' }) : '—';
+  const fmtTs   = ts => ts ? new Date(Number(ts) * 1000).toLocaleDateString('en-DE', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
 
   const SECTIONS = [
     { k:'overview', label:'Overview', icon:'👤' },
     { k:'details',  label:'Details',  icon:'📋' },
+    { k:'audit',    label:'Audit Trail', icon:'⛓' },
   ];
 
   const GENDER_COLOR = { FEMALE:'#C47A92', MALE:'#3478B0', OTHER:'#7B52B0' };
@@ -82,7 +113,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16, flexWrap:'wrap', gap:8 }}>
         <div style={{ display:'flex', gap:4, flexWrap:'wrap' }}>
           {SECTIONS.map(s => (
-            <div key={s.k} onClick={() => setSection(s.k)} style={{ height:30, padding:'0 13px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.54rem', fontWeight: section === s.k ? 600 : 400, color: section === s.k ? '#fff' : 'var(--ink-2)', background: section === s.k ? pColor : 'var(--cream-2)', border:`1px solid ${section === s.k ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, lineHeight:1 }}>
+            <div key={s.k} onClick={() => setSection(s.k)} style={{ height:30, padding:'0 13px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.54rem', fontWeight: section === s.k ? 600 : 400, color: section === s.k ? '#fff' : 'var(--ink-2)', background: section === s.k ? (s.k === 'audit' ? '#7B3FE4' : pColor) : 'var(--cream-2)', border:`1px solid ${section === s.k ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, lineHeight:1 }}>
               <span style={{ fontSize:'.7rem' }}>{s.icon}</span>{s.label}
             </div>
           ))}
@@ -117,8 +148,6 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
       {/* Overview */}
       {section === 'overview' && (
         <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-
-          {/* Basic info */}
           <div className="card">
             <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Basic Information</div></div>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
@@ -136,7 +165,6 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
             </div>
           </div>
 
-          {/* Allergies */}
           <div className="card">
             <div className="sh" style={{ marginBottom: allergies.length ? 12 : 0 }}>
               <div className="sh-title">Allergies & Sensitivities</div>
@@ -166,7 +194,6 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
             })}
           </div>
 
-          {/* Medical conditions */}
           <div className="card">
             <div className="sh" style={{ marginBottom: conditions.length ? 12 : 0 }}>
               <div className="sh-title">Medical Conditions</div>
@@ -237,6 +264,77 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Audit Trail */}
+      {section === 'audit' && (
+        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+
+          {/* Blockchain status */}
+          <div style={{ padding:'12px 16px', background:'linear-gradient(135deg,rgba(124,63,228,.08),rgba(124,63,228,.04))', border:'1px solid rgba(124,63,228,.2)', borderRadius:12, display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:28, height:28, borderRadius:8, background:'rgba(124,63,228,.12)', border:'1px solid rgba(124,63,228,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round">
+                <rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="7" width="6" height="10" rx="1"/>
+                <path d="M8 12h1M15 12h1"/>
+              </svg>
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4', marginBottom:1 }}>Immutable Audit Trail</div>
+              <div style={{ fontSize:'.46rem', color:'rgba(124,63,228,.7)' }}>
+                All actions are permanently recorded on Polygon Amoy blockchain · {auditLogs.length} events logged
+              </div>
+            </div>
+            <a href={`${POLYGONSCAN}/address/${process.env.REACT_APP_AUDIT_CONTRACT || '0x837fcEFAeF5c948386F1cd687B28ceE2a4161e9b'}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0 }}>
+              View contract ↗
+            </a>
+          </div>
+
+          {auditLoading ? (
+            <div className="card" style={{ textAlign:'center', padding:'32px', color:'var(--ink-3)', fontSize:'.6rem' }}>
+              Loading audit trail…
+            </div>
+          ) : auditLogs.length === 0 ? (
+            <div className="card" style={{ textAlign:'center', padding:'32px' }}>
+              <div style={{ fontSize:'2rem', marginBottom:10 }}>⛓</div>
+              <div style={{ fontSize:'.62rem', fontWeight:600, color:'var(--ink)', marginBottom:6 }}>No audit logs yet</div>
+              <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>Actions on this child's records will appear here once logged on-chain.</div>
+            </div>
+          ) : (
+            <div className="card" style={{ padding:0, overflow:'hidden' }}>
+              <div style={{ padding:'10px 16px', background:'rgba(124,63,228,.04)', borderBottom:'1px solid rgba(124,63,228,.12)', display:'flex', alignItems:'center', gap:8 }}>
+                <span style={{ fontSize:'.52rem', fontWeight:600, color:'#7B3FE4' }}>{auditLogs.length} Blockchain Events</span>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column' }}>
+                {auditLogs.map((log, i) => {
+                  const cfg = ACTION_CFG[log.action] || ACTION_CFG[1];
+                  return (
+                    <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, padding:'12px 16px', borderBottom: i < auditLogs.length - 1 ? '1px solid var(--line2)' : 'none', background: i % 2 === 0 ? 'transparent' : 'rgba(124,63,228,.015)' }}>
+                      <div style={{ width:30, height:30, borderRadius:8, background:cfg.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'.8rem' }}>
+                        {cfg.icon}
+                      </div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap', marginBottom:3 }}>
+                          <span style={{ fontSize:'.58rem', fontWeight:600, color:'var(--ink)' }}>{log.resourceType || 'Record'}</span>
+                          <span style={{ fontSize:'.44rem', fontWeight:600, color:cfg.color, background:cfg.bg, borderRadius:20, padding:'1px 7px' }}>{cfg.label}</span>
+                        </div>
+                        {log.metadata && <div style={{ fontSize:'.5rem', color:'var(--ink-3)', marginBottom:3 }}>{log.metadata}</div>}
+                        <div style={{ fontSize:'.44rem', color:'rgba(124,63,228,.6)' }}>
+                          {fmtTs(log.timestamp)} · Block logged on Polygon Amoy
+                        </div>
+                      </div>
+                      <a href={`${POLYGONSCAN}/address/${log.performedBy}`} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize:'.42rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0, marginTop:2 }}>
+                        ↗
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
