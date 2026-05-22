@@ -276,12 +276,14 @@ html{-webkit-text-size-adjust:100%;}
 /* ══ MOBILE ══ */
 @media(max-width:768px){
 
-  body{overflow:auto;}
+  html{height:auto!important;}
+  body{height:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;}
 
  .pv-root{
-    position:relative;
+    position:relative!important;
     min-height:100vh;
-    overflow:visible;
+    overflow:visible!important;
+    height:auto!important;
     display:block;
   }
 
