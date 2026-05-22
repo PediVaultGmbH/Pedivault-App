@@ -313,11 +313,11 @@ html{-webkit-text-size-adjust:100%;}
     box-shadow:0 -12px 40px rgba(0,0,0,.18);
     min-height:calc(100vh - 200px);
   }
-  .pv-mob-layout::after{
+ .pv-mob-layout::after{
     content:'';
     display:block;
     background:rgba(255,255,255,.97);
-    height:300px;
+    height:40px;
     margin-top:-2px;
     flex-shrink:0;
   }
