@@ -48,56 +48,6 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
     ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
   }, [input]);
 
-  const systemPrompt = useCallback(() => {
-    const c = activeChildData;
-    const g = growthData;
-    const weight = g?.weight || g?.weightKg;
-    const height = g?.height || g?.heightCm;
-    const bmi    = weight && height ? (weight / ((height / 100) ** 2)).toFixed(1) : null;
-
-    const calcAge = dob => {
-      if (!dob) return null;
-      const d = new Date(dob), now = new Date();
-      let years  = now.getFullYear() - d.getFullYear();
-      let months = now.getMonth()    - d.getMonth();
-      if (months < 0) { years--; months += 12; }
-      return years > 0 ? `${years} years ${months} months` : `${months} months`;
-    };
-
-    const activeMeds = medications.filter(m => m.status === 'ACTIVE' || m.status === 'active');
-
-    return `You are PediVault AI, a warm and knowledgeable paediatric health assistant integrated into PediVault — a German child health records app. You help parents understand their child's health data, answer paediatric questions, and provide guidance based on German healthcare standards (STIKO, U-Untersuchungen, DSGVO).
-
-CURRENT CHILD PROFILE:
-- Name: ${c?.name || childName}
-- Date of birth: ${c?.dateOfBirth || '—'}
-- Age: ${calcAge(c?.dateOfBirth) || '—'}
-- Gender: ${c?.gender || '—'}
-- Blood type: ${c?.bloodType || '—'}
-${weight ? `
-LATEST GROWTH:
-- Weight: ${weight} kg
-- Height: ${height} cm
-- Head circumference: ${g.head || g.headCm || '—'} cm
-- BMI: ${bmi}` : ''}
-${vaccineEntries.length ? `
-LOGGED VACCINES: ${vaccineEntries.length} doses recorded` : ''}
-${activeMeds.length ? `
-ACTIVE MEDICATIONS: ${activeMeds.map(m => `${m.name} ${m.dosage}`).join(', ')}` : ''}
-${c?.allergies?.length ? `
-ALLERGIES: ${Array.isArray(c.allergies) ? c.allergies.join(', ') : c.allergies}` : ''}
-
-GUIDELINES:
-- Be warm, clear and reassuring — parents are often worried
-- Always recommend consulting a paediatrician for medical decisions
-- Reference STIKO guidelines for vaccine questions
-- Use metric units (kg, cm, °C)
-- Keep responses concise — 2–4 short paragraphs maximum
-- Never diagnose — guide, inform and reassure
-- If urgent symptoms are described (breathing difficulty, high fever >40°C, rash, seizures), advise contacting a doctor or calling 112 immediately
-- Respond in the same language the parent writes in (English or German)`;
-  }, [activeChild, activeChildData, childName, growthData, vaccineEntries, medications]);
-
   const sendMessage = async (text) => {
     const trimmed = (text || input).trim();
     if (!trimmed || loading) return;
@@ -113,7 +63,7 @@ GUIDELINES:
       const history = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }));
       const data = await api.post('/ai/chat', {
         messages:     history,
-        systemPrompt: systemPrompt(),
+        childContext: activeChildData,
       });
       const reply = data?.data?.reply || "I couldn't generate a response. Please try again.";
       setMessages(prev => [...prev, { role:'assistant', content:reply, ts:Date.now() }]);
@@ -206,7 +156,7 @@ GUIDELINES:
                 </div>
                 <div style={{ marginTop:12, display:'inline-flex', alignItems:'center', gap:5, fontSize:'.46rem', color:'var(--ink-3)', background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:20, padding:'4px 10px' }}>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  Powered by Claude · Not a substitute for medical advice
+                  Powered by Gemini · Not a substitute for medical advice
                 </div>
               </div>
               <div style={{ marginBottom:8 }}>
@@ -227,7 +177,7 @@ GUIDELINES:
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             {messages.map((msg, i) => (
               <div key={i} style={{ display:'flex', flexDirection:msg.role === 'user' ? 'row-reverse' : 'row', alignItems:'flex-start', gap:10, animation:'fadeUp .2s ease both' }}>
-                <div style={{ width:30, height:30, borderRadius:9, flexShrink:0, background:msg.role === 'user' ? 'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))' : 'linear-gradient(135deg,var(--ink),#4A3240)', border:msg.role === 'user' ? '1px solid var(--rose-lt)' : 'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ width:30, height:30, borderRadius:9, flexShrink:0, background:msg.role === 'user' ? 'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))' : 'linear-gradient(135deg,#1a73e8,#0d47a1)', border:msg.role === 'user' ? '1px solid var(--rose-lt)' : 'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   {msg.role === 'user'
                     ? <span style={{ fontFamily:"'Playfair Display',serif", fontSize:'.7rem', color:'var(--rose)' }}>{childName[0]}</span>
                     : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5V11h-4V9.5A4 4 0 0112 2z"/><rect x="8" y="11" width="8" height="5" rx="1"/></svg>
@@ -244,12 +194,12 @@ GUIDELINES:
             {/* Loading bubble */}
             {loading && (
               <div style={{ display:'flex', alignItems:'flex-start', gap:10, animation:'fadeUp .2s ease both' }}>
-                <div style={{ width:30, height:30, borderRadius:9, background:'linear-gradient(135deg,var(--ink),#4A3240)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <div style={{ width:30, height:30, borderRadius:9, background:'linear-gradient(135deg,#1a73e8,#0d47a1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5V11h-4V9.5A4 4 0 0112 2z"/><rect x="8" y="11" width="8" height="5" rx="1"/></svg>
                 </div>
                 <div style={{ background:'var(--white)', border:'1px solid var(--line2)', borderRadius:'4px 16px 16px 16px', padding:'13px 16px', boxShadow:'var(--shadow-card)', display:'flex', gap:5, alignItems:'center' }}>
                   {[0,1,2].map(i => (
-                    <div key={i} style={{ width:6, height:6, borderRadius:'50%', background:'var(--rose-mid)', opacity:.7, animation:`ping ${0.6 + i * 0.15}s ease-in-out ${i * 0.15}s infinite` }}/>
+                    <div key={i} style={{ width:6, height:6, borderRadius:'50%', background:'#1a73e8', opacity:.7, animation:`ping ${0.6 + i * 0.15}s ease-in-out ${i * 0.15}s infinite` }}/>
                   ))}
                 </div>
               </div>
@@ -312,7 +262,7 @@ GUIDELINES:
                 </button>
               )}
             </div>
-            <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>Powered by Claude · Always consult your paediatrician</span>
+            <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>Powered by Gemini · Always consult your paediatrician</span>
           </div>
         </div>
       </div>
