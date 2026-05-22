@@ -31,7 +31,7 @@ export default function PediVaultAuth({ onLogin }) {
   const otpProps    = { ...sharedProps, phone: pendingPhoneRef.current.phone, countryCode: pendingPhoneRef.current.countryCode };
 
   return (
-    <div className="pv-root" style={{ opacity: fading ? 0 : 1, transition: 'opacity .3s ease', pointerEvents: fading ? 'none' : 'auto' }}>
+    <div className="pv-root" style={{ opacity: fading ? 0 : 1, transition: 'opacity .3s ease', pointerEvents: fading ? 'none' : 'auto', position: window.innerWidth <= 768 ? 'relative' : 'fixed', overflow: window.innerWidth <= 768 ? 'visible' : 'hidden' }}>
       <SvgDefs />
       <Bg />
       <div className="pv-layout pv-layout-desktop">
@@ -46,9 +46,9 @@ export default function PediVaultAuth({ onLogin }) {
           </div>
         </div>
       </div>
-      <div className="pv-mob-layout">
+      <div className="pv-mob-layout" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch', minHeight:'100vh' }}>
         <MobileHeader />
-        <div className="pv-mob-sheet">
+        <div className="pv-mob-sheet" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch' }}>
           <div className="pv-mob-sheet-handle" />
           {screen === 'signin'  && <SignIn        {...sharedProps} />}
           {screen === 'create'  && <CreateAccount {...sharedProps} />}

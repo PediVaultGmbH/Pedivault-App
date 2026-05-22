@@ -196,7 +196,7 @@ export function CreateAccount({ goTo }) {
   const onKey = e => { if (e.key === 'Enter') handleSubmit(); };
 
   return (
-    <div className="pv-si">
+    <div className="pv-si" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch' }}>
       <Brand/>
       <div className="pv-h-calm">Create your account</div>
       <div className="pv-s">Start managing your child's health in minutes</div>
@@ -242,13 +242,13 @@ export function CreateAccount({ goTo }) {
         </div>
         <div className="pv-tt">I agree to the <span className="pv-lk">Terms of Service</span> and <span className="pv-lk">Privacy Policy</span>. PediVault encrypts all health data per GDPR (EU) 2016/679.</div>
       </div>
-      <button type="button" className="pv-btn" disabled={loading} onClick={handleSubmit}>
+      <button type="button" className="pv-btn" style={{ marginBottom:8 }} disabled={loading} onClick={handleSubmit}>
         {loading
           ? <><div className="pv-btn-spin"/>Sending code…</>
           : <>Send OTP & Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></>
         }
       </button>
-      <div className="pv-sw">Already have an account? <span className="pv-lk" onClick={() => goTo('signin')}>← Sign in</span></div>
+      <div className="pv-sw" style={{ paddingBottom:32 }}>Already have an account? <span className="pv-lk" onClick={() => goTo('signin')}>← Sign in</span></div>
     </div>
   );
 }
