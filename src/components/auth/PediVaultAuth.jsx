@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import '../../styles/auth.css';
 
 import { SvgDefs, Bg } from './ui/Background';
@@ -16,6 +16,24 @@ export default function PediVaultAuth({ onLogin }) {
   const pendingNameRef      = useRef('');
   const pendingPhoneRef     = useRef({ phone: '', countryCode: '+49' });
 
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      document.documentElement.style.height = 'auto';
+      document.documentElement.style.overflow = 'auto';
+      document.body.style.height = 'auto';
+      document.body.style.overflow = 'auto';
+      document.body.style.webkitOverflowScrolling = 'touch';
+    }
+    return () => {
+      document.documentElement.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+      document.body.style.webkitOverflowScrolling = '';
+    };
+  }, []);
+
   const goTo = useCallback((s, name, phoneData) => {
     if (name)      pendingNameRef.current  = name;
     if (phoneData) pendingPhoneRef.current = phoneData;
@@ -30,8 +48,17 @@ export default function PediVaultAuth({ onLogin }) {
   const sharedProps = { goTo };
   const otpProps    = { ...sharedProps, phone: pendingPhoneRef.current.phone, countryCode: pendingPhoneRef.current.countryCode };
 
+  const isMobile = window.innerWidth <= 768;
+
   return (
-    <div className="pv-root" style={{ opacity: fading ? 0 : 1, transition: 'opacity .3s ease', pointerEvents: fading ? 'none' : 'auto', position: window.innerWidth <= 768 ? 'relative' : 'fixed', overflow: window.innerWidth <= 768 ? 'visible' : 'hidden' }}>
+    <div className="pv-root" style={{
+      opacity: fading ? 0 : 1,
+      transition: 'opacity .3s ease',
+      pointerEvents: fading ? 'none' : 'auto',
+      position: isMobile ? 'relative' : 'fixed',
+      overflow: isMobile ? 'visible' : 'hidden',
+      height: isMobile ? 'auto' : '100%',
+    }}>
       <SvgDefs />
       <Bg />
       <div className="pv-layout pv-layout-desktop">
@@ -46,9 +73,9 @@ export default function PediVaultAuth({ onLogin }) {
           </div>
         </div>
       </div>
-      <div className="pv-mob-layout" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch', minHeight:'100vh' }}>
+      <div className="pv-mob-layout">
         <MobileHeader />
-        <div className="pv-mob-sheet" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch' }}>
+        <div className="pv-mob-sheet">
           <div className="pv-mob-sheet-handle" />
           {screen === 'signin'  && <SignIn        {...sharedProps} />}
           {screen === 'create'  && <CreateAccount {...sharedProps} />}
