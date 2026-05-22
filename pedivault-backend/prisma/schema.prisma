@@ -134,18 +134,20 @@ model GrowthEntry {
 
 // ─── MEDICAL RECORDS ──────────────────────────────────────────────────────────
 model MedicalRecord {
-  id        String     @id @default(uuid())
-  childId   String
-  name      String
-  type      RecordType
-  source    String?
-  date      DateTime   @default(now())
-  fileUrl   String?
-  fileKey   String?
-  notes     String?
-  createdAt DateTime   @default(now())
+  id           String     @id @default(uuid())
+  childId      String
+  name         String
+  type         RecordType
+  source       String?
+  date         DateTime   @default(now())
+  fileUrl      String?
+  fileKey      String?
+  notes        String?
+  ipfsHash     String?
+  blockchainTx String?
+  createdAt    DateTime   @default(now())
 
-  child     Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
+  child        Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@map("medical_records")
 }
