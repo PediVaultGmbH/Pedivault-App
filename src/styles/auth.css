@@ -288,7 +288,7 @@ html{-webkit-text-size-adjust:100%;}
   }
 
   .pv-layout-desktop{display:none!important;}
-  .pv-mob-layout{display:flex;flex-direction:column;min-height:100vh;min-height:100svh;width:100%;}
+  .pv-mob-layout{display:flex;flex-direction:column;width:100%;}
 
   .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 52px;flex-shrink:0;position:relative;z-index:5;gap:10px;}
   .pv-mob-brand{display:flex;align-items:center;gap:12px;}
@@ -306,14 +306,12 @@ html{-webkit-text-size-adjust:100%;}
   /* ── Sheet card ── */
   .pv-mob-layout::after{display:none;}
   .pv-mob-sheet{
-    flex:1;
     background:rgba(255,255,255,.97);
     border-radius:28px 28px 0 0;
-    padding:10px 24px 80px;
+    padding:10px 24px 60px;
     position:relative;
     z-index:10;
     box-shadow:0 -12px 40px rgba(0,0,0,.18);
-    min-height:100vh;
   }
 
   /* ── Old card layout (fallback) ── */
