@@ -1,19 +1,5 @@
 // src/services/email.service.js
-const nodemailer = require('nodemailer');
-const jwt        = require('jsonwebtoken');
-
-function createTransport() {
-  if (process.env.SMTP_HOST) {
-    const port = parseInt(process.env.SMTP_PORT) || 587;
-    return nodemailer.createTransport({
-      host:   process.env.SMTP_HOST,
-      port:   port,
-      secure: port === 465,
-      auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    });
-  }
-  return null;
-}
+const jwt = require('jsonwebtoken');
 
 async function sendPasswordReset(user) {
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
@@ -32,18 +18,19 @@ async function sendPasswordReset(user) {
       <p style="color:#999;font-size:12px;">If you didn't request a password reset, you can safely ignore this email.</p>
     </div>`;
 
-  const transport = createTransport();
-  if (transport) {
+  if (process.env.RESEND_API_KEY) {
     try {
-      await transport.sendMail({
-        from:    process.env.EMAIL_FROM || '"PediVault" <noreply@pedivault.de>',
+      const { Resend } = require('resend');
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from:    process.env.EMAIL_FROM || 'PediVault <onboarding@resend.dev>',
         to:      user.email,
         subject: 'Reset your PediVault password',
         html,
       });
+      console.log('[EMAIL] Password reset sent to', user.email);
     } catch (err) {
       console.error('[EMAIL] Failed to send reset email:', err.message);
-      // Don't throw — auth controller always returns 200 for forgot-password
     }
   } else {
     console.log(`\n📧 [DEV EMAIL] Password reset for ${user.email}\n   Link: ${url}\n`);
