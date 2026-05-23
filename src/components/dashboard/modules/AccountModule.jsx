@@ -487,10 +487,25 @@ useEffect(() => {
       {/* NOTIFICATIONS TAB */}
       {tab==='notifications' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
-          <div className="card">
+         <div className="card">
             <div className="sh" style={{marginBottom:2}}><div className="sh-title">Delivery Channels</div></div>
             <ToggleSwitch on={notifs.pushDelivery} onChange={()=>toggleNotif('pushDelivery')} label="Push notifications" sub="In-app and browser notifications"/>
             <ToggleSwitch on={notifs.emailDelivery} onChange={()=>toggleNotif('emailDelivery')} label="Email notifications" sub={profile.email}/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 0',borderBottom:'1px solid var(--line2)'}}>
+              <div>
+                <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>SMS notifications</div>
+                <div style={{fontSize:'.5rem',fontWeight:300,color:'var(--ink-3)'}}>{profile.phone||'No phone number set'}</div>
+              </div>
+              <button type="button" onClick={async()=>{
+                try {
+                  const {default:api} = await import('../../../api/client');
+                  await api.post('/notifications/test');
+                  alert('✅ Test SMS sent! Check your phone.');
+                } catch(e){ alert('Failed: '+e.message); }
+              }} style={{height:32,padding:'0 14px',borderRadius:9,background:'var(--green-bg)',border:'1px solid var(--green-lt)',color:'var(--green)',fontSize:'.56rem',fontWeight:500,cursor:'pointer'}}>
+                Send test SMS
+              </button>
+            </div>
           </div>
           <div className="card">
             <div className="sh" style={{marginBottom:2}}><div className="sh-title">Health Reminders</div></div>
