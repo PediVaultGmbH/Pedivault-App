@@ -239,9 +239,45 @@ async function updateNotifications(req, res, next) {
   } catch (err) { next(err); }
 }
 
+// ── POST /api/auth/2fa/setup ──────────────────────────────────────────────────
+async function setup2FA(req, res, next) {
+  try {
+    const speakeasy = require('speakeasy');
+    const QRCode    = require('qrcode');
+    const secret = speakeasy.generateSecret({ name: `PediVault (${req.user.email})`, length: 20 });
+    await prisma.user.update({ where: { id: req.user.id }, data: { twoFactorSecret: secret.base32 } });
+    const qrDataUrl = await QRCode.toDataURL(secret.otpauth_url);
+    res.json({ success: true, data: { secret: secret.base32, qrCode: qrDataUrl } });
+  } catch (err) { next(err); }
+}
+
+// ── POST /api/auth/2fa/verify ─────────────────────────────────────────────────
+async function verify2FA(req, res, next) {
+  try {
+    const speakeasy = require('speakeasy');
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ success: false, error: 'Token is required' });
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    if (!user.twoFactorSecret) return res.status(400).json({ success: false, error: '2FA not set up' });
+    const valid = speakeasy.totp.verify({ secret: user.twoFactorSecret, encoding: 'base32', token, window: 1 });
+    if (!valid) return res.status(400).json({ success: false, error: 'Invalid code. Please try again.' });
+    await prisma.user.update({ where: { id: req.user.id }, data: { twoFactorEnabled: true } });
+    res.json({ success: true, message: '2FA enabled successfully' });
+  } catch (err) { next(err); }
+}
+
+// ── POST /api/auth/2fa/disable ────────────────────────────────────────────────
+async function disable2FA(req, res, next) {
+  try {
+    await prisma.user.update({ where: { id: req.user.id }, data: { twoFactorEnabled: false, twoFactorSecret: null } });
+    res.json({ success: true, message: '2FA disabled' });
+  } catch (err) { next(err); }
+}
+
 module.exports = {
   register, sendOTP, verifyOTP, resendOTP, signIn, refreshToken,
   signOut, forgotPassword, resetPassword, getMe, updateMe,
   changePassword, getSessions, revokeAllSessions, deleteAccount,
   getNotifications, updateNotifications,
+  setup2FA, verify2FA, disable2FA,
 };

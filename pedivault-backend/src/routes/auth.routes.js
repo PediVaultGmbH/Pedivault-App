@@ -22,7 +22,9 @@ router.delete('/me',             authenticate, ctrl.deleteAccount);
 router.post('/change-password',  authenticate, ctrl.changePassword);
 router.get ('/sessions',         authenticate, ctrl.getSessions);
 router.delete('/sessions',       authenticate, ctrl.revokeAllSessions);
-
 router.get("/notifications", authenticate, ctrl.getNotifications);
 router.put("/notifications", authenticate, ctrl.updateNotifications);
+router.post('/2fa/setup',   authenticate, ctrl.setup2FA);
+router.post('/2fa/verify',  authenticate, ctrl.verify2FA);
+router.post('/2fa/disable', authenticate, ctrl.disable2FA);
 module.exports = router;

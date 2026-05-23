@@ -23,6 +23,8 @@ plan                 String    @default("FREE")
   stripeSubscriptionId String?
   planExpiresAt        DateTime?
   notificationPrefs    Json?     @default("{}")
+  twoFactorSecret      String?
+  twoFactorEnabled     Boolean   @default(false)
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 
