@@ -202,7 +202,7 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
           </div>
         )}
         {deleteStep===3 && (
-          <div style={{padding:'48px 28px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:14}}>
+          <div style={{padding:'48px 28px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:14,borderRadius:22,overflow:'hidden'}}>
             <div style={{width:64,height:64,borderRadius:20,background:'var(--red-bg)',border:'1.5px solid rgba(185,40,20,.2)',display:'flex',alignItems:'center',justifyContent:'center',animation:'pvSuccessPop .4s ease both'}}>
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
             </div>
@@ -267,7 +267,7 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
           </div>
         )}
         {upgradeStep===3 && (
-          <div style={{padding:'48px 28px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:14,background:'linear-gradient(180deg,var(--rose-pale),var(--white))'}}>
+         <div style={{padding:'48px 28px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:14,background:'linear-gradient(180deg,var(--rose-pale),var(--white))',borderRadius:22,overflow:'hidden'}}>
             <div style={{width:72,height:72,borderRadius:22,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'2px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',animation:'pvSuccessPop .5s ease both',boxShadow:'0 8px 28px rgba(155,58,86,.2)'}}>
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="2.2" strokeLinecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             </div>
