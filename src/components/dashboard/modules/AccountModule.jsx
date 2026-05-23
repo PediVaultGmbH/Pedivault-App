@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications, setup2FA, verify2FA, disable2FA } from '../../../api/auth.api';
-import { createSubscription } from '../../../api/payments.api';
+import { createSubscription, getSubscription, cancelSubscription } from '../../../api/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
@@ -115,6 +115,8 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
   const [deleteInput, setDeleteInput] = useState('');
   const [upgradeStep, setUpgradeStep] = useState(0);
   const [plan, setPlan]               = useState('monthly');
+  const [billing, setBilling]         = useState(null);
+  const [cancelling, setCancelling]   = useState(false);
 
   useEffect(() => {
   if (tab !== 'security') return;
@@ -127,6 +129,11 @@ useEffect(() => {
     if (res?.data && Object.keys(res.data).length > 0) setNotifs(n => ({...n, ...res.data}));
   }).catch(() => {});
 }, []);
+
+useEffect(() => {
+  if (tab !== 'plan') return;
+  getSubscription().then(res => setBilling(res?.data || null)).catch(() => {});
+}, [tab]);
 
   const handleSaveProfile = async () => {
     setProfileSaving(true); setProfileError('');
@@ -586,11 +593,50 @@ useEffect(() => {
           )}
           <div className="card">
             <div className="sh" style={{marginBottom:12}}><div className="sh-title">Billing Information</div></div>
-            <div style={{padding:'14px',background:'var(--cream-2)',borderRadius:12,border:'1px solid var(--line2)',textAlign:'center'}}>
-              <div style={{fontSize:'.56rem',color:'var(--ink-3)',lineHeight:1.7}}>
-                {isPremium?'You are on the Premium plan.\nManage your subscription via your payment provider.':'You are on the free plan.\nNo billing information on file.'}
+            {billing && billing.status !== 'none' ? (
+              <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'1px solid var(--line2)'}}>
+                  <span style={{fontSize:'.56rem',color:'var(--ink-3)'}}>Status</span>
+                  <span style={{fontSize:'.56rem',fontWeight:600,color:billing.status==='active'?'var(--green)':'var(--amber)',background:billing.status==='active'?'var(--green-bg)':'var(--amber-bg)',border:`1px solid ${billing.status==='active'?'var(--green-lt)':'var(--amber-lt)'}`,borderRadius:20,padding:'2px 10px'}}>
+                    {billing.cancelAtPeriodEnd ? '⚠ Cancels at period end' : billing.status === 'active' ? '✓ Active' : billing.status}
+                  </span>
+                </div>
+                {billing.currentPeriodEnd && (
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'1px solid var(--line2)'}}>
+                    <span style={{fontSize:'.56rem',color:'var(--ink-3)'}}>
+                      {billing.cancelAtPeriodEnd ? 'Access until' : 'Next renewal'}
+                    </span>
+                    <span style={{fontSize:'.56rem',fontWeight:500,color:'var(--ink)'}}>
+                      {new Date(billing.currentPeriodEnd).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'})}
+                    </span>
+                  </div>
+                )}
+                {!billing.cancelAtPeriodEnd ? (
+                  <button type="button" onClick={async()=>{
+                    if(!window.confirm('Cancel your Premium subscription? You keep access until the end of the billing period.')) return;
+                    setCancelling(true);
+                    try {
+                      await cancelSubscription();
+                      const res = await getSubscription();
+                      setBilling(res?.data || null);
+                    } catch(e){ alert('Failed to cancel: '+e.message); }
+                    finally { setCancelling(false); }
+                  }} disabled={cancelling} style={{height:34,padding:'0 16px',borderRadius:9,background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.2)',color:'var(--red)',fontSize:'.56rem',fontWeight:500,cursor:'pointer',alignSelf:'flex-start',opacity:cancelling?.6:1}}>
+                    {cancelling?'Cancelling…':'Cancel subscription'}
+                  </button>
+                ) : (
+                  <div style={{fontSize:'.52rem',color:'var(--amber)',padding:'8px 12px',background:'var(--amber-bg)',borderRadius:9,border:'1px solid var(--amber-lt)'}}>
+                    Your subscription is set to cancel. You'll keep Premium access until the renewal date above.
+                  </div>
+                )}
               </div>
-            </div>
+            ) : (
+              <div style={{padding:'14px',background:'var(--cream-2)',borderRadius:12,border:'1px solid var(--line2)',textAlign:'center'}}>
+                <div style={{fontSize:'.56rem',color:'var(--ink-3)',lineHeight:1.7}}>
+                  {isPremium?'You are on the Premium plan.\nManage your subscription via your payment provider.':'You are on the free plan.\nNo billing information on file.'}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
