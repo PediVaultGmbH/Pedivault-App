@@ -4,10 +4,11 @@ const jwt        = require('jsonwebtoken');
 
 function createTransport() {
   if (process.env.SMTP_HOST) {
+    const port = parseInt(process.env.SMTP_PORT) || 587;
     return nodemailer.createTransport({
       host:   process.env.SMTP_HOST,
-      port:   parseInt(process.env.SMTP_PORT) || 587,
-      secure: false,
+      port:   port,
+      secure: port === 465,
       auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
     });
   }
