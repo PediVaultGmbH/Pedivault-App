@@ -93,36 +93,46 @@ export function SignIn({ goTo }) {
 </button>
       </div>
       <div className="pv-sw">Don't have an account? <span className="pv-lk" onClick={() => goTo('create')}>Create account →</span></div>
-      {requires2FA && (
-        <div style={{position:'fixed',inset:0,background:'rgba(26,16,22,.6)',backdropFilter:'blur(6px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:999,padding:20}}>
-          <div style={{background:'#fff',borderRadius:24,padding:'36px 32px',maxWidth:360,width:'100%',boxShadow:'0 40px 100px rgba(0,0,0,.25)'}}>
-            <div style={{width:56,height:56,borderRadius:16,background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    {requires2FA && (
+        <div style={{position:'fixed',inset:0,background:'linear-gradient(145deg,var(--bg1) 0%,var(--bg2) 35%,var(--bg3) 65%,var(--bg4) 100%)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:999,padding:20}}>
+          <div style={{background:'rgba(255,255,255,.97)',backdropFilter:'blur(40px)',WebkitBackdropFilter:'blur(40px)',borderRadius:28,padding:'42px 38px 36px',maxWidth:400,width:'100%',boxShadow:'0 60px 120px rgba(0,0,0,.3),0 20px 50px rgba(100,0,30,.25),0 5px 14px rgba(0,0,0,.15)',border:'1px solid rgba(255,255,255,1)',animation:'cardIn .5s cubic-bezier(.22,1,.36,1) both'}}>
+            <div style={{textAlign:'center',marginBottom:24}}>
+              <div style={{width:64,height:64,borderRadius:20,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'1.5px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px',boxShadow:'0 8px 24px rgba(155,58,86,.18)'}}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.35rem',fontWeight:400,color:'var(--ink)',marginBottom:6,letterSpacing:'-.02em'}}>Two-step verification</div>
+              <div style={{fontSize:'.58rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>Enter the 6-digit code from your<br/>Google Authenticator or Authy app</div>
             </div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.2rem',color:'var(--ink)',textAlign:'center',marginBottom:6}}>Two-Factor Authentication</div>
-            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',textAlign:'center',lineHeight:1.7,marginBottom:20}}>Enter the 6-digit code from your authenticator app</div>
-            {err && <div className="pv-err" style={{marginBottom:12}}>{err}</div>}
-            <input
-              className="pv-in"
-              value={twoFACode}
-              onChange={e=>setTwoFACode(e.target.value.replace(/\D/g,'').slice(0,6))}
-              placeholder="000000"
-              maxLength={6}
-              style={{textAlign:'center',letterSpacing:'.3em',fontFamily:'monospace',fontSize:'1.2rem',marginBottom:14,width:'100%'}}
-              autoFocus
-            />
-            <button type="button" className="pv-btn" disabled={twoFACode.length!==6||twoFALoading} onClick={async()=>{
-              setTwoFALoading(true); setErr('');
-              try {
-                const user = await login2FA({ userId: twoFAUserId, token: twoFACode, rememberMe });
-                goTo('dashboard', user.firstName);
-              } catch(e){ setErr(e.message||'Invalid code. Please try again.'); }
-              finally { setTwoFALoading(false); }
-            }}>
-              {twoFALoading?<><div className="pv-btn-spin"/>Verifying…</>:'Verify & Sign In →'}
+            {err && <div className="pv-err" style={{marginBottom:14}}>{err}</div>}
+            <div className="pv-f">
+              <input
+                className="pv-in"
+                value={twoFACode}
+                onChange={e=>setTwoFACode(e.target.value.replace(/\D/g,'').slice(0,6))}
+                placeholder="000 000"
+                maxLength={6}
+                style={{textAlign:'center',letterSpacing:'.4em',fontFamily:'monospace',fontSize:'1.4rem',height:58,borderRadius:14}}
+                autoFocus
+              />
+            </div>
+            <button type="button" className="pv-btn" disabled={twoFACode.length!==6||twoFALoading}
+              style={{opacity:twoFACode.length!==6?.5:1}}
+              onClick={async()=>{
+                setTwoFALoading(true); setErr('');
+                try {
+                  const user = await login2FA({ userId: twoFAUserId, token: twoFACode, rememberMe });
+                  goTo('dashboard', user.firstName);
+                } catch(e){ setErr(e.message||'Invalid code. Please try again.'); }
+                finally { setTwoFALoading(false); }
+              }}>
+              {twoFALoading?<><div className="pv-btn-spin"/>Verifying…</>:<>Verify & continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></>}
             </button>
-            <div style={{textAlign:'center',marginTop:14}}>
-              <span className="pv-lk" style={{fontSize:'.52rem'}} onClick={()=>{setRequires2FA(false);setTwoFACode('');setErr('');}}>← Back to sign in</span>
+            <div style={{textAlign:'center',marginTop:16}}>
+              <span className="pv-lk" style={{fontSize:'.54rem',fontWeight:400}} onClick={()=>{setRequires2FA(false);setTwoFACode('');setErr('');}}>← Back to sign in</span>
+            </div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:6,marginTop:22,paddingTop:16,borderTop:'1px solid var(--line2)'}}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose-mid)" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)',letterSpacing:'.04em'}}>Secured with AES-256 encryption · GDPR compliant</span>
             </div>
           </div>
         </div>
