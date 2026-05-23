@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
-import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount } from '../../../api/auth.api';
+import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications } from '../../../api/auth.api';
 import { createSubscription } from '../../../api/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -101,7 +101,11 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
     growthAlert:false, weeklySummary:true, appUpdates:false,
     emailDelivery:true, pushDelivery:true,
   });
-  const toggleNotif = k => setNotifs(n => ({...n,[k]:!n[k]}));
+  const toggleNotif = async (k) => {
+  const updated = {...notifs, [k]: !notifs[k]};
+  setNotifs(updated);
+  try { await updateNotifications(updated); } catch(_) {}
+};
 
   const [deleteStep, setDeleteStep]   = useState(0);
   const [deleteInput, setDeleteInput] = useState('');
@@ -109,10 +113,16 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
   const [plan, setPlan]               = useState('monthly');
 
   useEffect(() => {
-    if (tab !== 'security') return;
-    setSessionsLoading(true);
-    getSessions().then(res => setSessions(res?.data || [])).catch(() => setSessions([])).finally(() => setSessionsLoading(false));
-  }, [tab]);
+  if (tab !== 'security') return;
+  setSessionsLoading(true);
+  getSessions().then(res => setSessions(res?.data || [])).catch(() => setSessions([])).finally(() => setSessionsLoading(false));
+}, [tab]);
+
+useEffect(() => {
+  getNotifications().then(res => {
+    if (res?.data && Object.keys(res.data).length > 0) setNotifs(n => ({...n, ...res.data}));
+  }).catch(() => {});
+}, []);
 
   const handleSaveProfile = async () => {
     setProfileSaving(true); setProfileError('');
