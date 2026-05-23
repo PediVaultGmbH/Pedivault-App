@@ -277,19 +277,20 @@ html{-webkit-text-size-adjust:100%;}
 /* ══ MOBILE ══ */
 @media(max-width:768px){
 
-  html{height:auto!important;}
-  body{height:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;}
+  html{height:auto!important;background:#fff;}
+  body{height:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;background:#fff;}
 
-  .pv-root{
+.pv-root{
     position:relative!important;
     min-height:100vh;
     overflow:visible!important;
     height:auto!important;
     display:block;
+    background:#fff!important;
   }
 
   .pv-layout-desktop{display:none!important;}
-  .pv-mob-layout{display:flex;flex-direction:column;width:100%;}
+  .pv-mob-layout{display:flex;flex-direction:column;width:100%;min-height:100vh;}
   .pv-mob-layout::after{display:none;}
 
   .pv-mob-header{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px 40px;flex-shrink:0;position:relative;z-index:5;gap:10px;}
@@ -305,13 +306,14 @@ html{-webkit-text-size-adjust:100%;}
   .pv-mob-chip-dot{width:5px;height:5px;border-radius:50%;background:rgba(100,240,160,.8);display:inline-block;}
 
   .pv-mob-sheet{
-    background:rgba(255,255,255,.97);
+    background:#fff;
     border-radius:28px 28px 0 0;
     padding:10px 24px 80px;
     position:relative;
     z-index:10;
     box-shadow:0 -8px 24px rgba(0,0,0,.12);
-    min-height:60vh;
+    min-height:100vh;
+    flex:1;
   }
   .pv-mob-sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,.1);margin:8px auto 20px;}
 
