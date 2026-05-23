@@ -243,6 +243,34 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
 
         {loading ? (
           <SkeletonHome />
+        ) : apiChildren.length === 0 ? (
+          <div className="pv-page" style={{animation:'fadeUp .3s ease both',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'60vh',textAlign:'center',padding:'40px 20px'}}>
+            <div style={{width:80,height:80,borderRadius:24,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'2px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:24,boxShadow:'0 8px 32px rgba(155,58,86,.15)'}}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',color:'var(--ink)',marginBottom:8,letterSpacing:'-.02em'}}>Welcome to PediVault 🌸</div>
+            <div style={{fontSize:'.64rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.8,maxWidth:340,marginBottom:32}}>
+              Your child's complete health record — vaccines, growth, appointments, and more. Let's start by adding your first child.
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:12,width:'100%',maxWidth:320,marginBottom:32}}>
+              {[
+                {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4z"/><path d="M14.5 5.5l4 4"/><path d="M12 8l-8 8 1 3 3 1 8-8"/></svg>, text:'Track STIKO 2026 vaccine schedule'},
+                {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, text:'Monitor growth with WHO percentiles'},
+                {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>, text:'Store medical records securely'},
+                {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="7" width="6" height="10" rx="1"/></svg>, text:'Blockchain-verified vaccine certificates'},
+              ].map((f,i)=>(
+                <div key={i} style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px',background:'var(--white)',border:'1px solid var(--line2)',borderRadius:12,textAlign:'left'}}>
+                  <div style={{width:32,height:32,borderRadius:9,background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{f.icon}</div>
+                  <span style={{fontSize:'.6rem',color:'var(--ink-2)'}}>{f.text}</span>
+                </div>
+              ))}
+            </div>
+            <button type="button" onClick={()=>showModal('addchild')} style={{height:48,padding:'0 36px',borderRadius:14,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.72rem',fontWeight:600,cursor:'pointer',boxShadow:'0 4px 20px rgba(155,58,86,.32)',display:'flex',alignItems:'center',gap:10}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Add your first child
+            </button>
+            <div style={{fontSize:'.52rem',color:'var(--ink-3)',marginTop:16}}>Takes less than 2 minutes · GDPR compliant · Data stays yours</div>
+          </div>
         ) : active === 'home' ? (
           <HomeModule
   activeChild={activeChild}
