@@ -438,7 +438,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px soli
 /* Modal header — clean, no icon clutter */
 .pv-mhdr{
   padding:22px 24px 18px;
-  border-bottom:1px solid var(--line2);
+  border-bottom:none;
   position:relative;
 }
 .pv-mhdr-eyebrow{font-size:.42rem;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:4px;}
@@ -468,6 +468,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px soli
   padding:18px 24px 20px;
   border-top:1px solid var(--line2);
   background:linear-gradient(to bottom,var(--cream-2),rgba(253,250,248,.6));
+  border-radius:0 0 20px 20px;
 }
 
 /* ═══ MODAL BUTTONS ═══ */
