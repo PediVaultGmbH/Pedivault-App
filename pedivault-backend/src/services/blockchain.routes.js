@@ -1,9 +1,19 @@
 const router = require('express').Router();
 const blockchain = require('./blockchain.service');
 const { authenticate } = require('../middleware/auth');
+const { ethers } = require('ethers');
 
-router.get('/status', authenticate, (req, res) => {
-  res.json({ success: true, data: { enabled: blockchain.enabled } });
+router.get('/status', authenticate, async (req, res) => {
+  try {
+    let balance = null;
+    if (blockchain.enabled && blockchain.wallet) {
+      const raw = await blockchain.wallet.provider.getBalance(blockchain.wallet.address);
+      balance = parseFloat(ethers.formatEther(raw)).toFixed(4);
+    }
+    res.json({ success: true, data: { enabled: blockchain.enabled, balance, address: blockchain.wallet?.address || null } });
+  } catch (err) {
+    res.json({ success: true, data: { enabled: blockchain.enabled, balance: null } });
+  }
 });
 
 router.get('/child/:childId/records', authenticate, async (req, res, next) => {
