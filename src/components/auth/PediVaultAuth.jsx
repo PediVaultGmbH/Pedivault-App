@@ -9,14 +9,25 @@ import SignIn        from './screens/SignIn';
 import CreateAccount from './screens/CreateAccount';
 import Forgot        from './screens/Forgot';
 import OTP           from './screens/OTP';
+import ResetPassword from './screens/ResetPassword';
 
 export default function PediVaultAuth({ onLogin }) {
   const [screen, setScreen] = useState('signin');
+  const [resetToken, setResetToken] = useState('');
   const [fading, setFading] = useState(false);
   const pendingNameRef      = useRef('');
   const pendingPhoneRef     = useRef({ phone: '', countryCode: '+49' });
 
   useEffect(() => {
+    // Check for reset token in URL
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token) {
+      setResetToken(token);
+      setScreen('reset');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
       document.documentElement.style.height = 'auto';
@@ -70,6 +81,7 @@ export default function PediVaultAuth({ onLogin }) {
             {screen === 'create'  && <CreateAccount {...sharedProps} />}
             {screen === 'forgot'  && <Forgot        {...sharedProps} />}
             {screen === 'otp'     && <OTP           {...otpProps}    />}
+            {screen === 'reset'   && <ResetPassword {...sharedProps} token={resetToken} />}
           </div>
         </div>
       </div>
@@ -81,6 +93,7 @@ export default function PediVaultAuth({ onLogin }) {
           {screen === 'create'  && <CreateAccount {...sharedProps} />}
           {screen === 'forgot'  && <Forgot        {...sharedProps} />}
           {screen === 'otp'     && <OTP           {...otpProps}    />}
+          {screen === 'reset'   && <ResetPassword {...sharedProps} token={resetToken} />}
         </div>
       </div>
     </div>
