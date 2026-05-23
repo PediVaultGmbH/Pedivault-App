@@ -88,6 +88,9 @@ async function signIn(req, res, next) {
       return res.status(401).json({ success: false, error: 'Incorrect email or password' });
     if (!user.isVerified)
       return res.status(403).json({ success: false, error: 'Please verify your phone number before signing in' });
+    if (user.twoFactorEnabled) {
+      return res.json({ success: true, requires2FA: true, userId: user.id });
+    }
     const accessToken   = issueAccess(user.id);
     const refreshExpiry = rememberMe ? '30d' : '1d';
     const refreshMs     = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
@@ -274,10 +277,31 @@ async function disable2FA(req, res, next) {
   } catch (err) { next(err); }
 }
 
+// ── POST /api/auth/2fa/login ──────────────────────────────────────────────────
+async function login2FA(req, res, next) {
+  try {
+    const speakeasy = require('speakeasy');
+    const { userId, token, rememberMe = false } = req.body;
+    if (!userId || !token) return res.status(400).json({ success: false, error: 'userId and token are required' });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.twoFactorSecret) return res.status(400).json({ success: false, error: 'Invalid request' });
+    const valid = speakeasy.totp.verify({ secret: user.twoFactorSecret, encoding: 'base32', token, window: 1 });
+    if (!valid) return res.status(400).json({ success: false, error: 'Invalid code. Please try again.' });
+    const accessToken   = issueAccess(user.id);
+    const refreshExpiry = rememberMe ? '30d' : '1d';
+    const refreshMs     = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
+    const refreshToken  = issueRefresh(user.id, refreshExpiry);
+    await prisma.session.create({
+      data: { userId: user.id, refreshToken, expiresAt: new Date(Date.now() + refreshMs), userAgent: req.headers['user-agent'] || 'Unknown' },
+    });
+    res.json({ success: true, token: accessToken, refreshToken, user: safeUser(user) });
+  } catch (err) { next(err); }
+}
+
 module.exports = {
   register, sendOTP, verifyOTP, resendOTP, signIn, refreshToken,
   signOut, forgotPassword, resetPassword, getMe, updateMe,
   changePassword, getSessions, revokeAllSessions, deleteAccount,
   getNotifications, updateNotifications,
-  setup2FA, verify2FA, disable2FA,
+  setup2FA, verify2FA, disable2FA, login2FA,
 };

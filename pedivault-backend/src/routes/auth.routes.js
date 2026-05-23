@@ -27,4 +27,5 @@ router.put("/notifications", authenticate, ctrl.updateNotifications);
 router.post('/2fa/setup',   authenticate, ctrl.setup2FA);
 router.post('/2fa/verify',  authenticate, ctrl.verify2FA);
 router.post('/2fa/disable', authenticate, ctrl.disable2FA);
+router.post('/2fa/login', authLimiter, ctrl.login2FA);
 module.exports = router;
