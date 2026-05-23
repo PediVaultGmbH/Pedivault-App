@@ -61,7 +61,7 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
   return (
     <Modal open={open} onClose={handleClose}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{background:'linear-gradient(90deg,var(--rose),var(--rose-mid))'}}/>
+        
         <div className="pv-mhdr-eyebrow">Family</div>
         <div className="pv-mhdr-title">Add a child</div>
         <div className="pv-mhdr-sub">Create a health profile for your child</div>

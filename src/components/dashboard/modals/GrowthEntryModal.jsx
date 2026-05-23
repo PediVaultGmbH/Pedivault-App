@@ -49,7 +49,7 @@ export function GrowthEntryModal({open,onClose,onSuccess}) {
   return (
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{background:'linear-gradient(90deg,var(--green),rgba(42,158,98,.4))'}}/>
+        
         <div className="pv-mhdr-eyebrow">Growth Tracking</div>
         <div className="pv-mhdr-title">Add Measurement</div>
         <div className="pv-mhdr-sub">Record your child's latest growth measurements</div>

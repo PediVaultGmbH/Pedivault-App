@@ -64,7 +64,7 @@ export function LogVaccineModal({open,onClose,onSuccess}) {
   return (
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{background:'linear-gradient(90deg,var(--rose),var(--rose-mid))'}}/>
+        
         <div className="pv-mhdr-eyebrow">Immunisation</div>
         <div className="pv-mhdr-title">Log Vaccine</div>
         <div className="pv-mhdr-sub">Record a vaccine that was administered</div>

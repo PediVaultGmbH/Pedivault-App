@@ -281,7 +281,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* BMI modal */}
       <Modal open={showBmiInfo} onClose={() => setShowBmiInfo(false)} maxWidth={400}>
         <div className="pv-mhdr">
-          <div className="pv-mhdr-accent" style={{ background:'linear-gradient(90deg,var(--amber),rgba(186,112,24,.4))' }}/>
+          
           <div className="pv-mhdr-eyebrow">Growth</div>
           <div className="pv-mhdr-title">Body Mass Index (BMI)</div>
           <div className="pv-mhdr-sub">Understanding your child's BMI reading</div>

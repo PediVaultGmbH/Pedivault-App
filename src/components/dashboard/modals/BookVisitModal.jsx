@@ -46,7 +46,7 @@ export function BookVisitModal({open,onClose,onSuccess}) {
   return (
     <Modal open={open} onClose={handleClose} maxWidth={520}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{background:'linear-gradient(90deg,var(--blue),rgba(52,120,176,.5))'}}/>
+        
         <div className="pv-mhdr-eyebrow">Schedule</div>
         <div className="pv-mhdr-title">Book a Visit</div>
         <div className="pv-mhdr-sub">Schedule an appointment with your paediatrician</div>

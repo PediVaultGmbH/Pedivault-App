@@ -63,7 +63,7 @@ function RecordDetailModal({ open, onClose, record }) {
   return (
     <Modal open={open} onClose={onClose} maxWidth={480}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{ background:`linear-gradient(90deg,${cfg.color},${cfg.color}60)` }}/>
+        
         <div className="pv-mhdr-eyebrow">Health Record</div>
         <div className="pv-mhdr-title" style={{ paddingRight:32 }}>{record.name}</div>
         <div className="pv-mhdr-sub">{record.source || '—'} · {fmtDate(record.date || record.createdAt)}</div>

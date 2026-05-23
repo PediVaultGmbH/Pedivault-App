@@ -43,7 +43,7 @@ export function AddMedicationModal({open,onClose,onSuccess}) {
   return (
     <Modal open={open} onClose={handleClose} maxWidth={480}>
       <div className="pv-mhdr">
-        <div className="pv-mhdr-accent" style={{background:'linear-gradient(90deg,var(--green),rgba(42,158,98,.4))'}}/>
+        
         <div className="pv-mhdr-eyebrow">Medications</div>
         <div className="pv-mhdr-title">Add Medication</div>
         <div className="pv-mhdr-sub">Log a prescribed or ongoing medication</div>
