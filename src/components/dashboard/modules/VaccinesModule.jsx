@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EmptyState from '../ui/EmptyState';
 import { STIKO } from '../../../data/stiko';
 import { getVaccStatus, findVaccId } from '../../../utils/vaccineUtils';
@@ -35,6 +35,19 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
   const [expanded, setExpanded]   = useState(null);
   const [expandAll, setExpandAll] = useState(false);
   const [showBlockchain, setShowBlockchain] = useState(false);
+  const [polBalance, setPolBalance] = useState(null);
+  const [polWarning, setPolWarning] = useState(false);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}/blockchain/status`,
+      { headers: { Authorization: `Bearer ${localStorage.getItem('pv_token')}` } })
+      .then(r => r.json())
+      .then(d => {
+        const bal = parseFloat(d?.data?.balance || '0');
+        setPolBalance(bal);
+        if (d?.data?.enabled && bal < 0.01) setPolWarning(true);
+      }).catch(() => {});
+  }, []);
 
   const childAgeMo = (() => {
     if (!childDob) return 43;
@@ -97,6 +110,17 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
 
   return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
+
+      {polWarning && (
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px',background:'var(--amber-bg)',border:'1px solid var(--amber-lt)',borderRadius:12,marginBottom:18}}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="2" strokeLinecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div style={{flex:1}}>
+            <div style={{fontSize:'.6rem',fontWeight:600,color:'var(--amber)',marginBottom:2}}>Low blockchain wallet balance</div>
+            <div style={{fontSize:'.52rem',fontWeight:300,color:'var(--amber)'}}>POL balance is {polBalance?.toFixed(4) || '0'} — vaccine certificates may not be recorded on-chain. Top up the wallet to restore blockchain features.</div>
+          </div>
+          <div onClick={()=>setPolWarning(false)} style={{cursor:'pointer',color:'var(--amber)',fontSize:'1rem',lineHeight:1,flexShrink:0}}>×</div>
+        </div>
+      )}
 
       {/* Blockchain banner */}
       {counts.done > 0 && (
