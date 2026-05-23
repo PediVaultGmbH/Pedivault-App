@@ -230,9 +230,10 @@ async function getNotifications(req, res, next) {
 
 async function updateNotifications(req, res, next) {
   try {
+    const prefs = JSON.parse(JSON.stringify(req.body));
     const updated = await prisma.user.update({
       where: { id: req.user.id },
-      data: { notificationPrefs: req.body },
+      data: { notificationPrefs: prefs },
     });
     res.json({ success: true, data: updated.notificationPrefs });
   } catch (err) { next(err); }
