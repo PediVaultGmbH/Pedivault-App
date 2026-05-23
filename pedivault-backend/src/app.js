@@ -79,6 +79,10 @@ app.use('/api/ai', aiRoutes);
 // ── Payments ──────────────────────────────────────────────────────────────────
 app.use('/api/payments', paymentsRoutes);
 
+// ── Notifications ─────────────────────────────────────────────────────────────
+const notificationsRoutes = require('./routes/notifications.routes');
+app.use('/api/notifications', notificationsRoutes);
+
 // ── Blockchain ────────────────────────────────────────────────────────────────
 app.use('/api/blockchain', blockchainRoutes);
 
