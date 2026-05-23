@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
-import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications } from '../../../api/auth.api';
+import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications, setup2FA, verify2FA, disable2FA } from '../../../api/auth.api';
 import { createSubscription } from '../../../api/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -91,7 +91,11 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
   const [pwdMsg, setPwdMsg]       = useState('');
   const [pwdError, setPwdError]   = useState('');
   const [show2FA, setShow2FA]     = useState(false);
-  const [twoFA, setTwoFA]         = useState(false);
+  const [twoFA, setTwoFA]         = useState(userProfile?.twoFactorEnabled || false);
+  const [qrCode, setQrCode]       = useState('');
+  const [tfaCode, setTfaCode]     = useState('');
+  const [tfaError, setTfaError]   = useState('');
+  const [tfaLoading, setTfaLoading] = useState(false);
   const [sessions, setSessions]   = useState([]);
   const [sessionsLoading, setSessionsLoading] = useState(false);
   const [revokingAll, setRevokingAll] = useState(false);
@@ -413,16 +417,47 @@ useEffect(() => {
           </div>
           <div className="card">
             <div className="sh" style={{marginBottom:14}}><div className="sh-title">Two-Factor Authentication</div></div>
-            <ToggleSwitch on={twoFA} onChange={()=>{setTwoFA(v=>!v);setShow2FA(v=>!v);}} label="Enable 2FA" sub="Secure your account with an authenticator app (TOTP)"/>
-            {show2FA&&twoFA&&(
+            <ToggleSwitch on={twoFA} onChange={async()=>{
+              if(!twoFA){
+                setTfaError(''); setTfaCode('');
+                setTfaLoading(true);
+                try {
+                  const res = await setup2FA();
+                  setQrCode(res.data.qrCode);
+                  setShow2FA(true);
+                } catch(e){ setTfaError(e.message||'Failed to set up 2FA'); }
+                finally { setTfaLoading(false); }
+              } else {
+                try { await disable2FA(); setTwoFA(false); setShow2FA(false); setQrCode(''); } catch(e){ setTfaError(e.message||'Failed to disable 2FA'); }
+              }
+            }} label="Enable 2FA" sub={twoFA?'2FA is active — your account is protected':'Secure your account with an authenticator app (TOTP)'}/>
+            {tfaError&&<div style={{fontSize:'.52rem',color:'var(--red)',marginTop:8}}>{tfaError}</div>}
+            {show2FA&&!twoFA&&qrCode&&(
               <div style={{marginTop:14,padding:'14px',background:'var(--cream-2)',borderRadius:12,border:'1px solid var(--line2)'}}>
-                <div style={{fontSize:'.6rem',fontWeight:500,color:'var(--ink)',marginBottom:6}}>Scan with your authenticator app</div>
-                <div style={{width:100,height:100,background:'var(--white)',borderRadius:10,border:'1px solid var(--line2)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:10}}>
-                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">{[0,1,2,3,4,5,6].map(r=>[0,1,2,3,4,5,6].map(c=>(Math.random()>.4?<rect key={r*10+c} x={c*8} y={r*8} width={7} height={7} rx={1} fill="var(--ink)" opacity={.85}/>:null)))}</svg>
+                <div style={{fontSize:'.6rem',fontWeight:500,color:'var(--ink)',marginBottom:6}}>1. Scan with Google Authenticator or Authy</div>
+                <img src={qrCode} alt="2FA QR Code" style={{width:120,height:120,borderRadius:10,marginBottom:10,display:'block'}}/>
+                <div style={{fontSize:'.6rem',fontWeight:500,color:'var(--ink)',marginBottom:6}}>2. Enter the 6-digit code to confirm</div>
+                <div style={{display:'flex',gap:8}}>
+                  <input className="fi" value={tfaCode} onChange={e=>setTfaCode(e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="000000" maxLength={6}
+                    style={{flex:1,textAlign:'center',letterSpacing:'.2em',fontFamily:'monospace',fontSize:'.85rem'}}/>
+                  <button type="button" onClick={async()=>{
+                    setTfaLoading(true); setTfaError('');
+                    try {
+                      await verify2FA(tfaCode);
+                      setTwoFA(true); setShow2FA(false);
+                    } catch(e){ setTfaError(e.message||'Invalid code'); }
+                    finally { setTfaLoading(false); }
+                  }} disabled={tfaCode.length!==6||tfaLoading}
+                    style={{height:40,padding:'0 16px',borderRadius:10,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.6rem',fontWeight:500,cursor:'pointer',opacity:tfaCode.length!==6?0.5:1}}>
+                    {tfaLoading?'…':'Verify'}
+                  </button>
                 </div>
-                <div style={{fontSize:'.5rem',color:'var(--ink-3)'}}>Or enter this code manually: <strong style={{color:'var(--ink)',letterSpacing:'.1em'}}>PVLT-X2KR-9QMW</strong></div>
               </div>
             )}
+            {twoFA&&<div style={{marginTop:10,padding:'10px 12px',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:10,display:'flex',alignItems:'center',gap:8}}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>2FA is enabled — toggle off to disable</span>
+            </div>}
           </div>
           <div className="card">
             <div className="sh" style={{marginBottom:12}}><div className="sh-title">Active Sessions</div></div>

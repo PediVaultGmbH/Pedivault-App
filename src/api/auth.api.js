@@ -80,3 +80,15 @@ export const getNotifications = () =>
 /** Update notification preferences */
 export const updateNotifications = (prefs) =>
   api.put('/auth/notifications', prefs);
+
+/** 2FA setup — returns QR code and secret */
+export const setup2FA = () =>
+  api.post('/auth/2fa/setup');
+
+/** Verify 2FA token and enable */
+export const verify2FA = (token) =>
+  api.post('/auth/2fa/verify', { token });
+
+/** Disable 2FA */
+export const disable2FA = () =>
+  api.post('/auth/2fa/disable');
