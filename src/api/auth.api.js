@@ -68,3 +68,6 @@ export const getSessions = () =>
 /** Revoke all other sessions */
 export const revokeAllSessions = () =>
   api.delete('/auth/sessions', { refreshToken: getRefreshToken() });
+/** Delete account permanently */
+export const deleteAccount = () =>
+  api.delete('/auth/me');

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
-import { updateMe, changePassword, getSessions, revokeAllSessions } from '../../../api/auth.api';
+import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount } from '../../../api/auth.api';
 import { createSubscription } from '../../../api/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -194,7 +194,11 @@ export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
               style={{width:'100%',boxSizing:'border-box',textAlign:'center',letterSpacing:'.15em',fontFamily:'monospace',fontSize:'.85rem',borderColor:deleteInput==='DELETE'?'var(--red)':'var(--line2)',background:deleteInput==='DELETE'?'rgba(185,40,20,.05)':'var(--cream-2)',transition:'all .2s'}}/>
             <div style={{marginTop:16,display:'flex',gap:10}}>
               <button type="button" className="fb fb-g" style={{flex:1}} onClick={()=>{setDeleteStep(1);setDeleteInput('');}}>← Back</button>
-              <button type="button" disabled={deleteInput!=='DELETE'} onClick={()=>{setDeleteStep(3);setTimeout(onSignOut,2200);}}
+              <button type="button" disabled={deleteInput!=='DELETE'} onClick={async ()=>{
+  setDeleteStep(3);
+  try { await deleteAccount(); } catch(_) {}
+  setTimeout(onSignOut, 2200);
+}}
                 style={{flex:1,height:40,borderRadius:10,border:'none',fontSize:'.6rem',fontWeight:500,cursor:deleteInput==='DELETE'?'pointer':'default',transition:'all .2s',background:deleteInput==='DELETE'?'var(--red)':'var(--cream-2)',color:deleteInput==='DELETE'?'#fff':'var(--ink-3)'}}>
                 Delete my account
               </button>
