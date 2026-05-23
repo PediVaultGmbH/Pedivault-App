@@ -18,6 +18,7 @@ router.post('/forgot-password',  authLimiter, ctrl.forgotPassword);
 router.post('/reset-password',   authLimiter, ctrl.resetPassword);
 router.get ('/me',               authenticate, ctrl.getMe);
 router.put ('/me',               authenticate, ctrl.updateMe);
+router.delete('/me',             authenticate, ctrl.deleteAccount);
 router.post('/change-password',  authenticate, ctrl.changePassword);
 router.get ('/sessions',         authenticate, ctrl.getSessions);
 router.delete('/sessions',       authenticate, ctrl.revokeAllSessions);

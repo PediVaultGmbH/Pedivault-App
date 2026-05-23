@@ -235,6 +235,15 @@ async function updateMe(req, res, next) {
   } catch (err) { next(err); }
 }
 
+// ── DELETE /api/auth/me ───────────────────────────────────────────────────────
+async function deleteAccount(req, res, next) {
+  try {
+    await prisma.session.deleteMany({ where: { userId: req.user.id } });
+    await prisma.user.delete({ where: { id: req.user.id } });
+    res.json({ success: true, message: 'Account deleted successfully' });
+  } catch (err) { next(err); }
+}
+
 // ── POST /api/auth/change-password ───────────────────────────────────────────
 async function changePassword(req, res, next) {
   try {
@@ -283,5 +292,5 @@ async function revokeAllSessions(req, res, next) {
 module.exports = {
   register, sendOTP, verifyOTP, resendOTP, signIn, refreshToken,
   signOut, forgotPassword, resetPassword, getMe, updateMe,
-  changePassword, getSessions, revokeAllSessions,
+  changePassword, getSessions, revokeAllSessions, deleteAccount,
 };
