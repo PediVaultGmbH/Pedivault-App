@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Brand from '../ui/Brand';
 import { Eye } from '../ui/Logo';
-import { signIn } from '../../../api/auth.api';
+import { signIn, login2FA } from '../../../api/auth.api';
 
 export function SignIn({ goTo }) {
   const [email, setEmail]           = useState('');
@@ -10,6 +10,10 @@ export function SignIn({ goTo }) {
   const [err, setErr]               = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading]       = useState(false);
+  const [requires2FA, setRequires2FA] = useState(false);
+  const [twoFAUserId, setTwoFAUserId] = useState('');
+  const [twoFACode, setTwoFACode]   = useState('');
+  const [twoFALoading, setTwoFALoading] = useState(false);
 
   const handleSignIn = async () => {
     if (!email || !pwd) { setErr('Please fill in all fields.'); return; }
@@ -18,8 +22,14 @@ export function SignIn({ goTo }) {
 
     setErr(''); setLoading(true);
     try {
-      const user = await signIn({ email, password: pwd, rememberMe });
-      goTo('dashboard', user.firstName);
+      const res = await signIn({ email, password: pwd, rememberMe });
+      if (res?.requires2FA) {
+        setRequires2FA(true);
+        setTwoFAUserId(res.userId);
+        setLoading(false);
+        return;
+      }
+      goTo('dashboard', res.firstName);
     } catch (err) {
       setErr(err.message || 'Sign in failed. Please try again.');
     } finally {
@@ -83,6 +93,40 @@ export function SignIn({ goTo }) {
 </button>
       </div>
       <div className="pv-sw">Don't have an account? <span className="pv-lk" onClick={() => goTo('create')}>Create account →</span></div>
+      {requires2FA && (
+        <div style={{position:'fixed',inset:0,background:'rgba(26,16,22,.6)',backdropFilter:'blur(6px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:999,padding:20}}>
+          <div style={{background:'#fff',borderRadius:24,padding:'36px 32px',maxWidth:360,width:'100%',boxShadow:'0 40px 100px rgba(0,0,0,.25)'}}>
+            <div style={{width:56,height:56,borderRadius:16,background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.2rem',color:'var(--ink)',textAlign:'center',marginBottom:6}}>Two-Factor Authentication</div>
+            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',textAlign:'center',lineHeight:1.7,marginBottom:20}}>Enter the 6-digit code from your authenticator app</div>
+            {err && <div className="pv-err" style={{marginBottom:12}}>{err}</div>}
+            <input
+              className="pv-in"
+              value={twoFACode}
+              onChange={e=>setTwoFACode(e.target.value.replace(/\D/g,'').slice(0,6))}
+              placeholder="000000"
+              maxLength={6}
+              style={{textAlign:'center',letterSpacing:'.3em',fontFamily:'monospace',fontSize:'1.2rem',marginBottom:14,width:'100%'}}
+              autoFocus
+            />
+            <button type="button" className="pv-btn" disabled={twoFACode.length!==6||twoFALoading} onClick={async()=>{
+              setTwoFALoading(true); setErr('');
+              try {
+                const user = await login2FA({ userId: twoFAUserId, token: twoFACode, rememberMe });
+                goTo('dashboard', user.firstName);
+              } catch(e){ setErr(e.message||'Invalid code. Please try again.'); }
+              finally { setTwoFALoading(false); }
+            }}>
+              {twoFALoading?<><div className="pv-btn-spin"/>Verifying…</>:'Verify & Sign In →'}
+            </button>
+            <div style={{textAlign:'center',marginTop:14}}>
+              <span className="pv-lk" style={{fontSize:'.52rem'}} onClick={()=>{setRequires2FA(false);setTwoFACode('');setErr('');}}>← Back to sign in</span>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:6,marginTop:22,paddingTop:16,borderTop:'1px solid var(--line2)'}}>
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose-mid)" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
         <span style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)',letterSpacing:'.04em'}}>Secured with AES-256 encryption · GDPR compliant</span>

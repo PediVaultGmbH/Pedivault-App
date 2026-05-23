@@ -64,7 +64,7 @@ export function Modal({open,onClose,maxWidth=480,children}) {
     <div className={`pv-overlay${open?' open':''}`}
       onClick={e=>{ if(e.target===e.currentTarget) onCloseRef.current(); }}
       role="dialog" aria-modal="true">
-      <div className="pv-modal" style={{maxWidth, borderRadius:20}} ref={modalRef}>{children}</div>
+      <div className="pv-modal" style={{maxWidth, borderRadius:20, overflow:'hidden'}} ref={modalRef}>{children}</div>
     </div>
   );
 }

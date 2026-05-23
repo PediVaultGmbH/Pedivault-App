@@ -6,6 +6,7 @@ import api, { setToken, setRefreshToken, removeToken, removeRefreshToken, getRef
 /** Sign in → saves tokens, returns user object */
 export const signIn = async ({ email, password, rememberMe = false }) => {
   const data = await api.post('/auth/signin', { email, password, rememberMe });
+  if (data.requires2FA) return { requires2FA: true, userId: data.userId };
   setToken(data.token);
   setRefreshToken(data.refreshToken);
   return data.user;
@@ -92,3 +93,11 @@ export const verify2FA = (token) =>
 /** Disable 2FA */
 export const disable2FA = () =>
   api.post('/auth/2fa/disable');
+
+/** Complete login with 2FA token */
+export const login2FA = async ({ userId, token, rememberMe = false }) => {
+  const data = await api.post('/auth/2fa/login', { userId, token, rememberMe });
+  setToken(data.token);
+  setRefreshToken(data.refreshToken);
+  return data.user;
+};
