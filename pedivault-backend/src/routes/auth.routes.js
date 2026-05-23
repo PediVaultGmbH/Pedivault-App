@@ -23,4 +23,6 @@ router.post('/change-password',  authenticate, ctrl.changePassword);
 router.get ('/sessions',         authenticate, ctrl.getSessions);
 router.delete('/sessions',       authenticate, ctrl.revokeAllSessions);
 
+router.get("/notifications", authenticate, ctrl.getNotifications);
+router.put("/notifications", authenticate, ctrl.updateNotifications);
 module.exports = router;
