@@ -1,8 +1,10 @@
 import { useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmptyState from '../ui/EmptyState';
 import { WHO } from '../../../data/growthData';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
+
 
 function GrowthChart({ history, field, color, bandKey }) {
   const W = 560, H = 200, PAD = { t:18, r:20, b:32, l:40 };
@@ -105,7 +107,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
   const [showAll, setShowAll]   = useState(false);
   const [showBmiInfo, setShowBmiInfo] = useState(false);
   const chartRef = useRef(null);
-
+  const { t: tr } = useTranslation();
   const switchTab = useCallback(t => {
     setTab(t);
     setTimeout(() => {
@@ -131,9 +133,9 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       <div className="mb">
         <EmptyState color="var(--green)"
           icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.5" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
-          title="No growth data yet"
+          title={tr('growth.noData','No growth data yet')}
           sub="Start tracking growth by adding the first measurements. WHO percentile charts will populate automatically."
-          btnLabel="Add First Measurement"
+          btnLabel={tr('growth.addEntry','Add First Measurement')}
           onBtn={() => showModal('growth')}/>
       </div>
     </div>
@@ -143,9 +145,9 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
   const displayHistory = showAll ? allHistory : allHistory.slice(0, 6);
 
   const CHARTS = {
-    weight: { label:'Weight',     unit:'kg', color:'var(--rose)',  bandKey:'weight' },
-    height: { label:'Height',     unit:'cm', color:'var(--green)', bandKey:'height' },
-    head:   { label:'Head circ.', unit:'cm', color:'var(--blue)',  bandKey:'head'   },
+    weight: { label: tr('growth.weight','Weight'),     unit:'kg', color:'var(--rose)',  bandKey:'weight' },
+    height: { label: tr('growth.height','Height'),     unit:'cm', color:'var(--green)', bandKey:'height' },
+   head:   { label: tr('growth.headCirc','Head circ.'), unit:'cm', color:'var(--blue)',  bandKey:'head'   },
   };
   const cd = CHARTS[tab];
   const wTrend = calcTrend(allHistory, 'weight');
@@ -167,10 +169,10 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         {[
-          { cls:'sc-healthy', lbl:'Weight',     val:curr.weight, unit:'kg', sub:'Current', subC:'var(--green)',    t:'weight', trend:wTrend },
-          { cls:'sc-info',    lbl:'Height',     val:curr.height, unit:'cm', sub:'Current', subC:'var(--blue)',     t:'height', trend:hTrend },
-          { cls:'sc-normal',  lbl:'Head Circ.', val:curr.head,   unit:'cm', sub:'Current', subC:'var(--rose-mid)', t:'head',   trend:null   },
-          { cls:'sc-warning', lbl:'BMI',        val:bmi,         unit:'',   sub:bmiStatus, subC:'var(--amber)',    t:null,     trend:null   },
+          { cls:'sc-healthy', lbl: tr('growth.weight','Weight'),     val:curr.weight, unit:'kg', sub:'Current', subC:'var(--green)',    t:'weight', trend:wTrend },
+          { cls:'sc-info',    lbl: tr('growth.height','Height'),     val:curr.height, unit:'cm', sub:'Current', subC:'var(--blue)',     t:'height', trend:hTrend },
+          { cls:'sc-normal',  lbl: tr('growth.headCirc','Head Circ.'), val:curr.head, unit:'cm', sub:'Current', subC:'var(--rose-mid)', t:'head', trend:null },
+          { cls:'sc-warning', lbl: tr('growth.bmi','BMI'),             val:bmi,       unit:'',   sub:bmiStatus, subC:'var(--amber)',    t:null,   trend:null },
         ].map((s, i) => (
           <div key={i} className={`stat-card ${s.cls}`}
             style={{ cursor: s.t || i === 3 ? 'pointer' : 'default' }}
@@ -213,7 +215,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
               display:'flex', alignItems:'center', gap:5,
             }}>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-              Add Entry
+              {tr('growth.addEntry','Add Entry')}
             </button>
           </div>
         </div>
@@ -237,12 +239,12 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* History table */}
       <div>
         <div className="sh">
-          <div className="sh-title">Measurement History <span style={{ fontSize:'.5rem', color:'var(--ink-3)', fontWeight:300, marginLeft:4 }}>({allHistory.length} entries)</span></div>
+         <div className="sh-title">{tr('growth.history','Measurement History')} <span style={{ fontSize:'.5rem', color:'var(--ink-3)', fontWeight:300, marginLeft:4 }}>({allHistory.length} entries)</span></div>
           <button type="button" className="sh-link" onClick={() => showModal('growth')}>+ Add →</button>
         </div>
         <div className="card" style={{ padding:0, overflow:'hidden' }}>
           <div style={{ display:'grid', gridTemplateColumns:'1.2fr .7fr .7fr .6fr .8fr', gap:0, padding:'9px 17px', borderBottom:'1px solid var(--line2)', background:'var(--cream-2)' }}>
-            {['Date','Weight','Height','Head','Trend'].map(h => (
+            {[tr('appointments.date','Date'), tr('growth.weight','Weight'), tr('growth.height','Height'), tr('growth.headCirc','Head'), tr('growth.trend','Trend')].map(h => (
               <div key={h} style={{ fontSize:'.41rem', fontWeight:600, letterSpacing:'.14em', textTransform:'uppercase', color:'var(--ink-3)' }}>{h}</div>
             ))}
           </div>
@@ -281,7 +283,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* BMI modal */}
       <Modal open={showBmiInfo} onClose={() => setShowBmiInfo(false)} maxWidth={400}>
         <div className="pv-mhdr">
-          
+
           <div className="pv-mhdr-eyebrow">Growth</div>
           <div className="pv-mhdr-title">Body Mass Index (BMI)</div>
           <div className="pv-mhdr-sub">Understanding your child's BMI reading</div>
