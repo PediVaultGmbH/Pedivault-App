@@ -7,9 +7,12 @@
     "appointments": "Appointments",
     "medications": "Medications",
     "profile": "Profile",
-    "aiAssist": "AI Assistant",
+    "ai_assist": "AI Assistant",
     "support": "Support",
-    "account": "Account"
+    "account": "Account",
+    "sec_overview": "Overview",
+    "sec_care": "Care",
+    "sec_assistance": "Assistance"
   },
   "common": {
     "save": "Save",

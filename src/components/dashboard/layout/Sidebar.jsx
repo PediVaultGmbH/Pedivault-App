@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { NAV } from '../../../data/navConfig';
 import FlowerLogo from '../ui/FlowerLogo';
 import { a11yClick } from '../../../utils/a11y';
+import { useTranslation } from 'react-i18next';
 
 export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildren=[],userName='Lena'}) {
   const childCount = apiChildren.length + extraChildren.length;
   const [ripple, setRipple] = useState(null);
+  const { t } = useTranslation();
   const handleNav = (id) => {
     setRipple(id);
     setTimeout(() => setRipple(null), 500);
@@ -21,7 +23,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
       </div>
       {NAV.map(g=>(
         <div key={g.sec}>
-          <div className="pv-nav-sec">{g.sec}</div>
+          <div className="pv-nav-sec">{t(`nav.sec_${g.sec.toLowerCase()}`, g.sec)}</div>
           {g.items.map(item=>(
             <div key={item.id}
               className={`pv-nav-item${active===item.id?' active':''}${ripple===item.id?' ripple':''}`}
@@ -29,7 +31,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
               aria-current={active===item.id?'page':undefined}
               aria-label={item.lbl}>
               <div className="pv-nav-ico">{item.icon}</div>
-              <span className="pv-nav-lbl">{item.lbl}</span>
+              <span className="pv-nav-lbl">{t(`nav.${item.id.replace('-','_')}`, item.lbl)}</span>
               {item.badge&&<span className="pv-nav-badge">{item.badge}</span>}
             </div>
           ))}

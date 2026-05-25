@@ -1,5 +1,6 @@
 import { a11yClick } from '../../../utils/a11y';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 export function Header({
   active, activeChild, onChildSelect, extraChildren=[],
@@ -7,14 +8,21 @@ export function Header({
   onSearch, onNotif, onBook, onAddChild, showToast, onBurger,
   onSignOut,
 }) {
+  const { t } = useTranslation();
   const isHome = active === 'home';
   const titles = {
-    growth:'Growth Tracker', vaccines:'Vaccines', records:'Health Records',
-    appointments:'Appointments', medications:'Medications', profile:'Child Profile',
-    'ai-assist':'AI Assistant', support:'Support', account:'My Account',
+    growth: t('growth.title', 'Growth'),
+    vaccines: t('vaccines.title', 'Vaccines'),
+    records: t('records.title', 'Records'),
+    appointments: t('appointments.title', 'Appointments'),
+    medications: t('medications.title', 'Medications'),
+    profile: t('profile.title', 'Profile'),
+    'ai-assist': t('nav.ai_assist', 'AI Assistant'),
+    support: t('nav.support', 'Support'),
+    account: t('account.title', 'Account'),
   };
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const greeting = hour < 12 ? t('home.welcome', 'Good morning') : hour < 17 ? t('home.welcome', 'Good afternoon') : t('home.welcome', 'Good evening');
 
   const GENDER_COLOR = { FEMALE: '#C47A92', MALE: '#3478B0', OTHER: '#7B52B0' };
 

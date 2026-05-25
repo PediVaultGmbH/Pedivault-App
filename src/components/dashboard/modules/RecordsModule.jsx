@@ -54,9 +54,16 @@ function RecordDetailModal({ open, onClose, record }) {
 
   const handleDownload = e => {
     e?.stopPropagation?.();
-    if (record.fileUrl) {
+    if (!record.fileUrl) return;
+    if (record.fileUrl.startsWith('data:')) {
       const a = document.createElement('a');
-      a.href = record.fileUrl; a.target = '_blank'; a.download = record.name; a.click();
+      a.href = record.fileUrl;
+      a.download = record.name || 'document';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      window.open(record.fileUrl, '_blank');
     }
   };
 
@@ -75,10 +82,22 @@ function RecordDetailModal({ open, onClose, record }) {
           <div style={{ fontSize:'.64rem', fontWeight:500, color:cfg.color, marginBottom:3 }}>{cfg.label}</div>
           <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>{fileExt}</div>
           {record.fileUrl && (
-            <div onClick={handleDownload} style={{ marginTop:14, display:'inline-flex', alignItems:'center', gap:6, height:30, padding:'0 16px', borderRadius:9, background:cfg.color, color:'#fff', fontSize:'.54rem', fontWeight:500, cursor:'pointer' }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download {fileExt}
-            </div>
+            <>
+              {record.fileUrl.startsWith('data:image') && (
+                <img src={record.fileUrl} alt={record.name}
+                  style={{maxWidth:'100%',maxHeight:200,borderRadius:8,marginTop:12,objectFit:'contain',border:'1px solid var(--line2)'}}/>
+              )}
+              {record.fileUrl.startsWith('data:application/pdf') && (
+                <div style={{marginTop:12}}>
+                  <iframe src={record.fileUrl} title={record.name}
+                    style={{width:'100%',height:280,borderRadius:8,border:'1px solid var(--line2)'}}/>
+                </div>
+              )}
+              <div onClick={handleDownload} style={{marginTop:14,display:'inline-flex',alignItems:'center',gap:6,height:30,padding:'0 16px',borderRadius:9,background:cfg.color,color:'#fff',fontSize:'.54rem',fontWeight:500,cursor:'pointer'}}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Open / Download {fileExt}
+              </div>
+            </>
           )}
         </div>
 
