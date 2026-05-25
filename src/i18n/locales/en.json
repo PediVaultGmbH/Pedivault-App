@@ -113,7 +113,13 @@
     "viewChart": "View chart",
     "whatIsBmi": "What is BMI?",
     "showLess": "Show less",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "overTime": "over time",
+    "entries": "entries",
+    "underweight": "Underweight",
+    "healthy": "Healthy",
+    "overweight": "Overweight",
+    "obese": "Obese"
   },
   "records": {
     "title": "Records",

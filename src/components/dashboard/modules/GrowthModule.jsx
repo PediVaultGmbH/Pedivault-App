@@ -158,10 +158,10 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
     : '—';
 
   const bmiStatus = bmi === '—' ? '—'
-    : bmi < 13 ? 'Underweight'
-    : bmi < 17 ? 'Healthy'
-    : bmi < 19 ? 'Overweight'
-    : 'Obese';
+    : bmi < 13 ? tr('growth.underweight','Underweight')
+    : bmi < 17 ? tr('growth.healthy','Healthy')
+    : bmi < 19 ? tr('growth.overweight','Overweight')
+    : tr('growth.obese','Obese');
 
   return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
@@ -221,7 +221,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
         </div>
 
         <div style={{ padding:'14px 20px 6px', display:'flex', alignItems:'baseline', gap:8 }}>
-          <div className="eyebrow" style={{ marginBottom:0 }}>{cd.label} over time</div>
+         <div className="eyebrow" style={{ marginBottom:0 }}>{cd.label} {tr('growth.overTime','over time')}</div>
           <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1rem', color:'var(--ink)' }}>
             {curr[tab]} <span style={{ fontSize:'.7rem', color:'var(--ink-3)', fontFamily:"'DM Sans',sans-serif" }}>{cd.unit}</span>
           </div>
@@ -239,8 +239,8 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* History table */}
       <div>
         <div className="sh">
-         <div className="sh-title">{tr('growth.history','Measurement History')} <span style={{ fontSize:'.5rem', color:'var(--ink-3)', fontWeight:300, marginLeft:4 }}>({allHistory.length} entries)</span></div>
-          <button type="button" className="sh-link" onClick={() => showModal('growth')}>+ Add →</button>
+         <div className="sh-title">{tr('growth.history','Measurement History')} <span style={{ fontSize:'.5rem', color:'var(--ink-3)', fontWeight:300, marginLeft:4 }}>({allHistory.length} {tr('growth.entries','entries')})</span></div>
+         <button type="button" className="sh-link" onClick={() => showModal('growth')}>+ {tr('growth.addEntry','Add')} →</button>
         </div>
         <div className="card" style={{ padding:0, overflow:'hidden' }}>
           <div style={{ display:'grid', gridTemplateColumns:'1.2fr .7fr .7fr .6fr .8fr', gap:0, padding:'9px 17px', borderBottom:'1px solid var(--line2)', background:'var(--cream-2)' }}>

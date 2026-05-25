@@ -113,7 +113,13 @@
     "viewChart": "Diagramm anzeigen",
     "whatIsBmi": "Was ist BMI?",
     "showLess": "Weniger anzeigen",
-    "viewAll": "Alle anzeigen"
+    "viewAll": "Alle anzeigen",
+    "overTime": "im Verlauf",
+    "entries": "Einträge",
+    "underweight": "Untergewicht",
+    "healthy": "Normalgewicht",
+    "overweight": "Übergewicht",
+    "obese": "Adipositas"
   },
   "records": {
     "title": "Dokumente",
