@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmptyState from '../ui/EmptyState';
 import { STIKO } from '../../../data/stiko';
 import { getVaccStatus, findVaccId } from '../../../utils/vaccineUtils';
-
-const STATUS_CFG = {
-  done:      { label:'Done',     color:'var(--green)', bg:'var(--green-bg)', border:'var(--green-lt)',     icon:'✓' },
-  overdue:   { label:'Overdue',  color:'var(--red)',   bg:'var(--red-bg)',   border:'rgba(185,40,20,.18)', icon:'!' },
-  'due-soon':{ label:'Due Soon', color:'var(--amber)', bg:'var(--amber-bg)', border:'var(--amber-lt)',     icon:'~' },
-  upcoming:  { label:'Upcoming', color:'var(--blue)',  bg:'var(--blue-bg)',  border:'var(--blue-lt)',      icon:'○' },
-};
 
 const POLYGONSCAN = 'https://amoy.polygonscan.com';
 
