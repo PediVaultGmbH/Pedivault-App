@@ -82,7 +82,9 @@ app.use('/api/payments', paymentsRoutes);
 
 // ── Notifications ─────────────────────────────────────────────────────────────
 const notificationsRoutes = require('./routes/notifications.routes');
+const cronRoutes = require('./routes/cron.routes');
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/cron', cronRoutes);
 
 // ── Blockchain ────────────────────────────────────────────────────────────────
 app.use('/api/blockchain', blockchainRoutes);
