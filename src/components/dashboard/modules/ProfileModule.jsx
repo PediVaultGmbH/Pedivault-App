@@ -4,6 +4,7 @@ import EmptyState from '../ui/EmptyState';
 import XBtn from '../ui/XBtn';
 import api from '../../../api/client';
 import HealthSummaryModal from '../modals/HealthSummaryModal';
+import { useTranslation } from 'react-i18next';
 
 const ACTION_CFG = {
   0: { label:'Viewed',  color:'var(--blue)',  bg:'var(--blue-bg)',  icon:'👁' },
@@ -48,12 +49,13 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', { day:'numeric', month:'long', year:'numeric' }) : '—';
   const fmtTs   = ts => ts ? new Date(Number(ts) * 1000).toLocaleDateString('en-DE', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
 
-  const SECTIONS = [
-    { k:'overview', label:'Overview',    icon:'👤' },
-    { k:'details',  label:'Details',     icon:'📋' },
-    { k:'audit',    label:'Audit Trail', icon:'⛓' },
-  ];
+  const { t } = useTranslation();
 
+  const SECTIONS = [
+    { k:'overview', label: t('profile.overview','Overview'),    icon:'👤' },
+    { k:'details',  label: t('profile.details','Details'),      icon:'📋' },
+    { k:'audit',    label: t('profile.auditTrail','Audit Trail'), icon:'⛓' },
+  ];
   const GENDER_COLOR = { FEMALE:'#C47A92', MALE:'#3478B0', OTHER:'#7B52B0' };
 
   if (!child) return (
@@ -100,7 +102,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.2rem', fontWeight:400, color:'var(--ink)', marginBottom:3 }}>{child.name}</div>
               <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
                 <span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{calcAge(child.dateOfBirth)}</span>
-                {child.gender && <><span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span><span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : 'Other'}</span></>}
+                {child.gender && <><span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span><span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{child.gender === 'FEMALE' ? t('children.girl','Girl') : child.gender === 'MALE' ? t('children.boy','Boy') : t('children.other','Other')}</span></>}
                 {child.bloodType && <><span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span><span style={{ fontSize:'.56rem', fontWeight:500, color:pColor, background:`${pColor}15`, border:`1px solid ${pColor}25`, borderRadius:20, padding:'1px 8px' }}>{child.bloodType}</span></>}
               </div>
               <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', marginTop:4 }}>{fmtDate(child.dateOfBirth)}</div>
@@ -119,12 +121,12 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
           </div>
           <div style={{ display:'flex', gap:6 }}>
             <button type="button" onClick={() => setShowSummary(true)} style={{ height:28, padding:'0 12px', borderRadius:20, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.5rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:5, boxShadow:'0 2px 8px rgba(155,58,86,.25)' }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              Share with Doctor
+             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              {t('profile.shareWithDoctor','Share with Doctor')}
             </button>
             <button type="button" onClick={() => setConfirmDelete(true)} style={{ height:28, padding:'0 12px', borderRadius:20, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', color:'var(--red)', fontSize:'.5rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:5 }}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-              Remove child
+              {t('children.removeChild','Remove child')}
             </button>
           </div>
         </div>
@@ -136,15 +138,15 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
             <div style={{ width:56, height:56, borderRadius:16, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="8"/></svg>
             </div>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:8 }}>Remove this child?</div>
+           <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:8 }}>{t('children.removeChild','Remove this child?')}</div>
             <div style={{ fontSize:'.54rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7, marginBottom:22 }}>
-              <strong style={{ color:'var(--ink)' }}>{child.name}</strong> and all their records will be permanently removed. This cannot be undone.
+              <strong style={{ color:'var(--ink)' }}>{child.name}</strong> {t('children.removeConfirm','and all their records will be permanently removed. This cannot be undone.')}
             </div>
             <div style={{ display:'flex', gap:10 }}>
-              <button type="button" className="fb fb-g" style={{ flex:1 }} onClick={() => setConfirmDelete(false)}>Cancel</button>
+              <button type="button" className="fb fb-g" style={{ flex:1 }} onClick={() => setConfirmDelete(false)}>{t('common.cancel','Cancel')}</button>
               <button type="button" style={{ flex:1, height:40, borderRadius:10, background:'var(--red)', color:'#fff', border:'none', fontSize:'.6rem', fontWeight:500, cursor:'pointer' }}
                 onClick={() => { setConfirmDelete(false); onDeleteChild && onDeleteChild(activeChild); }}>
-                Yes, remove
+                {t('common.yes','Yes')}, remove
               </button>
             </div>
           </div>
@@ -154,13 +156,13 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
         {section === 'overview' && (
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             <div className="card">
-              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Basic Information</div></div>
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">{t('profile.basicInfo','Basic Information')}</div></div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 {[
-                  { lbl:'Date of birth', val: fmtDate(child.dateOfBirth) },
-                  { lbl:'Age',           val: calcAge(child.dateOfBirth) },
-                  { lbl:'Gender',        val: child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : child.gender || '—' },
-                  { lbl:'Blood type',    val: child.bloodType || '—' },
+                  { lbl: t('children.dateOfBirth','Date of birth'), val: fmtDate(child.dateOfBirth) },
+                  { lbl: t('children.age','Age'),                   val: calcAge(child.dateOfBirth) },
+                  { lbl: t('children.gender','Gender'),             val: child.gender === 'FEMALE' ? t('children.girl','Girl') : child.gender === 'MALE' ? t('children.boy','Boy') : child.gender || '—' },
+                  { lbl: t('children.bloodType','Blood type'),      val: child.bloodType || '—' },
                 ].map((d, i) => (
                   <div key={i} style={{ background:'var(--cream-2)', borderRadius:9, padding:'9px 12px', border:'1px solid var(--line2)' }}>
                     <div style={{ fontSize:'.41rem', fontWeight:600, letterSpacing:'.13em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:3 }}>{d.lbl}</div>
@@ -172,9 +174,9 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
 
             <div className="card">
               <div className="sh" style={{ marginBottom: allergies.length ? 12 : 0 }}>
-                <div className="sh-title">Allergies & Sensitivities</div>
+                <div className="sh-title">{t('profile.allergies','Allergies & Sensitivities')}</div>
                 <span style={{ fontSize:'.46rem', fontWeight:600, color: allergies.length > 0 ? 'var(--amber)' : 'var(--green)', background: allergies.length > 0 ? 'var(--amber-bg)' : 'var(--green-bg)', border:`1px solid ${allergies.length > 0 ? 'var(--amber-lt)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
-                  {allergies.length === 0 ? 'None known' : `${allergies.length} recorded`}
+                  {allergies.length === 0 ? t('profile.noneKnown','None known') : `${allergies.length} recorded`}
                 </span>
               </div>
               {allergies.length === 0 ? (
@@ -201,9 +203,9 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
 
             <div className="card">
               <div className="sh" style={{ marginBottom: conditions.length ? 12 : 0 }}>
-                <div className="sh-title">Medical Conditions</div>
+               <div className="sh-title">{t('profile.conditions','Medical Conditions')}</div>
                 <span style={{ fontSize:'.46rem', fontWeight:600, color: conditions.length > 0 ? 'var(--red)' : 'var(--green)', background: conditions.length > 0 ? 'var(--red-bg)' : 'var(--green-bg)', border:`1px solid ${conditions.length > 0 ? 'rgba(185,40,20,.18)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
-                  {conditions.length === 0 ? 'None recorded' : `${conditions.length} recorded`}
+                  {conditions.length === 0 ? t('profile.noneRecorded','None recorded') : `${conditions.length} recorded`}
                 </span>
               </div>
               {conditions.length === 0 ? (
@@ -228,7 +230,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
         {section === 'details' && (
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             <div className="card">
-              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Emergency Contact</div></div>
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">{t('profile.emergencyContact','Emergency Contact')}</div></div>
               <div style={{ display:'flex', alignItems:'center', gap:10, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.18)', borderRadius:12, padding:'10px 14px' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
                 <div>
@@ -253,15 +255,15 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
             </div>
 
             <div className="card">
-              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Quick Actions</div></div>
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">{t('profile.quickActions','Quick Actions')}</div></div>
               <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
                 {[
-                  { label:'Book appointment',  action: () => showModal('book'),       icon:'📅' },
-                  { label:'Log vaccine',       action: () => showModal('vaccine'),    icon:'💉' },
-                  { label:'Add growth entry',  action: () => showModal('growth'),     icon:'📏' },
-                  { label:'Upload record',     action: () => showModal('record'),     icon:'📄' },
-                  { label:'Add medication',    action: () => showModal('medication'), icon:'💊' },
-                  { label:'Share with Doctor', action: () => setShowSummary(true),   icon:'🖨️' },
+                 { label: t('appointments.book','Book appointment'),  action: () => showModal('book'),       icon:'📅' },
+                  { label: t('vaccines.logVaccine','Log vaccine'),     action: () => showModal('vaccine'),    icon:'💉' },
+                  { label: t('growth.addEntry','Add growth entry'),    action: () => showModal('growth'),     icon:'📏' },
+                  { label: t('records.upload','Upload record'),        action: () => showModal('record'),     icon:'📄' },
+                  { label: t('medications.add','Add medication'),      action: () => showModal('medication'), icon:'💊' },
+                  { label: t('profile.shareWithDoctor','Share with Doctor'), action: () => setShowSummary(true), icon:'🖨️' },
                 ].map((a, i) => (
                   <button key={i} type="button" onClick={a.action} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', borderRadius:10, background:'var(--cream-2)', border:'1px solid var(--line2)', cursor:'pointer', fontSize:'.6rem', fontWeight:500, color:'var(--ink)', textAlign:'left' }}>
                     <span style={{ fontSize:'1rem' }}>{a.icon}</span>{a.label}
