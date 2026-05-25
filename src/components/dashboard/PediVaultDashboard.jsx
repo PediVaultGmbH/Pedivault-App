@@ -379,10 +379,11 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
         try {
           const typeMap = { 'Lab Report':'LAB_REPORT', 'Prescription':'PRESCRIPTION', 'Vaccination Certificate':'VACCINATION_CARD', 'Scan / X-ray':'SCAN', 'Discharge Summary':'OTHER', 'Other':'OTHER' };
           const res = await uploadRecord(currentBackendId, {
-            name:   entry.name,
-            type:   typeMap[entry.type] || 'OTHER',
-            source: entry.source,
-            notes:  entry.date ? `Document date: ${entry.date}` : null,
+            name:    entry.name,
+            type:    typeMap[entry.type] || 'OTHER',
+            source:  entry.source,
+            notes:   entry.date ? `Document date: ${entry.date}` : null,
+            fileUrl: entry.fileUrl || null,
           });
           const saved = res.data || entry;
           setUploadedRecords(prev => ({ ...prev, [activeChild]: [...(prev[activeChild] || []), saved] }));

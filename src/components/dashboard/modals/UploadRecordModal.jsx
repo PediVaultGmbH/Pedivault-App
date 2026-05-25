@@ -21,7 +21,16 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
   const submit = ()=>{
     if(!validate(f))return;
     run(async ()=>{
-      const entry = {name:f.name, type:f.type, date:f.date, source:f.source};
+      let fileUrl = null;
+      if (file) {
+        fileUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+      const entry = {name:f.name, type:f.type, date:f.date, source:f.source, fileUrl};
       await onSuccess(entry);
       setDone(true);
       setTimeout(()=>{
@@ -43,7 +52,7 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
   return (
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <div className="pv-mhdr">
-        
+
         <div className="pv-mhdr-eyebrow">Health Records</div>
         <div className="pv-mhdr-title">Upload Document</div>
         <div className="pv-mhdr-sub">Add a health document, report or certificate</div>
