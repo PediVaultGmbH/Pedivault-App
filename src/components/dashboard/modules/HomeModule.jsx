@@ -31,24 +31,14 @@ export function HomeModule({
 
   const nextVisit = upcomingVisits[0] || null;
 
-  const qCounts = {
-    vaccine: vaccineCount,
-    growth:  growthCount,
-    record:  recordCount,
-    book:    bookingCount,
-  };
+  const qCounts = { vaccine: vaccineCount, growth: growthCount, record: recordCount, book: bookingCount };
 
   return (
     <div className="pv-page" key={activeChild} style={{ animation:'fadeUp .3s ease both' }}>
 
       {/* Overdue alert */}
       {overdueList.length > 0 && (
-        <div style={{
-          display:'flex', alignItems:'center', gap:12,
-          background:'linear-gradient(135deg,rgba(185,40,20,.06),rgba(185,40,20,.03))',
-          border:'1px solid rgba(185,40,20,.18)', borderLeft:'3px solid var(--red)',
-          borderRadius:12, padding:'11px 16px', marginBottom:18,
-        }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12, background:'linear-gradient(135deg,rgba(185,40,20,.06),rgba(185,40,20,.03))', border:'1px solid rgba(185,40,20,.18)', borderLeft:'3px solid var(--red)', borderRadius:12, padding:'11px 16px', marginBottom:18 }}>
           <div style={{ width:30, height:30, borderRadius:9, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </div>
@@ -56,7 +46,7 @@ export function HomeModule({
             <div style={{ fontSize:'.64rem', fontWeight:600, color:'var(--red)', marginBottom:2 }}>
               {overdueList.length === 1
                 ? `${overdueList[0].name} — ${overdueList[0].dose} ${t('vaccines.overdue','is overdue')}`
-                : `${overdueList.length} ${t('home.overdueVaccines','vaccines are overdue')} — action needed`}
+                : `${overdueList.length} ${t('home.overdueVaccines','vaccines are overdue')}`}
             </div>
             <div style={{ fontSize:'.52rem', fontWeight:300, color:'var(--ink-2)' }}>
               {overdueList.slice(0, 2).map(v => `${v.name} ${v.dose}`).join(' · ')}
@@ -84,24 +74,20 @@ export function HomeModule({
         </div>
         <div className="stat-card sc-info" onClick={() => showModal('book')} style={{ cursor:'pointer' }}>
           <div className="stat-label">{t('home.nextAppointment','Next Visit')}</div>
-          <div className="stat-val" style={{ fontSize:'1.35rem' }}>
-            {nextVisit ? `${nextVisit.day} ${nextVisit.mon}` : '—'}
-          </div>
-          <div className="stat-meta">
-            <span className="pill blue">{nextVisit ? nextVisit.name : t('appointments.noAppointments','No visits booked')}</span>
-          </div>
+          <div className="stat-val" style={{ fontSize:'1.35rem' }}>{nextVisit ? `${nextVisit.day} ${nextVisit.mon}` : '—'}</div>
+          <div className="stat-meta"><span className="pill blue">{nextVisit ? nextVisit.name : t('appointments.noAppointments','No visits')}</span></div>
           <div className="stat-card-cta">{t('appointments.book','Book visit')} →</div>
         </div>
         <div className="stat-card sc-healthy" onClick={() => onNav('growth')} style={{ cursor:'pointer' }}>
           <div className="stat-label">{t('growth.weight','Weight')}</div>
           <div className="stat-val">{currWeight}<span className="stat-unit">{currWeight !== '—' ? ' kg' : ''}</span></div>
-          <div className="stat-meta"><span className="pill green">{currWeight !== '—' ? 'Latest' : t('common.noData','No data')}</span></div>
+          <div className="stat-meta"><span className="pill green">{currWeight !== '—' ? t('common.latest','Latest') : t('common.noData','No data')}</span></div>
           <div className="stat-card-cta">{t('home.viewAll','View')} growth →</div>
         </div>
         <div className="stat-card sc-normal" onClick={() => onNav('growth')} style={{ cursor:'pointer' }}>
           <div className="stat-label" style={{ color:'var(--rose-mid)' }}>{t('growth.height','Height')}</div>
           <div className="stat-val">{currHeight}<span className="stat-unit">{currHeight !== '—' ? ' cm' : ''}</span></div>
-          <div className="stat-meta"><span className="pill rose">{currHeight !== '—' ? 'Latest' : t('common.noData','No data')}</span></div>
+          <div className="stat-meta"><span className="pill rose">{currHeight !== '—' ? t('common.latest','Latest') : t('common.noData','No data')}</span></div>
           <div className="stat-card-cta">{t('home.viewAll','View')} charts →</div>
         </div>
       </div>
@@ -115,7 +101,7 @@ export function HomeModule({
             </div>
             <div style={{ flex:1, minWidth:0 }}>
               <div className="eyebrow" style={{ color:vaccStats.overdue > 0 ? 'var(--red)' : 'var(--green)', marginBottom:2 }}>
-                {vaccStats.overdue > 0 ? t('vaccines.title','Immunisation') + ' — Action needed' : t('vaccines.title','Immunisation') + ' — On track'}
+                {vaccStats.overdue > 0 ? t('vaccines.title','Immunisation') + ' — ' + t('home.actionNeeded','Action needed') : t('vaccines.title','Immunisation') + ' — On track'}
               </div>
               <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'.9rem', color:'var(--ink)' }}>{childName} · {childAge}</div>
             </div>
@@ -140,7 +126,7 @@ export function HomeModule({
             {overdueList.length === 0 && (
               <div style={{ display:'flex', alignItems:'center', gap:9 }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                <span style={{ fontSize:'.57rem', color:'var(--green)', fontWeight:500 }}>All vaccines are up to date</span>
+                <span style={{ fontSize:'.57rem', color:'var(--green)', fontWeight:500 }}>{t('common.upToDate','All vaccines are up to date')}</span>
               </div>
             )}
           </div>
@@ -155,7 +141,7 @@ export function HomeModule({
                 {currWeight}<span style={{ fontSize:'.95rem', color:'var(--ink-3)', fontFamily:"'DM Sans',sans-serif" }}>{currWeight !== '—' ? ' kg' : ''}</span>
               </div>
             </div>
-            <span className="pill green">{currWeight !== '—' ? 'Latest' : t('common.noData','No data yet')}</span>
+            <span className="pill green">{currWeight !== '—' ? t('common.latest','Latest') : t('common.noData','No data')}</span>
           </div>
           {currWeight !== '—' && (
             <svg width="100%" height="46" viewBox="0 0 560 46" fill="none" preserveAspectRatio="none">
@@ -175,17 +161,20 @@ export function HomeModule({
               <div key={i} style={{ background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:9, padding:'8px 10px' }}>
                 <div className="eyebrow" style={{ marginBottom:2 }}>{s.lbl}</div>
                 <div className="serif-val" style={{ fontSize:'.88rem' }}>{s.val}</div>
-                <div style={{ fontSize:'.4rem', color:s.c, marginTop:2 }}>{s.val !== '—' ? 'Latest' : t('common.noData','No data')}</div>
+                <div style={{ fontSize:'.4rem', color:s.c, marginTop:2 }}>{s.val !== '—' ? t('common.latest','Latest') : t('common.noData','No data')}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Due Soon */}
+      {/* Action Needed */}
       {overdueList.length > 0 && (
         <>
-          <div className="sh"><div className="sh-title">Action Needed</div><button type="button" className="sh-link" onClick={() => onNav('vaccines')}>{t('home.viewAll','All')} vaccines →</button></div>
+          <div className="sh">
+            <div className="sh-title">{t('home.actionNeeded','Action Needed')}</div>
+            <button type="button" className="sh-link" onClick={() => onNav('vaccines')}>{t('home.viewAll','All')} vaccines →</button>
+          </div>
           <div className="three-col">
             {overdueList.slice(0, 3).map((v, i) => (
               <div key={i} className="due-card" {...a11yClick(() => onNav('vaccines'))} aria-label={`Overdue: ${v.name}`}>
@@ -199,7 +188,7 @@ export function HomeModule({
                 <div style={{ fontSize:'.65rem', fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{v.name}</div>
                 <div style={{ fontSize:'.51rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.5 }}>{v.dose}</div>
                 <div className="divider"/>
-                <div style={{ fontSize:'.5rem', fontWeight:500, color:'var(--red)' }}>Action needed</div>
+                <div style={{ fontSize:'.5rem', fontWeight:500, color:'var(--red)' }}>{t('home.actionNeeded','Action needed')}</div>
               </div>
             ))}
           </div>
@@ -209,7 +198,10 @@ export function HomeModule({
       {/* Upcoming Visits + Quick Add */}
       <div className="two-col">
         <div>
-          <div className="sh"><div className="sh-title">{t('home.upcomingVisits','Upcoming Visits')}</div><button type="button" className="sh-link" onClick={() => showModal('book')}>+ {t('appointments.book','Book')} →</button></div>
+          <div className="sh">
+            <div className="sh-title">{t('home.upcomingVisits','Upcoming Visits')}</div>
+            <button type="button" className="sh-link" onClick={() => showModal('book')}>+ {t('appointments.book','Book')} →</button>
+          </div>
           <div className="card" style={{ padding:0, overflow:'hidden', borderTop:'3px solid var(--blue)' }}>
             {upcomingVisits.length === 0 ? (
               <div style={{ padding:'22px 17px', textAlign:'center', fontSize:'.58rem', color:'var(--ink-3)' }}>
@@ -233,10 +225,10 @@ export function HomeModule({
           <div className="sh"><div className="sh-title">{t('home.quickAdd','Quick Add')}</div></div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
             {[
-              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--rose)"  strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4z"/><path d="M14.5 5.5l4 4"/><path d="M12 8l-8 8 1 3 3 1 8-8"/></svg>,  bg:'var(--rose-pale)', border:'var(--rose-lt)',        label: t('vaccines.logVaccine','Log Vaccine'),  sub:`${qCounts.vaccine} logged`,   action:'vaccine' },
-              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)"  strokeWidth="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,                                                              bg:'var(--blue-bg)',  border:'rgba(52,120,176,.18)',  label: t('growth.addEntry','Growth Entry'),  sub:`${qCounts.growth} entries`,   action:'growth'  },
-              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>, bg:'var(--green-bg)', border:'rgba(42,158,98,.18)',  label: t('records.upload','Upload Record'),  sub:`${qCounts.record} uploaded`,  action:'record'  },
-              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>, bg:'var(--amber-bg)', border:'rgba(186,112,24,.18)', label: t('appointments.book','Book Visit'),    sub:`${qCounts.book} upcoming`,    action:'book'    },
+              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--rose)"  strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4z"/><path d="M14.5 5.5l4 4"/><path d="M12 8l-8 8 1 3 3 1 8-8"/></svg>,  bg:'var(--rose-pale)', border:'var(--rose-lt)',        label: t('vaccines.logVaccine','Log Vaccine'),  sub:`${qCounts.vaccine} ${t('common.logged','logged')}`,   action:'vaccine' },
+              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)"  strokeWidth="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,                                                              bg:'var(--blue-bg)',  border:'rgba(52,120,176,.18)',  label: t('growth.addEntry','Growth Entry'),  sub:`${qCounts.growth} ${t('common.entries','entries')}`,   action:'growth'  },
+              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>, bg:'var(--green-bg)', border:'rgba(42,158,98,.18)',  label: t('records.upload','Upload Record'),  sub:`${qCounts.record} ${t('common.uploaded','uploaded')}`,  action:'record'  },
+              { ico:<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>, bg:'var(--amber-bg)', border:'rgba(186,112,24,.18)', label: t('appointments.book','Book Visit'),    sub:`${qCounts.book} ${t('common.upcoming','upcoming')}`,    action:'book'    },
             ].map((q, i) => (
               <div key={q.label} className="quick-card" {...a11yClick(() => showModal(q.action))} aria-label={q.label}>
                 <div className="quick-ico" style={{ background:q.bg, border:`1px solid ${q.border}` }}>{q.ico}</div>

@@ -36,7 +36,13 @@
     "signOut": "Abmelden",
     "parent": "Elternteil",
     "child": "Kind",
-    "childrenSuffix": "er"
+    "childrenSuffix": "er",
+    "latest": "Aktuell",
+    "logged": "eingetragen",
+    "entries": "Einträge",
+    "uploaded": "hochgeladen",
+    "upcoming": "bevorstehend",
+    "upToDate": "Alle Impfungen sind aktuell"
   },
   "auth": {
     "signIn": "Anmelden",
@@ -59,7 +65,8 @@
     "quickAdd": "Schnell hinzufügen",
     "overdueVaccines": "Impfungen sind überfällig",
     "bookNow": "Jetzt buchen",
-    "viewAll": "Alle anzeigen"
+    "viewAll": "Alle anzeigen",
+    "actionNeeded": "Handlungsbedarf"
   },
   "children": {
     "addChild": "Kind hinzufügen",

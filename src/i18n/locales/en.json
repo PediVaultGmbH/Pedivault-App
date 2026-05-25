@@ -21,6 +21,15 @@
     "signOut": "Sign out",
     "parent": "Parent",
     "child": "child",
-    "childrenSuffix": "ren"
+    "childrenSuffix": "ren",
+    "latest": "Latest",
+    "logged": "logged",
+    "entries": "entries",
+    "uploaded": "uploaded",
+    "upcoming": "upcoming",
+    "upToDate": "All vaccines are up to date"
+  },
+  "home": {
+    "actionNeeded": "Action Needed"
   }
 }
