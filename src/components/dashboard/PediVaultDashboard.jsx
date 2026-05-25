@@ -388,6 +388,13 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           const saved = res.data || entry;
           setUploadedRecords(prev => ({ ...prev, [activeChild]: [...(prev[activeChild] || []), saved] }));
           showToast(`${entry.name || 'Record'} uploaded ✓`);
+          // Re-fetch after 3 seconds to pick up IPFS hash
+          setTimeout(async () => {
+            try {
+              const fresh = await getRecords(currentBackendId);
+              setUploadedRecords(prev => ({ ...prev, [activeChild]: fresh?.data || prev[activeChild] }));
+            } catch (_) {}
+          }, 3000);
         } catch (err) { showToast(err.message || 'Failed to upload record'); }
       }} />
 
