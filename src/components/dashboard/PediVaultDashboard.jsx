@@ -49,6 +49,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
   const [notifOpen, setNotifOpen]     = useState(false);
   const [modal, setModal]             = useState(null);
   const [loading, setLoading]         = useState(true);
+  const [childrenLoaded, setChildrenLoaded] = useState(false);
   const { toasts, show: showToast, dismiss: dismissToast } = useToast();
 
   const [apiChildren, setApiChildren]     = useState([]);
@@ -97,7 +98,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
         setChildIdMap(map);
 
         const backendId = activeChild;
-        if (!backendId || !backendId.includes('-')) { setLoading(false); return; }
+        if (!backendId || !backendId.includes('-')) { setLoading(false); setChildrenLoaded(true); return; }
 
         Promise.allSettled([
           getVaccineRecords(backendId),
@@ -107,9 +108,9 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           getMedications(backendId),
         ]).then(([vaccines, growth, records, appts, meds]) => {
           processAndStore(activeChild, vaccines, growth, records, appts, meds);
-        }).finally(() => setLoading(false));
+        }).finally(() => { setLoading(false); setChildrenLoaded(true); });
       })
-      .catch(err => { console.warn('Could not load children:', err.message); setLoading(false); });
+      .catch(err => { console.warn('Could not load children:', err.message); setLoading(false); setChildrenLoaded(true); });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -241,7 +242,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
         <SearchPanel open={searchOpen} onClose={() => setSearchOpen(false)} onNav={navigate} />
         <NotifPanel  open={notifOpen}  onClose={() => setNotifOpen(false)} />
 
-        {loading ? (
+        {loading || !childrenLoaded ? (
           <SkeletonHome />
         ) : apiChildren.length === 0 ? (
           <div className="pv-page" style={{animation:'fadeUp .3s ease both',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'60vh',textAlign:'center',padding:'40px 20px'}}>
