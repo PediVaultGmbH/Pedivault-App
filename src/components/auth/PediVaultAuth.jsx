@@ -25,7 +25,7 @@ export default function PediVaultAuth({ onLogin }) {
     if (token) {
       setResetToken(token);
       setScreen('reset');
-      window.history.replaceState({}, '', window.location.pathname);
+      window.history.replaceState({}, '', '/');
     }
 
     const isMobile = window.innerWidth <= 768;
