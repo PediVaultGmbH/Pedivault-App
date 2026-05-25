@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildren=[],userName='Lena'}) {
   const childCount = apiChildren.length + extraChildren.length;
   const [ripple, setRipple] = useState(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const handleNav = (id) => {
     setRipple(id);
     setTimeout(() => setRipple(null), 500);
@@ -22,7 +22,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
         </div>
       </div>
       {NAV.map(g=>(
-        <div key={g.sec}>
+        <div key={`${g.sec}-${i18n.language}`}>
           <div className="pv-nav-sec">{t(`nav.sec_${g.sec.toLowerCase()}`, g.sec)}</div>
           {g.items.map(item=>(
             <div key={item.id}
