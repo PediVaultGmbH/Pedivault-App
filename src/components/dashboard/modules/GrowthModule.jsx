@@ -169,9 +169,9 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         {[
-          { cls:'sc-healthy', lbl: tr('growth.weight','Weight'),     val:curr.weight, unit:'kg', sub:'Current', subC:'var(--green)',    t:'weight', trend:wTrend },
-          { cls:'sc-info',    lbl: tr('growth.height','Height'),     val:curr.height, unit:'cm', sub:'Current', subC:'var(--blue)',     t:'height', trend:hTrend },
-          { cls:'sc-normal',  lbl: tr('growth.headCirc','Head Circ.'), val:curr.head, unit:'cm', sub:'Current', subC:'var(--rose-mid)', t:'head', trend:null },
+          { cls:'sc-healthy', lbl: tr('growth.weight','Weight'),     val:curr.weight, unit:'kg', sub: tr('growth.current','Current'), subC:'var(--green)',    t:'weight', trend:wTrend },
+          { cls:'sc-info',    lbl: tr('growth.height','Height'),     val:curr.height, unit:'cm', sub: tr('growth.current','Current'), subC:'var(--blue)',     t:'height', trend:hTrend },
+          { cls:'sc-normal',  lbl: tr('growth.headCirc','Head Circ.'), val:curr.head, unit:'cm', sub: tr('growth.current','Current'), subC:'var(--rose-mid)', t:'head', trend:null },
           { cls:'sc-warning', lbl: tr('growth.bmi','BMI'),             val:bmi,       unit:'',   sub:bmiStatus, subC:'var(--amber)',    t:null,   trend:null },
         ].map((s, i) => (
           <div key={i} className={`stat-card ${s.cls}`}
@@ -183,7 +183,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
               <span style={{ fontSize:'.46rem', color:s.subC }}>{s.sub}</span>
               {s.trend && <span style={{ fontSize:'.44rem', fontWeight:500, color:s.trend.col, marginLeft:6 }}>{s.trend.dir}{s.trend.diff}{s.unit} / {s.trend.months}mo</span>}
             </div>
-            <div className="stat-card-cta">{i === 3 ? 'What is BMI? →' : 'View chart →'}</div>
+            <div className="stat-card-cta">{i === 3 ? tr('growth.whatIsBmi','What is BMI?') + ' →' : tr('growth.viewChart','View chart') + ' →'}</div>
           </div>
         ))}
       </div>
@@ -261,7 +261,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
                   <div style={{ fontSize:'.61rem', fontWeight: i === 0 ? 600 : 400, color: i === 0 ? 'var(--rose)' : 'var(--ink)' }}>
                     {new Date(h.date).toLocaleDateString('en-DE', { day:'numeric', month:'short', year:'numeric' })}
                   </div>
-                  {i === 0 && <div style={{ fontSize:'.42rem', color:'var(--rose)' }}>Latest</div>}
+                  {i === 0 && <div style={{ fontSize:'.42rem', color:'var(--rose)' }}>{tr('common.latest','Latest')}</div>}
                 </div>
                 <div style={{ fontSize:'.61rem', color:'var(--ink-2)' }}>{h.weight} <span style={{ fontSize:'.46rem', color:'var(--ink-3)' }}>kg</span></div>
                 <div style={{ fontSize:'.61rem', color:'var(--ink-2)' }}>{h.height} <span style={{ fontSize:'.46rem', color:'var(--ink-3)' }}>cm</span></div>
@@ -274,7 +274,7 @@ export function GrowthModule({ activeChild, showModal, extraEntries = [] }) {
           })}
           {allHistory.length > 6 && (
             <div onClick={() => setShowAll(s => !s)} style={{ padding:'10px 17px', textAlign:'center', fontSize:'.54rem', fontWeight:500, color:'var(--rose)', cursor:'pointer', borderTop:'1px solid var(--line2)', background:'var(--rose-ghost)', transition:'background .15s' }}>
-              {showAll ? '↑ Show less' : `↓ View all ${allHistory.length} entries`}
+              {showAll ? `↑ ${tr('growth.showLess','Show less')}` : `↓ ${tr('growth.viewAll','View all')} ${allHistory.length} entries`}
             </div>
           )}
         </div>

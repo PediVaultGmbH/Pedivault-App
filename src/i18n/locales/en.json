@@ -108,7 +108,12 @@
     "noDataSub": "Start tracking growth by adding the first measurements.",
     "history": "Measurement history",
     "trend": "Trend",
-    "whoChart": "WHO percentile chart"
+    "whoChart": "WHO percentile chart",
+    "current": "Current",
+    "viewChart": "View chart",
+    "whatIsBmi": "What is BMI?",
+    "showLess": "Show less",
+    "viewAll": "View all"
   },
   "records": {
     "title": "Records",

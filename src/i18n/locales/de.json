@@ -108,7 +108,12 @@
     "noDataSub": "Beginne mit der Wachstumsverfolgung, indem du die ersten Messungen hinzufügst.",
     "history": "Messverlauf",
     "trend": "Trend",
-    "whoChart": "WHO-Perzentilkurve"
+    "whoChart": "WHO-Perzentilkurve",
+    "current": "Aktuell",
+    "viewChart": "Diagramm anzeigen",
+    "whatIsBmi": "Was ist BMI?",
+    "showLess": "Weniger anzeigen",
+    "viewAll": "Alle anzeigen"
   },
   "records": {
     "title": "Dokumente",
