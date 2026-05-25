@@ -63,7 +63,7 @@ function RecordDetailModal({ open, onClose, record }) {
   return (
     <Modal open={open} onClose={onClose} maxWidth={480}>
       <div className="pv-mhdr">
-        
+
         <div className="pv-mhdr-eyebrow">Health Record</div>
         <div className="pv-mhdr-title" style={{ paddingRight:32 }}>{record.name}</div>
         <div className="pv-mhdr-sub">{record.source || '—'} · {fmtDate(record.date || record.createdAt)}</div>
@@ -310,7 +310,19 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
                     <div style={{ display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
                       {rec.fileUrl && (
                         <div style={{ width:28, height:28, borderRadius:8, background:'var(--cream-2)', border:'1px solid var(--line2)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}
-                          onClick={e => { e.stopPropagation(); window.open(rec.fileUrl, '_blank'); }} title="Download">
+                          onClick={e => {
+                            e.stopPropagation();
+                            if (rec.fileUrl.startsWith('data:')) {
+                              const a = document.createElement('a');
+                              a.href = rec.fileUrl;
+                              a.download = rec.name || 'document';
+                              document.body.appendChild(a);
+                              a.click();
+                              document.body.removeChild(a);
+                            } else {
+                              window.open(rec.fileUrl, '_blank');
+                            }
+                          }} title="Download">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         </div>
                       )}
