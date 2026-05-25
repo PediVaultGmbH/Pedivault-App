@@ -59,7 +59,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
           }}>{userName[0]}</div>
           <div style={{flex:1,minWidth:0}}>
             <div className="pv-user-name">{userName}</div>
-            <div className="pv-user-role">Parent · {childCount} child{childCount!==1?'ren':''}</div>
+            <div className="pv-user-role">{t('common.parent','Parent')} · {childCount} {t('common.child','child')}{childCount!==1?t('common.childrenSuffix','ren'):''}</div>
           </div>
           <button
             type="button"

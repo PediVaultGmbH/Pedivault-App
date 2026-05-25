@@ -7,13 +7,12 @@
     "appointments": "Termine",
     "medications": "Medikamente",
     "profile": "Profil",
-    "aiAssist": "KI-Assistent",
-    "support": "Support",
     "ai_assist": "KI-Assistent",
+    "support": "Support",
+    "account": "Konto",
     "sec_overview": "Übersicht",
     "sec_care": "Pflege",
-    "sec_assistance": "Assistenz",
-    "account": "Konto"
+    "sec_assistance": "Assistenz"
   },
   "common": {
     "save": "Speichern",
@@ -34,7 +33,10 @@
     "yes": "Ja",
     "no": "Nein",
     "error": "Etwas ist schiefgelaufen",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "parent": "Elternteil",
+    "child": "Kind",
+    "childrenSuffix": "er"
   },
   "auth": {
     "signIn": "Anmelden",
@@ -62,7 +64,7 @@
   "children": {
     "addChild": "Kind hinzufügen",
     "noChildren": "Willkommen bei PediVault 🌸",
-    "noChildrenSub": "Die vollständige Gesundheitsakte deines Kindes — Impfungen, Wachstum, Termine und mehr. Fangen wir an, dein erstes Kind hinzuzufügen.",
+    "noChildrenSub": "Die vollständige Gesundheitsakte deines Kindes — Impfungen, Wachstum, Termine und mehr.",
     "addFirstChild": "Erstes Kind hinzufügen",
     "switchedTo": "Zu {{name}}s Akte gewechselt",
     "removeChild": "Kind entfernen",

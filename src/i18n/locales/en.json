@@ -32,6 +32,9 @@
     "done": "Done",
     "yes": "Yes",
     "no": "No",
+    "parent": "Elternteil",
+"child": "Kind",
+"childrenSuffix": "er"
     "error": "Something went wrong",
     "signOut": "Sign out"
   },
