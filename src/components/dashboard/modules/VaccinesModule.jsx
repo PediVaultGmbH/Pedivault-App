@@ -25,6 +25,13 @@ function BlockchainBadge({ txHash }) {
 }
 
 export function VaccinesModule({ activeChild, showModal, extraVaccines = [], childDob }) {
+  const { t } = useTranslation();
+  const STATUS_CFG = {
+    done:      { label: t('vaccines.done','Done'),         color:'var(--green)', bg:'var(--green-bg)', border:'var(--green-lt)',     icon:'✓' },
+    overdue:   { label: t('vaccines.overdue','Overdue'),   color:'var(--red)',   bg:'var(--red-bg)',   border:'rgba(185,40,20,.18)', icon:'!' },
+    'due-soon':{ label: t('vaccines.dueSoon','Due Soon'),  color:'var(--amber)', bg:'var(--amber-bg)', border:'var(--amber-lt)',     icon:'~' },
+    upcoming:  { label: t('vaccines.upcoming','Upcoming'), color:'var(--blue)',  bg:'var(--blue-bg)',  border:'var(--blue-lt)',      icon:'○' },
+  };
   const [filter, setFilter]       = useState('all');
   const [expanded, setExpanded]   = useState(null);
   const [expandAll, setExpandAll] = useState(false);
