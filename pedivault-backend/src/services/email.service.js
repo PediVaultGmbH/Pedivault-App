@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 async function sendPasswordReset(user) {
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-  const url   = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
+  const url   = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/?token=${token}`;
 
   const html = `
     <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;">
