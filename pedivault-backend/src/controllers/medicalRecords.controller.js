@@ -24,6 +24,8 @@ const uploadRecord = async (req, res, next) => {
       const result = await storageSvc.saveFile(req.file, req.params.childId);
       fileUrl = result.url;
       fileKey = result.key;
+    } else if (req.body.fileUrl) {
+      fileUrl = req.body.fileUrl;
     }
 
     const record = await prisma.medicalRecord.create({
