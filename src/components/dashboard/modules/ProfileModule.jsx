@@ -3,6 +3,7 @@ import Modal from '../ui/Modal';
 import EmptyState from '../ui/EmptyState';
 import XBtn from '../ui/XBtn';
 import api from '../../../api/client';
+import HealthSummaryModal from '../modals/HealthSummaryModal';
 
 const ACTION_CFG = {
   0: { label:'Viewed',  color:'var(--blue)',  bg:'var(--blue-bg)',  icon:'👁' },
@@ -15,12 +16,12 @@ const ACTION_CFG = {
 
 const POLYGONSCAN = 'https://amoy.polygonscan.com';
 
-export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildren = [] }) {
+export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildren = [], growthData = [], vaccines = [], medications = [] }) {
   const [section,       setSection]       = useState('overview');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [auditLogs,     setAuditLogs]     = useState([]);
   const [auditLoading,  setAuditLoading]  = useState(false);
-  const [blockchainOn,  setBlockchainOn]  = useState(false);
+  const [showSummary,   setShowSummary]   = useState(false);
 
   const child = apiChildren.find(c => c.id === activeChild) || null;
 
@@ -28,14 +29,8 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
     if (section !== 'audit' || !activeChild) return;
     setAuditLoading(true);
     api.get(`/blockchain/child/${activeChild}/audit`)
-      .then(res => {
-        setAuditLogs(res.data || []);
-        setBlockchainOn(true);
-      })
-      .catch(() => {
-        setAuditLogs([]);
-        setBlockchainOn(false);
-      })
+      .then(res => setAuditLogs(res.data || []))
+      .catch(() => setAuditLogs([]))
       .finally(() => setAuditLoading(false));
   }, [section, activeChild]);
 
@@ -54,19 +49,12 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
   const fmtTs   = ts => ts ? new Date(Number(ts) * 1000).toLocaleDateString('en-DE', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
 
   const SECTIONS = [
-    { k:'overview', label:'Overview', icon:'👤' },
-    { k:'details',  label:'Details',  icon:'📋' },
+    { k:'overview', label:'Overview',    icon:'👤' },
+    { k:'details',  label:'Details',     icon:'📋' },
     { k:'audit',    label:'Audit Trail', icon:'⛓' },
   ];
 
   const GENDER_COLOR = { FEMALE:'#C47A92', MALE:'#3478B0', OTHER:'#7B52B0' };
-  const pColor = child?.color || GENDER_COLOR[child?.gender] || '#9B3A56';
-
-  const sevCfg = {
-    'Mild':     { color:'var(--amber)', bg:'var(--amber-bg)', border:'var(--amber-lt)' },
-    'Moderate': { color:'#D46A10',      bg:'rgba(212,106,16,.08)', border:'rgba(212,106,16,.22)' },
-    'Severe':   { color:'var(--red)',   bg:'var(--red-bg)',   border:'rgba(185,40,20,.18)' },
-  };
 
   if (!child) return (
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
@@ -79,264 +67,260 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
     </div>
   );
 
+  const pColor   = child?.color || GENDER_COLOR[child?.gender] || '#9B3A56';
   const allergies  = child.allergies  || [];
   const conditions = child.conditions || [];
 
+  const sevCfg = {
+    'Mild':     { color:'var(--amber)', bg:'var(--amber-bg)', border:'var(--amber-lt)' },
+    'Moderate': { color:'#D46A10',      bg:'rgba(212,106,16,.08)', border:'rgba(212,106,16,.22)' },
+    'Severe':   { color:'var(--red)',   bg:'var(--red-bg)',   border:'rgba(185,40,20,.18)' },
+  };
+
   return (
-    <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
+    <>
+      <HealthSummaryModal
+        open={showSummary}
+        onClose={() => setShowSummary(false)}
+        child={child}
+        growthData={growthData}
+        vaccines={vaccines}
+        medications={medications}
+      />
 
-      {/* Hero card */}
-      <div style={{ background:`linear-gradient(135deg,${pColor}18,${pColor}08,var(--white))`, border:`1.5px solid ${pColor}30`, borderRadius:18, padding:'20px 22px', marginBottom:20, boxShadow:'var(--shadow-card)' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
-          <div style={{ width:64, height:64, borderRadius:18, flexShrink:0, background:`linear-gradient(135deg,${pColor}30,${pColor}18)`, border:`2px solid ${pColor}40`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'Playfair Display',serif", fontSize:'1.6rem', color:pColor }}>
-            {child.name[0]}
-          </div>
-          <div style={{ flex:1, minWidth:140 }}>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.2rem', fontWeight:400, color:'var(--ink)', marginBottom:3 }}>{child.name}</div>
-            <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
-              <span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{calcAge(child.dateOfBirth)}</span>
-              {child.gender && <>
-                <span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span>
-                <span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : 'Other'}</span>
-              </>}
-              {child.bloodType && <>
-                <span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span>
-                <span style={{ fontSize:'.56rem', fontWeight:500, color:pColor, background:`${pColor}15`, border:`1px solid ${pColor}25`, borderRadius:20, padding:'1px 8px' }}>{child.bloodType}</span>
-              </>}
+      <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
+
+        {/* Hero card */}
+        <div style={{ background:`linear-gradient(135deg,${pColor}18,${pColor}08,var(--white))`, border:`1.5px solid ${pColor}30`, borderRadius:18, padding:'20px 22px', marginBottom:20, boxShadow:'var(--shadow-card)' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
+            <div style={{ width:64, height:64, borderRadius:18, flexShrink:0, background:`linear-gradient(135deg,${pColor}30,${pColor}18)`, border:`2px solid ${pColor}40`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'Playfair Display',serif", fontSize:'1.6rem', color:pColor }}>
+              {child.name[0]}
             </div>
-            <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', marginTop:4 }}>{fmtDate(child.dateOfBirth)}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Section tabs + delete */}
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16, flexWrap:'wrap', gap:8 }}>
-        <div style={{ display:'flex', gap:4, flexWrap:'wrap' }}>
-          {SECTIONS.map(s => (
-            <div key={s.k} onClick={() => setSection(s.k)} style={{ height:30, padding:'0 13px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.54rem', fontWeight: section === s.k ? 600 : 400, color: section === s.k ? '#fff' : 'var(--ink-2)', background: section === s.k ? (s.k === 'audit' ? '#7B3FE4' : pColor) : 'var(--cream-2)', border:`1px solid ${section === s.k ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, lineHeight:1 }}>
-              <span style={{ fontSize:'.7rem' }}>{s.icon}</span>{s.label}
-            </div>
-          ))}
-        </div>
-        <button type="button" onClick={() => setConfirmDelete(true)} style={{ height:28, padding:'0 12px', borderRadius:20, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', color:'var(--red)', fontSize:'.5rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:5 }}>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-          Remove child
-        </button>
-      </div>
-
-      {/* Confirm delete modal */}
-      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} maxWidth={360}>
-        <div style={{ padding:'32px 28px 24px', textAlign:'center' }}>
-          <XBtn onClick={() => setConfirmDelete(false)}/>
-          <div style={{ width:56, height:56, borderRadius:16, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="8"/></svg>
-          </div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:8 }}>Remove this child?</div>
-          <div style={{ fontSize:'.54rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7, marginBottom:22 }}>
-            <strong style={{ color:'var(--ink)' }}>{child.name}</strong> and all their records will be permanently removed from your account. This cannot be undone.
-          </div>
-          <div style={{ display:'flex', gap:10 }}>
-            <button type="button" className="fb fb-g" style={{ flex:1 }} onClick={() => setConfirmDelete(false)}>Cancel</button>
-            <button type="button" style={{ flex:1, height:40, borderRadius:10, background:'var(--red)', color:'#fff', border:'none', fontSize:'.6rem', fontWeight:500, cursor:'pointer' }}
-              onClick={() => { setConfirmDelete(false); onDeleteChild && onDeleteChild(activeChild); }}>
-              Yes, remove
-            </button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Overview */}
-      {section === 'overview' && (
-        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-          <div className="card">
-            <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Basic Information</div></div>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
-              {[
-                { lbl:'Date of birth', val: fmtDate(child.dateOfBirth) },
-                { lbl:'Age',           val: calcAge(child.dateOfBirth) },
-                { lbl:'Gender',        val: child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : child.gender || '—' },
-                { lbl:'Blood type',    val: child.bloodType || '—' },
-              ].map((d, i) => (
-                <div key={i} style={{ background:'var(--cream-2)', borderRadius:9, padding:'9px 12px', border:'1px solid var(--line2)' }}>
-                  <div style={{ fontSize:'.41rem', fontWeight:600, letterSpacing:'.13em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:3 }}>{d.lbl}</div>
-                  <div style={{ fontSize:'.6rem', fontWeight:500, color:'var(--ink)' }}>{d.val}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="sh" style={{ marginBottom: allergies.length ? 12 : 0 }}>
-              <div className="sh-title">Allergies & Sensitivities</div>
-              <span style={{ fontSize:'.46rem', fontWeight:600, color: allergies.length > 0 ? 'var(--amber)' : 'var(--green)', background: allergies.length > 0 ? 'var(--amber-bg)' : 'var(--green-bg)', border:`1px solid ${allergies.length > 0 ? 'var(--amber-lt)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
-                {allergies.length === 0 ? 'None known' : `${allergies.length} recorded`}
-              </span>
-            </div>
-            {allergies.length === 0 ? (
-              <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                No known allergies recorded
+            <div style={{ flex:1, minWidth:140 }}>
+              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.2rem', fontWeight:400, color:'var(--ink)', marginBottom:3 }}>{child.name}</div>
+              <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
+                <span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{calcAge(child.dateOfBirth)}</span>
+                {child.gender && <><span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span><span style={{ fontSize:'.56rem', fontWeight:300, color:'var(--ink-3)' }}>{child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : 'Other'}</span></>}
+                {child.bloodType && <><span style={{ color:'var(--line)', fontSize:'.6rem' }}>·</span><span style={{ fontSize:'.56rem', fontWeight:500, color:pColor, background:`${pColor}15`, border:`1px solid ${pColor}25`, borderRadius:20, padding:'1px 8px' }}>{child.bloodType}</span></>}
               </div>
-            ) : allergies.map((a, i) => {
-              const sc = sevCfg[a.severity] || sevCfg['Mild'];
-              return (
-                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, paddingBottom: i < allergies.length - 1 ? 12 : 0, borderBottom: i < allergies.length - 1 ? '1px solid var(--line2)' : 'none', marginBottom: i < allergies.length - 1 ? 12 : 0 }}>
-                  <div style={{ width:32, height:32, borderRadius:9, background:sc.bg, border:`1px solid ${sc.border}`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'1rem' }}>⚠️</div>
-                  <div style={{ flex:1 }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:3 }}>
-                      <span style={{ fontSize:'.65rem', fontWeight:600, color:'var(--ink)' }}>{a.name || a}</span>
-                      {a.severity && <span style={{ fontSize:'.42rem', fontWeight:600, color:sc.color, background:sc.bg, border:`1px solid ${sc.border}`, borderRadius:20, padding:'1px 7px' }}>{a.severity}</span>}
-                    </div>
-                    {a.reaction && <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>{a.reaction}</div>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="card">
-            <div className="sh" style={{ marginBottom: conditions.length ? 12 : 0 }}>
-              <div className="sh-title">Medical Conditions</div>
-              <span style={{ fontSize:'.46rem', fontWeight:600, color: conditions.length > 0 ? 'var(--red)' : 'var(--green)', background: conditions.length > 0 ? 'var(--red-bg)' : 'var(--green-bg)', border:`1px solid ${conditions.length > 0 ? 'rgba(185,40,20,.18)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
-                {conditions.length === 0 ? 'None recorded' : `${conditions.length} recorded`}
-              </span>
+              <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', marginTop:4 }}>{fmtDate(child.dateOfBirth)}</div>
             </div>
-            {conditions.length === 0 ? (
-              <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                No medical conditions recorded
-              </div>
-            ) : conditions.map((c, i) => (
-              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                <div style={{ width:32, height:32, borderRadius:9, background:'var(--cream-2)', border:'1px solid var(--line2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'1rem' }}>🏥</div>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.65rem', fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{c.name || c}</div>
-                  {c.notes && <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.5 }}>{c.notes}</div>}
-                </div>
+          </div>
+        </div>
+
+        {/* Section tabs + actions */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16, flexWrap:'wrap', gap:8 }}>
+          <div style={{ display:'flex', gap:4, flexWrap:'wrap' }}>
+            {SECTIONS.map(s => (
+              <div key={s.k} onClick={() => setSection(s.k)} style={{ height:30, padding:'0 13px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.54rem', fontWeight:section===s.k?600:400, color:section===s.k?'#fff':'var(--ink-2)', background:section===s.k?(s.k==='audit'?'#7B3FE4':pColor):'var(--cream-2)', border:`1px solid ${section===s.k?'transparent':'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, lineHeight:1 }}>
+                <span style={{ fontSize:'.7rem' }}>{s.icon}</span>{s.label}
               </div>
             ))}
           </div>
+          <div style={{ display:'flex', gap:6 }}>
+            <button type="button" onClick={() => setShowSummary(true)} style={{ height:28, padding:'0 12px', borderRadius:20, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.5rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:5, boxShadow:'0 2px 8px rgba(155,58,86,.25)' }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Share with Doctor
+            </button>
+            <button type="button" onClick={() => setConfirmDelete(true)} style={{ height:28, padding:'0 12px', borderRadius:20, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', color:'var(--red)', fontSize:'.5rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:5 }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              Remove child
+            </button>
+          </div>
         </div>
-      )}
 
-      {/* Details */}
-      {section === 'details' && (
-        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-          <div className="card">
-            <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Emergency Contact</div></div>
-            <div style={{ display:'flex', alignItems:'center', gap:10, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.18)', borderRadius:12, padding:'10px 14px' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-              <div>
-                <div style={{ fontSize:'.58rem', fontWeight:600, color:'var(--red)' }}>Emergency: call 112</div>
-                <div style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>European emergency number — ambulance, fire, police</div>
-              </div>
+        {/* Confirm delete modal */}
+        <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} maxWidth={360}>
+          <div style={{ padding:'32px 28px 24px', textAlign:'center' }}>
+            <XBtn onClick={() => setConfirmDelete(false)}/>
+            <div style={{ width:56, height:56, borderRadius:16, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="8"/></svg>
+            </div>
+            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:8 }}>Remove this child?</div>
+            <div style={{ fontSize:'.54rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7, marginBottom:22 }}>
+              <strong style={{ color:'var(--ink)' }}>{child.name}</strong> and all their records will be permanently removed. This cannot be undone.
+            </div>
+            <div style={{ display:'flex', gap:10 }}>
+              <button type="button" className="fb fb-g" style={{ flex:1 }} onClick={() => setConfirmDelete(false)}>Cancel</button>
+              <button type="button" style={{ flex:1, height:40, borderRadius:10, background:'var(--red)', color:'#fff', border:'none', fontSize:'.6rem', fontWeight:500, cursor:'pointer' }}
+                onClick={() => { setConfirmDelete(false); onDeleteChild && onDeleteChild(activeChild); }}>
+                Yes, remove
+              </button>
             </div>
           </div>
+        </Modal>
 
-          <div className="card" style={{ background:'linear-gradient(135deg,var(--blue-bg),rgba(253,250,248,.8))' }}>
-            <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-              <div style={{ width:32, height:32, borderRadius:9, background:'var(--blue-bg)', border:'1px solid var(--blue-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        {/* Overview */}
+        {section === 'overview' && (
+          <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            <div className="card">
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Basic Information</div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+                {[
+                  { lbl:'Date of birth', val: fmtDate(child.dateOfBirth) },
+                  { lbl:'Age',           val: calcAge(child.dateOfBirth) },
+                  { lbl:'Gender',        val: child.gender === 'FEMALE' ? 'Girl' : child.gender === 'MALE' ? 'Boy' : child.gender || '—' },
+                  { lbl:'Blood type',    val: child.bloodType || '—' },
+                ].map((d, i) => (
+                  <div key={i} style={{ background:'var(--cream-2)', borderRadius:9, padding:'9px 12px', border:'1px solid var(--line2)' }}>
+                    <div style={{ fontSize:'.41rem', fontWeight:600, letterSpacing:'.13em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:3 }}>{d.lbl}</div>
+                    <div style={{ fontSize:'.6rem', fontWeight:500, color:'var(--ink)' }}>{d.val}</div>
+                  </div>
+                ))}
               </div>
-              <div>
-                <div style={{ fontSize:'.6rem', fontWeight:600, color:'var(--blue)', marginBottom:3 }}>About GKV coverage</div>
-                <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7 }}>
-                  Under Germany's Gesetzliche Krankenversicherung (GKV), children are fully co-insured under a parent's policy at no extra cost until age 18 (or 23 if in education). All U-Untersuchungen check-ups, vaccinations on the STIKO schedule, and emergency treatment are fully covered.
+            </div>
+
+            <div className="card">
+              <div className="sh" style={{ marginBottom: allergies.length ? 12 : 0 }}>
+                <div className="sh-title">Allergies & Sensitivities</div>
+                <span style={{ fontSize:'.46rem', fontWeight:600, color: allergies.length > 0 ? 'var(--amber)' : 'var(--green)', background: allergies.length > 0 ? 'var(--amber-bg)' : 'var(--green-bg)', border:`1px solid ${allergies.length > 0 ? 'var(--amber-lt)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
+                  {allergies.length === 0 ? 'None known' : `${allergies.length} recorded`}
+                </span>
+              </div>
+              {allergies.length === 0 ? (
+                <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  No known allergies recorded
                 </div>
-              </div>
+              ) : allergies.map((a, i) => {
+                const sc = sevCfg[a.severity] || sevCfg['Mild'];
+                return (
+                  <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, paddingBottom: i < allergies.length-1 ? 12 : 0, borderBottom: i < allergies.length-1 ? '1px solid var(--line2)' : 'none', marginBottom: i < allergies.length-1 ? 12 : 0 }}>
+                    <div style={{ width:32, height:32, borderRadius:9, background:sc.bg, border:`1px solid ${sc.border}`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'1rem' }}>⚠️</div>
+                    <div style={{ flex:1 }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:3 }}>
+                        <span style={{ fontSize:'.65rem', fontWeight:600, color:'var(--ink)' }}>{a.name || a}</span>
+                        {a.severity && <span style={{ fontSize:'.42rem', fontWeight:600, color:sc.color, background:sc.bg, border:`1px solid ${sc.border}`, borderRadius:20, padding:'1px 7px' }}>{a.severity}</span>}
+                      </div>
+                      {a.reaction && <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>{a.reaction}</div>}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
 
-          <div className="card">
-            <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Quick Actions</div></div>
-            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-              {[
-                { label:'Book appointment', action: () => showModal('book'),       icon:'📅' },
-                { label:'Log vaccine',      action: () => showModal('vaccine'),    icon:'💉' },
-                { label:'Add growth entry', action: () => showModal('growth'),     icon:'📏' },
-                { label:'Upload record',    action: () => showModal('record'),     icon:'📄' },
-                { label:'Add medication',   action: () => showModal('medication'), icon:'💊' },
-              ].map((a, i) => (
-                <button key={i} type="button" onClick={a.action} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', borderRadius:10, background:'var(--cream-2)', border:'1px solid var(--line2)', cursor:'pointer', fontSize:'.6rem', fontWeight:500, color:'var(--ink)', textAlign:'left', transition:'background .15s' }}>
-                  <span style={{ fontSize:'1rem' }}>{a.icon}</span>{a.label}
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.2" strokeLinecap="round" style={{ marginLeft:'auto' }}><path d="M9 18l6-6-6-6"/></svg>
-                </button>
+            <div className="card">
+              <div className="sh" style={{ marginBottom: conditions.length ? 12 : 0 }}>
+                <div className="sh-title">Medical Conditions</div>
+                <span style={{ fontSize:'.46rem', fontWeight:600, color: conditions.length > 0 ? 'var(--red)' : 'var(--green)', background: conditions.length > 0 ? 'var(--red-bg)' : 'var(--green-bg)', border:`1px solid ${conditions.length > 0 ? 'rgba(185,40,20,.18)' : 'var(--green-lt)'}`, borderRadius:20, padding:'2px 9px' }}>
+                  {conditions.length === 0 ? 'None recorded' : `${conditions.length} recorded`}
+                </span>
+              </div>
+              {conditions.length === 0 ? (
+                <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  No medical conditions recorded
+                </div>
+              ) : conditions.map((c, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                  <div style={{ width:32, height:32, borderRadius:9, background:'var(--cream-2)', border:'1px solid var(--line2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'1rem' }}>🏥</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:'.65rem', fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{c.name || c}</div>
+                    {c.notes && <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.5 }}>{c.notes}</div>}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Audit Trail */}
-      {section === 'audit' && (
-        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-
-          {/* Blockchain status */}
-          <div style={{ padding:'12px 16px', background:'linear-gradient(135deg,rgba(124,63,228,.08),rgba(124,63,228,.04))', border:'1px solid rgba(124,63,228,.2)', borderRadius:12, display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:28, height:28, borderRadius:8, background:'rgba(124,63,228,.12)', border:'1px solid rgba(124,63,228,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round">
-                <rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="7" width="6" height="10" rx="1"/>
-                <path d="M8 12h1M15 12h1"/>
-              </svg>
-            </div>
-            <div style={{ flex:1 }}>
-              <div style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4', marginBottom:1 }}>Immutable Audit Trail</div>
-              <div style={{ fontSize:'.46rem', color:'rgba(124,63,228,.7)' }}>
-                All actions are permanently recorded on Polygon Amoy blockchain · {auditLogs.length} events logged
+        {/* Details */}
+        {section === 'details' && (
+          <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            <div className="card">
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Emergency Contact</div></div>
+              <div style={{ display:'flex', alignItems:'center', gap:10, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.18)', borderRadius:12, padding:'10px 14px' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                <div>
+                  <div style={{ fontSize:'.58rem', fontWeight:600, color:'var(--red)' }}>Emergency: call 112</div>
+                  <div style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>European emergency number — ambulance, fire, police</div>
+                </div>
               </div>
             </div>
-            <a href={`${POLYGONSCAN}/address/${process.env.REACT_APP_AUDIT_CONTRACT || '0x837fcEFAeF5c948386F1cd687B28ceE2a4161e9b'}`}
-              target="_blank" rel="noopener noreferrer"
-              style={{ fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0 }}>
-              View contract ↗
-            </a>
+
+            <div className="card" style={{ background:'linear-gradient(135deg,var(--blue-bg),rgba(253,250,248,.8))' }}>
+              <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                <div style={{ width:32, height:32, borderRadius:9, background:'var(--blue-bg)', border:'1px solid var(--blue-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div>
+                  <div style={{ fontSize:'.6rem', fontWeight:600, color:'var(--blue)', marginBottom:3 }}>About GKV coverage</div>
+                  <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7 }}>
+                    Under Germany's Gesetzliche Krankenversicherung (GKV), children are fully co-insured under a parent's policy at no extra cost until age 18 (or 23 if in education). All U-Untersuchungen check-ups, vaccinations on the STIKO schedule, and emergency treatment are fully covered.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="sh" style={{ marginBottom:12 }}><div className="sh-title">Quick Actions</div></div>
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {[
+                  { label:'Book appointment',  action: () => showModal('book'),       icon:'📅' },
+                  { label:'Log vaccine',       action: () => showModal('vaccine'),    icon:'💉' },
+                  { label:'Add growth entry',  action: () => showModal('growth'),     icon:'📏' },
+                  { label:'Upload record',     action: () => showModal('record'),     icon:'📄' },
+                  { label:'Add medication',    action: () => showModal('medication'), icon:'💊' },
+                  { label:'Share with Doctor', action: () => setShowSummary(true),   icon:'🖨️' },
+                ].map((a, i) => (
+                  <button key={i} type="button" onClick={a.action} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', borderRadius:10, background:'var(--cream-2)', border:'1px solid var(--line2)', cursor:'pointer', fontSize:'.6rem', fontWeight:500, color:'var(--ink)', textAlign:'left' }}>
+                    <span style={{ fontSize:'1rem' }}>{a.icon}</span>{a.label}
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.2" strokeLinecap="round" style={{ marginLeft:'auto' }}><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
+        )}
 
-          {auditLoading ? (
-            <div className="card" style={{ textAlign:'center', padding:'32px', color:'var(--ink-3)', fontSize:'.6rem' }}>
-              Loading audit trail…
-            </div>
-          ) : auditLogs.length === 0 ? (
-            <div className="card" style={{ textAlign:'center', padding:'32px' }}>
-              <div style={{ fontSize:'2rem', marginBottom:10 }}>⛓</div>
-              <div style={{ fontSize:'.62rem', fontWeight:600, color:'var(--ink)', marginBottom:6 }}>No audit logs yet</div>
-              <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>Actions on this child's records will appear here once logged on-chain.</div>
-            </div>
-          ) : (
-            <div className="card" style={{ padding:0, overflow:'hidden' }}>
-              <div style={{ padding:'10px 16px', background:'rgba(124,63,228,.04)', borderBottom:'1px solid rgba(124,63,228,.12)', display:'flex', alignItems:'center', gap:8 }}>
-                <span style={{ fontSize:'.52rem', fontWeight:600, color:'#7B3FE4' }}>{auditLogs.length} Blockchain Events</span>
+        {/* Audit Trail */}
+        {section === 'audit' && (
+          <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            <div style={{ padding:'12px 16px', background:'linear-gradient(135deg,rgba(124,63,228,.08),rgba(124,63,228,.04))', border:'1px solid rgba(124,63,228,.2)', borderRadius:12, display:'flex', alignItems:'center', gap:10 }}>
+              <div style={{ width:28, height:28, borderRadius:8, background:'rgba(124,63,228,.12)', border:'1px solid rgba(124,63,228,.2)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B3FE4" strokeWidth="2" strokeLinecap="round"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="7" width="6" height="10" rx="1"/><path d="M8 12h1M15 12h1"/></svg>
               </div>
-              <div style={{ display:'flex', flexDirection:'column' }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:'.58rem', fontWeight:600, color:'#7B3FE4', marginBottom:1 }}>Immutable Audit Trail</div>
+                <div style={{ fontSize:'.46rem', color:'rgba(124,63,228,.7)' }}>All actions permanently recorded on Polygon Amoy · {auditLogs.length} events logged</div>
+              </div>
+              <a href={`${POLYGONSCAN}/address/${process.env.REACT_APP_AUDIT_CONTRACT || '0x837fcEFAeF5c948386F1cd687B28ceE2a4161e9b'}`} target="_blank" rel="noopener noreferrer" style={{ fontSize:'.46rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0 }}>View contract ↗</a>
+            </div>
+            {auditLoading ? (
+              <div className="card" style={{ textAlign:'center', padding:'32px', color:'var(--ink-3)', fontSize:'.6rem' }}>Loading audit trail…</div>
+            ) : auditLogs.length === 0 ? (
+              <div className="card" style={{ textAlign:'center', padding:'32px' }}>
+                <div style={{ fontSize:'2rem', marginBottom:10 }}>⛓</div>
+                <div style={{ fontSize:'.62rem', fontWeight:600, color:'var(--ink)', marginBottom:6 }}>No audit logs yet</div>
+                <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>Actions on this child's records will appear here once logged on-chain.</div>
+              </div>
+            ) : (
+              <div className="card" style={{ padding:0, overflow:'hidden' }}>
+                <div style={{ padding:'10px 16px', background:'rgba(124,63,228,.04)', borderBottom:'1px solid rgba(124,63,228,.12)' }}>
+                  <span style={{ fontSize:'.52rem', fontWeight:600, color:'#7B3FE4' }}>{auditLogs.length} Blockchain Events</span>
+                </div>
                 {auditLogs.map((log, i) => {
                   const cfg = ACTION_CFG[log.action] || ACTION_CFG[1];
                   return (
-                    <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, padding:'12px 16px', borderBottom: i < auditLogs.length - 1 ? '1px solid var(--line2)' : 'none', background: i % 2 === 0 ? 'transparent' : 'rgba(124,63,228,.015)' }}>
-                      <div style={{ width:30, height:30, borderRadius:8, background:cfg.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'.8rem' }}>
-                        {cfg.icon}
-                      </div>
+                    <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, padding:'12px 16px', borderBottom: i < auditLogs.length-1 ? '1px solid var(--line2)' : 'none', background: i%2===0?'transparent':'rgba(124,63,228,.015)' }}>
+                      <div style={{ width:30, height:30, borderRadius:8, background:cfg.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'.8rem' }}>{cfg.icon}</div>
                       <div style={{ flex:1, minWidth:0 }}>
                         <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap', marginBottom:3 }}>
                           <span style={{ fontSize:'.58rem', fontWeight:600, color:'var(--ink)' }}>{log.resourceType || 'Record'}</span>
                           <span style={{ fontSize:'.44rem', fontWeight:600, color:cfg.color, background:cfg.bg, borderRadius:20, padding:'1px 7px' }}>{cfg.label}</span>
                         </div>
                         {log.metadata && <div style={{ fontSize:'.5rem', color:'var(--ink-3)', marginBottom:3 }}>{log.metadata}</div>}
-                        <div style={{ fontSize:'.44rem', color:'rgba(124,63,228,.6)' }}>
-                          {fmtTs(log.timestamp)} · Block logged on Polygon Amoy
-                        </div>
+                        <div style={{ fontSize:'.44rem', color:'rgba(124,63,228,.6)' }}>{fmtTs(log.timestamp)} · Block logged on Polygon Amoy</div>
                       </div>
-                      <a href={`${POLYGONSCAN}/address/${log.performedBy}`} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize:'.42rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0, marginTop:2 }}>
-                        ↗
-                      </a>
+                      <a href={`${POLYGONSCAN}/address/${log.performedBy}`} target="_blank" rel="noopener noreferrer" style={{ fontSize:'.42rem', color:'#7B3FE4', textDecoration:'none', flexShrink:0, marginTop:2 }}>↗</a>
                     </div>
                   );
                 })}
               </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

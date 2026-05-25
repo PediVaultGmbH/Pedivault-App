@@ -296,7 +296,11 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
         ) : active === 'medications' ? (
           <MedicationsModule key={`meds-${activeChild}`} activeChild={activeChild} showModal={showModal} extraMeds={medications[activeChild] || []} onMarkComplete={handleMarkComplete} />
         ) : active === 'profile' ? (
-         <ProfileModule key={`profile-${activeChild}`} activeChild={activeChild} showModal={showModal} apiChildren={apiChildren} onDeleteChild={async (id) => {
+         <ProfileModule key={`profile-${activeChild}`} activeChild={activeChild} showModal={showModal} apiChildren={apiChildren}
+          growthData={growthEntries[activeChild] || []}
+          vaccines={vaccineEntries[activeChild] || []}
+          medications={medications[activeChild] || []}
+          onDeleteChild={async (id) => {
           try { await deleteChild(id); } catch (_) {}
           setApiChildren(prev => prev.filter(c => c.id !== id));
           setExtraChildren(prev => prev.filter(c => c.id !== id));
