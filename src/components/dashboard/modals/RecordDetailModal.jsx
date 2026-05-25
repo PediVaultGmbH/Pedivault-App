@@ -26,14 +26,18 @@ export function RecordDetailModal({ open, onClose, record }) {
 
  const handleDownload = e => {
     e?.stopPropagation?.();
-    if (record.fileUrl) {
+    if (!record.fileUrl) return;
+    if (record.fileUrl.startsWith('data:')) {
+      // base64 — force download
       const a = document.createElement('a');
       a.href     = record.fileUrl;
-      a.target   = '_blank';
       a.download = record.name || 'document';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    } else {
+      // regular URL — open in new tab
+      window.open(record.fileUrl, '_blank');
     }
   };
 
