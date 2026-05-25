@@ -95,7 +95,22 @@
     "upcoming": "Bevorstehend",
     "certificate": "Zertifikat ausstellen",
     "noCertificate": "Noch kein Zertifikat",
-    "walletWarning": "Niedriger POL-Kontostand — Blockchain-Funktionen sind möglicherweise nicht verfügbar"
+    "walletWarning": "Niedriger POL-Kontostand — Blockchain-Funktionen sind möglicherweise nicht verfügbar",
+    "urgent": "Dringend",
+    "actionNeeded": "Handlungsbedarf",
+    "allClear": "Alles in Ordnung",
+    "scheduleNow": "Jetzt planen",
+    "completed": "Abgeschlossen",
+    "notYetDue": "Noch nicht fällig",
+    "dosesCompleted": "Dosen verabreicht",
+    "immunised": "immunisiert",
+    "viewOverdue": "Überfällige anzeigen",
+    "viewSchedule": "Impfplan anzeigen",
+    "viewCompleted": "Abgeschlossene anzeigen",
+    "viewUpcoming": "Bevorstehende anzeigen",
+    "percentDone": "% erledigt",
+    "collapseAll": "Alle einklappen",
+    "expandAll": "Alle ausklappen"
   },
   "growth": {
     "title": "Wachstum",

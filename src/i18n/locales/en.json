@@ -95,7 +95,22 @@
     "upcoming": "Upcoming",
     "certificate": "Issue Certificate",
     "noCertificate": "No certificate yet",
-    "walletWarning": "Low POL balance — blockchain features may not work"
+    "walletWarning": "Low POL balance — blockchain features may not work",
+    "urgent": "Urgent",
+    "actionNeeded": "Action needed",
+    "allClear": "All clear",
+    "scheduleNow": "Schedule now",
+    "completed": "Completed",
+    "notYetDue": "Not yet due",
+    "dosesCompleted": "doses completed",
+    "immunised": "immunised",
+    "viewOverdue": "View overdue",
+    "viewSchedule": "View schedule",
+    "viewCompleted": "View completed",
+    "viewUpcoming": "View upcoming",
+    "percentDone": "% done",
+    "collapseAll": "Collapse all",
+    "expandAll": "Expand all"
   },
   "growth": {
     "title": "Growth",
