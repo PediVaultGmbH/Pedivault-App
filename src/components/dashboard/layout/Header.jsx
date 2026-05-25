@@ -1,4 +1,5 @@
 import { a11yClick } from '../../../utils/a11y';
+import LanguageSwitcher from '../ui/LanguageSwitcher';
 
 export function Header({
   active, activeChild, onChildSelect, extraChildren=[],
@@ -97,7 +98,8 @@ export function Header({
       </div>
 
       {/* Action buttons */}
-      <div className="pv-hdr-acts" style={{flexShrink:0}}>
+      <div className="pv-hdr-acts" style={{flexShrink:0, display:'flex', alignItems:'center', gap:8}}>
+        <LanguageSwitcher compact={true} />
         <button className="pv-hbtn" onClick={onSearch} aria-label="Search" type="button">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round">
             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>

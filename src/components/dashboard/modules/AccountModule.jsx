@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications, setup2FA, verify2FA, disable2FA } from '../../../api/auth.api';
+import LanguageSwitcher from '../ui/LanguageSwitcher';
 import { createSubscription, getSubscription, cancelSubscription } from '../../../api/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -366,10 +367,8 @@ useEffect(() => {
             </div>
             <div className="two-col" style={{marginTop:12}}>
               <div>
-                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Language</div>
-                <select className="fi" value={profile.language} onChange={e=>setProfile(p=>({...p,language:e.target.value}))} style={{width:'100%',boxSizing:'border-box',cursor:'pointer'}}>
-                  <option>English</option><option>Deutsch</option>
-                </select>
+               <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Language</div>
+                <LanguageSwitcher compact={false}/>
               </div>
               <div>
                 <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Timezone</div>
