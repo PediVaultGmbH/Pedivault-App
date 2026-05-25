@@ -182,7 +182,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               {allergies.length === 0 ? (
                 <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                  No known allergies recorded
+                 {t('profile.noAllergies','No known allergies recorded')}
                 </div>
               ) : allergies.map((a, i) => {
                 const sc = sevCfg[a.severity] || sevCfg['Mild'];
@@ -211,7 +211,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               {conditions.length === 0 ? (
                 <div style={{ fontSize:'.56rem', fontWeight:300, color:'var(--green)', display:'flex', alignItems:'center', gap:6 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                  No medical conditions recorded
+                  {t('profile.noConditions','No medical conditions recorded')}
                 </div>
               ) : conditions.map((c, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>

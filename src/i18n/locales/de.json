@@ -169,7 +169,10 @@
     "noneKnown": "Keine bekannt",
     "noneRecorded": "Keine eingetragen",
     "emergencyContact": "Notfallkontakt",
-    "quickActions": "Schnellaktionen"
+    "quickActions": "Schnellaktionen",
+    "noAllergies": "Keine bekannten Allergien eingetragen",
+    "noConditions": "Keine Erkrankungen eingetragen",
+    "yesRemove": "Ja, entfernen"
   },
   "account": {
     "title": "Konto",
