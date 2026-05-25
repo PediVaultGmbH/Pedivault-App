@@ -6,7 +6,7 @@ export default function LanguageSwitcher({ compact = false }) {
 
   const toggle = (lang) => {
     i18n.changeLanguage(lang);
-    localStorage.setItem('pv_lang', lang);
+    localStorage.setItem('pv_lang_v2', lang);
   };
 
   if (compact) {

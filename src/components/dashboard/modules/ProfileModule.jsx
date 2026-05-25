@@ -146,7 +146,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               <button type="button" className="fb fb-g" style={{ flex:1 }} onClick={() => setConfirmDelete(false)}>{t('common.cancel','Cancel')}</button>
               <button type="button" style={{ flex:1, height:40, borderRadius:10, background:'var(--red)', color:'#fff', border:'none', fontSize:'.6rem', fontWeight:500, cursor:'pointer' }}
                 onClick={() => { setConfirmDelete(false); onDeleteChild && onDeleteChild(activeChild); }}>
-                {t('common.yes','Yes')}, remove
+                {t('profile.yesRemove','Yes, remove')}
               </button>
             </div>
           </div>
