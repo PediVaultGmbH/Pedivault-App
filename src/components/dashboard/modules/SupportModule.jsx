@@ -214,7 +214,7 @@ function TopicModal({topic, onClose}) {
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.05rem',color:'var(--ink)',marginBottom:6,marginTop:4,lineHeight:1.3}}>{titleT(activeArticle.title)}</div>
             <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
               <div style={{width:6,height:6,borderRadius:'50%',background:topic.color}}/>
-              <span style={{fontSize:'.46rem',color:topic.color,fontWeight:600}}>{topic.label}</span>
+              <span style={{fontSize:'.46rem',color:topic.color,fontWeight:600}}>{topicLabelT(topic.id)}</span>
               <span style={{color:'var(--line)',fontSize:'.5rem'}}>·</span>
               <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{activeArticle.time} {t('support.read','read')}</span>
               <span style={{color:'var(--line)',fontSize:'.5rem'}}>·</span>
