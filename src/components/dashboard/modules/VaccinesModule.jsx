@@ -296,7 +296,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
               boxShadow:'0 2px 10px rgba(155,58,86,.28)',
             }}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-              Log Vaccine
+              {t('vaccines.logVaccine','Log Vaccine')}
             </button>
           </div>
         </div>
