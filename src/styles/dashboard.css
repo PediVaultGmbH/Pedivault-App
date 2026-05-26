@@ -346,7 +346,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px soli
   cursor:default;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
   position:relative;overflow:hidden;
 }
-.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.6));pointer-events:none;}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.08));pointer-events:none;}
 .stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(155,58,86,.13);}
 
 /* ═══ NAV ITEM HOVER ═══ */
