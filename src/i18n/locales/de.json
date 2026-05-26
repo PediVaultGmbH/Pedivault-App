@@ -316,7 +316,8 @@
     "welcomePremium": "Willkommen bei Premium!",
     "startExploring": "Premium erkunden →",
     "storageUsed": "Genutzter Speicher",
-    "storageRemaining": "MB verbleibend"
+    "storageRemaining": "MB verbleibend",
+    "title": "Konto"
   },
   "healthSummary": {
     "title": "Gesundheitsübersicht",

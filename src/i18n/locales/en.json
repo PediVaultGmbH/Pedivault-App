@@ -316,7 +316,8 @@
     "welcomePremium": "Welcome to Premium!",
     "startExploring": "Start exploring Premium →",
     "storageUsed": "Storage used",
-    "storageRemaining": "MB remaining"
+    "storageRemaining": "MB remaining",
+    "title": "Account"
   },
   "healthSummary": {
     "title": "Health Summary",
