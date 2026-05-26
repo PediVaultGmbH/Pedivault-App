@@ -160,7 +160,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
               flexShrink:0,height:32,padding:'0 14px',borderRadius:9,
               background:cfg.color,color:'#fff',border:'none',
               fontSize:'.55rem',fontWeight:500,cursor:'pointer',
-            }}>Reschedule</button>
+            }}>{t('appointments.reschedule','Reschedule')}</button>
           </div>
         );
       })()}
