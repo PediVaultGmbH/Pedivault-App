@@ -190,7 +190,9 @@
     "nextVisit": "Nächster Termin",
     "reschedule": "Verschieben",
     "keepIt": "Behalten",
-    "cancelVisit": "Termin absagen"
+    "cancelVisit": "Termin absagen",
+    "viewUpcoming": "Bevorstehende anzeigen",
+    "viewHistory": "Verlauf anzeigen"
   },
   "medications": {
     "title": "Medikamente",

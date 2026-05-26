@@ -101,13 +101,13 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
           <div className="stat-label">{t('appointments.upcoming','Upcoming')}</div>
           <div className="stat-val">{counts.upcoming}</div>
           <div className="stat-meta"><span className="pill blue">{t('appointments.upcoming','Scheduled')}</span></div>
-          <div className="stat-card-cta">{t('home.viewAll','View')} upcoming →</div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} {t('appointments.upcoming','')} →</div>
         </div>
         <div className="stat-card sc-normal" style={{cursor:'pointer'}} onClick={()=>setFilter('past')}>
           <div className="stat-label">{t('appointments.completed','Past Visits')}</div>
           <div className="stat-val">{counts.past}</div>
           <div className="stat-meta"><span className="pill rose">{t('appointments.completed','Completed')}</span></div>
-          <div className="stat-card-cta">{t('home.viewAll','View')} history →</div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} {t('appointments.completed','')} →</div>
         </div>
         <div className="stat-card sc-healthy" style={{cursor:'pointer'}} onClick={()=>setFilter('all')}>
           <div className="stat-label">{t('records.title','Total')}</div>
