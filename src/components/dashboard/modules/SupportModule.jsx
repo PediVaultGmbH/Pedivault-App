@@ -8,6 +8,11 @@ import XBtn from '../ui/XBtn';
 function TopicModal({topic, onClose}) {
   const { t, i18n } = useTranslation();
   const [search, setSearch] = useState('');
+  const titleT = (title) => {
+    if (i18n.language !== 'de') return title;
+    const titles = t('support.titles', {returnObjects: true});
+    return (titles && titles[title]) ? titles[title] : title;
+  };
   const [activeArticle, setActiveArticle] = useState(null);
 
   /* Article content map — keyed by article title */
@@ -179,7 +184,7 @@ function TopicModal({topic, onClose}) {
                 {topic.label}
               </button>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-              <span style={{fontSize:'.52rem',color:'var(--ink)',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:200}}>{activeArticle.title}</span>
+              <span style={{fontSize:'.52rem',color:'var(--ink)',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:200}}>{titleT(activeArticle.title)}</span>
             </div>
           ) : (
             <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:4}}>
@@ -197,7 +202,7 @@ function TopicModal({topic, onClose}) {
         {/* ARTICLE DETAIL VIEW */}
         {activeArticle ? (
           <div style={{padding:'0 24px 24px'}}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.05rem',color:'var(--ink)',marginBottom:6,marginTop:4,lineHeight:1.3}}>{activeArticle.title}</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.05rem',color:'var(--ink)',marginBottom:6,marginTop:4,lineHeight:1.3}}>{titleT(activeArticle.title)}</div>
             <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
               <div style={{width:6,height:6,borderRadius:'50%',background:topic.color}}/>
               <span style={{fontSize:'.46rem',color:topic.color,fontWeight:600}}>{topic.label}</span>
@@ -245,7 +250,7 @@ function TopicModal({topic, onClose}) {
                   onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
                   <div style={{width:24,height:24,borderRadius:8,background:`${topic.color}15`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'.52rem',fontWeight:600,color:topic.color}}>{a.n}</div>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:'.62rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{a.title}</div>
+                    <div style={{fontSize:'.62rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{titleT(a.title)}</div>
                     <div style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{a.time} read · {a.views} views</div>
                   </div>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={topic.color} strokeWidth="2.2" strokeLinecap="round"><path d="M9 18l6-6-6-6"/></svg>
