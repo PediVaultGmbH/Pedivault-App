@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import Brand from '../ui/Brand';
 import { useTimer } from '../../../hooks/useTimer';
 import { verifyOTP, resendOTP } from '../../../api/auth.api';
 
 export function OTP({ goTo, phone, countryCode }) {
+  const { t } = useTranslation();
   const [otp, setOtp]         = useState(['','','','']);
   const [hasErr, setHasErr]   = useState(false);
   const [errMsg, setErrMsg]   = useState('Incorrect code — please try again');
@@ -104,8 +106,8 @@ export function OTP({ goTo, phone, countryCode }) {
               <path d="M20 6L9 17l-5-5"/>
             </svg>
           </div>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.2rem',fontWeight:400,color:'var(--ink)'}}>Verified!</div>
-          <div style={{fontSize:'.56rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>Taking you to your vault…</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.2rem',fontWeight:400,color:'var(--ink)'}}>{t('auth.verified','Verified!')}</div>
+          <div style={{fontSize:'.56rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>{t('auth.takingToVault','Taking you to your vault…')}</div>
           <div style={{width:48,height:3,borderRadius:4,background:'linear-gradient(90deg,var(--green),rgba(42,158,98,.3))',animation:'pvBarGrow .9s ease both'}}/>
         </div>
       )}
@@ -114,18 +116,18 @@ export function OTP({ goTo, phone, countryCode }) {
 
       <div className="pv-steps">
         <div className="pv-step d"/><div className="pv-step d"/><div className="pv-step a"/>
-        <div className="pv-slbl">Step 3 of 3</div>
+        <div className="pv-slbl">{t('auth.stepOf','Step 3 of 3')}</div>
       </div>
 
       <div className="pv-otp-head">
-        <div className="pv-h-calm" style={{marginBottom:5}}>Verify your number</div>
-        <div className="pv-os">We sent a 4-digit code to</div>
+        <div className="pv-h-calm" style={{marginBottom:5}}>{t('auth.verifyNumber','Verify your number')}</div>
+        <div className="pv-os">{t('auth.otpSentTo','We sent a 4-digit code to')}</div>
         <div className="pv-on">{displayPhone}</div>
       </div>
 
       <div className="pv-on2">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose-mid)" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Expires in <strong>5 minutes</strong> · PediVault will never ask for this code
+        {t('auth.otpNote','Expires in 5 minutes · PediVault will never ask for this code')}
       </div>
 
       <div className="pv-obs" onPaste={handlePaste}>
@@ -155,22 +157,22 @@ export function OTP({ goTo, phone, countryCode }) {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" style={{animation:'pvSpin 1s linear infinite'}}>
               <circle cx="12" cy="12" r="10" strokeOpacity=".25"/><path d="M12 2a10 10 0 0110 10"/>
             </svg>
-            Verifying…
+            {t('auth.verifying','Verifying…')}
           </>
         ) : (
-          <>Verify & Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg></>
+          <>{t('auth.verifyAndCont','Verify & Continue')} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg></>
         )}
       </button>
 
       <div className="pv-ors">
         {!done
-          ? <span>Resend code in <strong style={{color:'var(--rose-mid)',fontWeight:500}}>{secs}s</strong></span>
+          ? <span>{t('auth.resendIn','Resend code in')} <strong style={{color:'var(--rose-mid)',fontWeight:500}}>{secs}s</strong></span>
           : <span className="pv-lk" onClick={handleResend}>
-              {resending ? 'Sending…' : 'Resend code →'}
+              {resending ? t('auth.resending','Sending…') : t('auth.resendCode','Resend code →')}
             </span>
         }
       </div>
-      <div className="pv-sw"><span className="pv-lk" onClick={() => goTo('create')}>← Back</span></div>
+      <div className="pv-sw"><span className="pv-lk" onClick={() => goTo('create')}>{t('auth.backToSignIn','← Back')}</span></div>
     </div>
   );
 }

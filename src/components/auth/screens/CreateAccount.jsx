@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import Brand from '../ui/Brand';
 import { Eye } from '../ui/Logo';
@@ -160,6 +161,7 @@ function CountryPicker({ value, onChange }) {
 }
 
 export function CreateAccount({ goTo }) {
+  const { t } = useTranslation();
   const [f, setF]         = useState({ fname:'', lname:'', email:'', phone:'', pwd:'', country:'+49' });
   const [show, setShow]   = useState(false);
   const [chk, setChk]     = useState(false);
@@ -198,28 +200,28 @@ export function CreateAccount({ goTo }) {
   return (
     <div className="pv-si" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch' }}>
       <Brand/>
-      <div className="pv-h-calm">Create your account</div>
-      <div className="pv-s">Start managing your child's health in minutes</div>
+      <div className="pv-h-calm">{t('auth.createAccountTitle','Create your account')}</div>
+      <div className="pv-s">{t('auth.createAccountSub',"Start managing your child's health in minutes")}</div>
       {err && <div className="pv-err">{err}</div>}
       <div className="pv-r2">
-        <div className="pv-f"><label className="pv-lbl">First name</label><input className="pv-in" type="text" placeholder="Lena" value={f.fname} onChange={set('fname')}/></div>
-        <div className="pv-f"><label className="pv-lbl">Last name</label><input className="pv-in" type="text" placeholder="Müller" value={f.lname} onChange={set('lname')}/></div>
+        <div className="pv-f"><label className="pv-lbl">{t('auth.firstName','First name')}</label><input className="pv-in" type="text" placeholder="Lena" value={f.fname} onChange={set('fname')}/></div>
+        <div className="pv-f"><label className="pv-lbl">{t('auth.lastName','Last name')}</label><input className="pv-in" type="text" placeholder="Müller" value={f.lname} onChange={set('lname')}/></div>
       </div>
       <div className="pv-f">
-        <label className="pv-lbl">Email address</label>
+        <label className="pv-lbl">{t('auth.emailAddress','Email address')}</label>
         <input className="pv-in" type="email" autoComplete="email" placeholder="you@example.com" value={f.email} onChange={set('email')} onKeyDown={onKey}/>
       </div>
       <div className="pv-f">
-        <label className="pv-lbl">Mobile number</label>
+        <label className="pv-lbl">{t('auth.mobileNumber','Mobile number')}</label>
         <div className="pv-phrow">
           <CountryPicker value={f.country} onChange={code => setF(p => ({ ...p, country: code }))}/>
           <input className="pv-in" style={{flex:1}} type="tel" placeholder="151 0000 0000" value={f.phone} onChange={set('phone')} onKeyDown={onKey}/>
         </div>
       </div>
       <div className="pv-f">
-        <label className="pv-lbl">Password</label>
+        <label className="pv-lbl">{t('auth.password','Password')}</label>
         <div className="pv-iw">
-          <input className="pv-in ir" type={show ? 'text' : 'password'} placeholder="Min. 8 characters" autoComplete="new-password" value={f.pwd} onChange={set('pwd')} onKeyDown={onKey}/>
+          <input className="pv-in ir" type={show ? 'text' : 'password'} placeholder={t('auth.passwordMin','Min. 8 characters')} autoComplete="new-password" value={f.pwd} onChange={set('pwd')} onKeyDown={onKey}/>
           <span className="pv-ir" onClick={() => setShow(!show)}><Eye open={show}/></span>
         </div>
         {f.pwd && str && (
@@ -240,15 +242,15 @@ export function CreateAccount({ goTo }) {
         <div className={`pv-ck${chk ? ' on' : ''}`} onClick={() => setChk(!chk)}>
           {chk && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>}
         </div>
-        <div className="pv-tt">I agree to the <span className="pv-lk">Terms of Service</span> and <span className="pv-lk">Privacy Policy</span>. PediVault encrypts all health data per GDPR (EU) 2016/679.</div>
+        <div className="pv-tt">{t('auth.agreeTerms','I agree to the')} <span className="pv-lk">{t('auth.termsOfService','Terms of Service')}</span> {t('auth.and','and')} <span className="pv-lk">{t('auth.privacyPolicy','Privacy Policy')}</span>. {t('auth.gdprNote','PediVault encrypts all health data per GDPR (EU) 2016/679.')}</div>
       </div>
       <button type="button" className="pv-btn" style={{ marginBottom:8 }} disabled={loading} onClick={handleSubmit}>
         {loading
-          ? <><div className="pv-btn-spin"/>Sending code…</>
-          : <>Send OTP & Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></>
+          ? <><div className="pv-btn-spin"/>{t('auth.sendingCode','Sending code…')}</>
+          : <>{t('auth.sendOTP','Send OTP & Continue')} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></>
         }
       </button>
-      <div className="pv-sw" style={{ paddingBottom:32 }}>Already have an account? <span className="pv-lk" onClick={() => goTo('signin')}>← Sign in</span></div>
+      <div className="pv-sw" style={{ paddingBottom:32 }}>{t('auth.alreadyHaveAccount','Already have an account?')} <span className="pv-lk" onClick={() => goTo('signin')}>{t('auth.backSignIn','← Sign in')}</span></div>
     </div>
   );
 }
