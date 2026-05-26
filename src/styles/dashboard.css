@@ -269,7 +269,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px soli
 .stat-card-cta{
   position:absolute;bottom:0;left:0;right:0;
   height:28px;
-  background:linear-gradient(to top,rgba(255,255,255,1) 60%,rgba(255,255,255,0));
+  background:linear-gradient(to top,var(--white) 60%,transparent);
   display:flex;align-items:flex-end;padding:0 18px 7px;
   font-size:.46rem;font-weight:500;letter-spacing:.08em;
   opacity:0;transition:opacity .22s;pointer-events:none;
