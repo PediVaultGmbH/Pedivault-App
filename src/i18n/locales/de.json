@@ -416,6 +416,13 @@
       "Accepted payment methods": "Akzeptierte Zahlungsmethoden",
       "Requesting a refund": "Rückerstattung beantragen",
       "Family plan pricing": "Familienplan-Preise"
-    }
+    },
+    "faq_tag_privacy": "Datenschutz",
+    "faq_tag_account": "Konto",
+    "faq_tag_records": "Dokumente",
+    "faq_tag_vaccines": "Impfungen",
+    "faq_tag_healthcare": "Gesundheit",
+    "faq_tag_ai": "KI",
+    "faq_tag_growth": "Wachstum"
   }
 }

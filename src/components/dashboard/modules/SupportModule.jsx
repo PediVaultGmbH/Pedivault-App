@@ -408,8 +408,8 @@ export function SupportModule({onNav, showToast=()=>{}}) {
         </div>
       </div>
       <div style={{display:'flex',gap:4,flexWrap:'wrap',marginBottom:12}}>
-        {tags.map(t=>(
-          <div key={t} onClick={()=>setOpenFaq(null)||setFilter(t)} style={{height:24,padding:'0 10px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.5rem',fontWeight:filter===t?600:400,color:filter===t?'#fff':'var(--ink-2)',background:filter===t?'var(--rose)':'var(--cream-2)',border:`1px solid ${filter===t?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{t==='all'?`All (${FAQ_ITEMS.length})`:t}</div>
+        {tags.map(ftag=>(
+          <div key={ftag} onClick={()=>setOpenFaq(null)||setFilter(ftag)} style={{height:24,padding:'0 10px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.5rem',fontWeight:filter===ftag?600:400,color:filter===ftag?'#fff':'var(--ink-2)',background:filter===ftag?'var(--rose)':'var(--cream-2)',border:`1px solid ${filter===ftag?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{t==='all'?`All (${FAQ_ITEMS.length})`:t}</div>
         ))}
       </div>
       <div style={{display:'flex',flexDirection:'column',gap:0,borderRadius:14,overflow:'hidden',boxShadow:'var(--shadow-card)',marginBottom:20}}>

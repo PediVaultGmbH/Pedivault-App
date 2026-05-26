@@ -351,6 +351,13 @@
     "faq_tag4": "Vaccines",
     "faq_tag5": "Healthcare",
     "faq_tag6": "AI",
-    "faq_tag7": "Growth"
+    "faq_tag7": "Growth",
+    "faq_tag_privacy": "Privacy",
+    "faq_tag_account": "Account",
+    "faq_tag_records": "Records",
+    "faq_tag_vaccines": "Vaccines",
+    "faq_tag_healthcare": "Healthcare",
+    "faq_tag_ai": "AI",
+    "faq_tag_growth": "Growth"
   }
 }
