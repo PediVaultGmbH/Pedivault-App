@@ -103,7 +103,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
           icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.5" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4z"/><path d="M14.5 5.5l4 4"/><path d="M12 8l-8 8 1 3 3 1 8-8"/></svg>}
           title="No vaccine records yet"
           sub="Add vaccination history to track the STIKO 2026 schedule. Due dates are calculated automatically."
-          btnLabel="Log First Vaccine"
+          btnLabel={t('vaccines.logVaccine','Log First Vaccine')}
           onBtn={() => showModal('vaccine')}/>
       </div>
     </div>
@@ -214,7 +214,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
         <div className="stat-card sc-healthy" style={{ cursor:'pointer' }} onClick={() => setFilter('done')}>
           <div className="stat-label">{t('vaccines.completed','Completed')}</div>
           <div className="stat-val">{counts.done}<span className="stat-unit"> /{counts.total}</span></div>
-          <div className="stat-meta"><span className="pill green">{pct}% done</span></div>
+          <div className="stat-meta"><span className="pill green">{pct}{t('vaccines.percentDone','% done')}</span></div>
           <div className="stat-card-cta">{t('vaccines.viewCompleted','View completed')} →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('upcoming')}>
@@ -262,11 +262,11 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:8, flexWrap:'wrap' }}>
           <div style={{ display:'flex', gap:4, flexWrap:'wrap' }}>
             {[
-              { k:'all',      label:`All (${counts.total})` },
-              { k:'overdue',  label:`Overdue (${counts.overdue})`,   alert:counts.overdue > 0 },
-              { k:'due-soon', label:`Due Soon (${counts['due-soon']})` },
-              { k:'done',     label:`Done (${counts.done})` },
-              { k:'upcoming', label:`Upcoming (${counts.upcoming})` },
+              { k:'all',      label:`${t('common.done','All')} (${counts.total})` },
+              { k:'overdue',  label:`${t('vaccines.overdue','Overdue')} (${counts.overdue})`,   alert:counts.overdue > 0 },
+              { k:'due-soon', label:`${t('vaccines.dueSoon','Due Soon')} (${counts['due-soon']})` },
+              { k:'done',     label:`${t('vaccines.done','Done')} (${counts.done})` },
+              { k:'upcoming', label:`${t('vaccines.upcoming','Upcoming')} (${counts.upcoming})` },
             ].map(tab => (
               <div key={tab.k} onClick={() => setFilter(tab.k)} style={{
                 height:28, padding:'0 12px', borderRadius:20, cursor:'pointer', userSelect:'none',
@@ -288,7 +288,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
                 style={{ transform:expandAll ? 'rotate(180deg)' : 'none', transition:'transform .2s' }}>
                 <path d="M6 9l6 6 6-6"/>
               </svg>
-              {expandAll ? 'Collapse all' : 'Expand all'}
+              {expandAll ? t('vaccines.collapseAll','Collapse all') : t('vaccines.expandAll','Expand all')}
             </div>
             <button type="button" onClick={() => showModal('vaccine')} style={{
               height:32, padding:'0 14px', borderRadius:9, background:'var(--rose)', color:'#fff', border:'none',
@@ -346,9 +346,9 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
                       {nextPending && worstStatus !== 'done' && (
                         <span style={{ fontSize:'.46rem', fontWeight:500, color:cfg.color }}>
                           · {worstStatus === 'overdue'
-                              ? `${nextPending.dose.dose} overdue`
+                              ? `${nextPending.dose.dose} ${t('vaccines.overdue','overdue')}`
                               : worstStatus === 'due-soon'
-                              ? `${nextPending.dose.dose} due ~${nextPending.dose.ageMinMo}mo`
+                              ? `${nextPending.dose.dose} ${t('vaccines.dueSoon','due')} ~${nextPending.dose.ageMinMo}mo`
                               : `${nextPending.dose.dose} at ${nextPending.dose.ageMinMo}mo`}
                         </span>
                       )}
@@ -373,7 +373,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
                 {open && (
                   <div style={{ borderTop:'1px solid var(--line2)', background:'var(--cream-2)' }}>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1.1fr 1.3fr auto', padding:'8px 17px', borderBottom:'1px solid var(--line2)' }}>
-                      {['Dose','Status','Date / Due',''].map(h => (
+                      {[t('vaccines.done','Dose'),t('common.noData','Status'),t('appointments.date','Date') + ' / Due',''].map(h => (
                         <div key={h} style={{ fontSize:'.4rem', fontWeight:600, letterSpacing:'.14em', textTransform:'uppercase', color:'var(--ink-3)' }}>{h}</div>
                       ))}
                     </div>
