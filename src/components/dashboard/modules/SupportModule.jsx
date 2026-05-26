@@ -276,6 +276,21 @@ function TopicModal({topic, onClose}) {
 
 export function SupportModule({onNav, showToast=()=>{}}) {
   const { t } = useTranslation();
+  const faqT = (i, field) => {
+    const keys = {
+      q: ['faq_q1','faq_q2','faq_q3','faq_q4','faq_q5','faq_q6','faq_q7','faq_q8'],
+      a: ['faq_a1','faq_a2','faq_a3','faq_a4','faq_a5','faq_a6','faq_a7','faq_a8'],
+      tag: ['faq_tag1','faq_tag2','faq_tag3','faq_tag4','faq_tag5','faq_tag6','faq_tag7','faq_tag1'],
+    };
+    return t(`support.${keys[field][i]}`, '');
+  };
+  const emergT = (i, field) => {
+    const keys = {
+      label: ['emerg1_label','emerg2_label','emerg3_label','emerg4_label'],
+      sub:   ['emerg1_sub','emerg2_sub','emerg3_sub','emerg4_sub'],
+    };
+    return t(`support.${keys[field][i]}`, '');
+  };
   const topicLabel = (id) => ({
     'started':  t('support.topicStarted','Getting Started'),
     'records':  t('support.topicRecords','Health Records'),
@@ -372,8 +387,8 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             </div>
             <div style={{minWidth:0}}>
               <div style={{fontSize:'.78rem',fontWeight:700,color:e.color,fontFamily:"'Playfair Display',serif",marginBottom:1}}>{e.number}</div>
-              <div style={{fontSize:'.56rem',fontWeight:600,color:'var(--ink)',marginBottom:1}}>{e.label}</div>
-              <div style={{fontSize:'.44rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.4}}>{e.sub}</div>
+              <div style={{fontSize:'.56rem',fontWeight:600,color:'var(--ink)',marginBottom:1}}>{emergT(EMERGENCY_NUMBERS.indexOf(e),'label')||e.label}</div>
+              <div style={{fontSize:'.44rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.4}}>{emergT(EMERGENCY_NUMBERS.indexOf(e),'sub')||e.sub}</div>
             </div>
           </a>
         ))}
@@ -402,14 +417,14 @@ export function SupportModule({onNav, showToast=()=>{}}) {
                   {item.icon}
                 </div>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:'.63rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{item.q}</div>
-                  <span style={{fontSize:'.43rem',fontWeight:600,color:'var(--blue)',background:'var(--blue-bg)',border:'1px solid var(--blue-lt)',borderRadius:20,padding:'1px 6px'}}>{item.tag}</span>
+                  <div style={{fontSize:'.63rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{faqT(faqVisible.indexOf(item),'q')||item.q}</div>
+                  <span style={{fontSize:'.43rem',fontWeight:600,color:'var(--blue)',background:'var(--blue-bg)',border:'1px solid var(--blue-lt)',borderRadius:20,padding:'1px 6px'}}>{faqT(faqVisible.indexOf(item),'tag')||item.tag}</span>
                 </div>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.2" style={{flexShrink:0,transform:isOpen?'rotate(180deg)':'none',transition:'transform .2s'}}><path d="M6 9l6 6 6-6"/></svg>
               </div>
               {isOpen&&(
                 <div style={{padding:'0 17px 14px 59px',fontSize:'.57rem',fontWeight:300,color:'var(--ink-2)',lineHeight:1.75}}>
-                  {item.a}
+                  {faqT(faqVisible.indexOf(item),'a')||item.a}
                   <div style={{marginTop:10,display:'flex',alignItems:'center',gap:7}}>
                     <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{t('support.wasHelpful','Was this helpful?')}</span>
                     {[t('common.yes','Yes'), t('common.no','No')].map((lbl,j)=>(
