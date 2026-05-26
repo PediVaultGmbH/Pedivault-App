@@ -66,19 +66,19 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
           <div className="stat-label">{t('medications.active','Active')}</div>
           <div className="stat-val">{counts.active}</div>
           <div className="stat-meta"><span className="pill green">{t('medications.active','In progress')}</span></div>
-          <div className="stat-card-cta">{t('home.viewAll','View')} active →</div>
+          <div className="stat-card-cta">{t('medications.active','Active')} →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('as-needed')}>
           <div className="stat-label">{t('medications.frequency','As Needed')}</div>
           <div className="stat-val">{counts.asNeeded}</div>
           <div className="stat-meta"><span className="pill blue">PRN</span></div>
-          <div className="stat-card-cta">{t('home.viewAll','View')} PRN →</div>
+          <div className="stat-card-cta">PRN →</div>
         </div>
         <div className="stat-card sc-normal" style={{ cursor:'pointer' }} onClick={() => setFilter('completed')}>
           <div className="stat-label">{t('medications.completed','Completed')}</div>
           <div className="stat-val">{counts.completed}</div>
           <div className="stat-meta"><span className="pill rose">{t('medications.completed','Finished')}</span></div>
-          <div className="stat-card-cta">{t('home.viewAll','View')} history →</div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} →</div>
         </div>
         <div className="stat-card sc-warning" style={{ cursor:'pointer' }} onClick={() => showModal('medication')}>
           <div className="stat-label">{t('medications.add','Add New')}</div>
@@ -91,7 +91,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       {/* Active highlight */}
       {counts.active > 0 && (filter === 'all' || filter === 'active') && (
         <div style={{ marginBottom:20 }}>
-          <div className="sh"><div className="sh-title">{t('medications.active','Currently Active')}</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ Add →</button></div>
+          <div className="sh"><div className="sh-title">{t('medications.active','Currently Active')}</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ {t('medications.add','Add')} →</button></div>
           <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
             {allMeds.filter(m => (m.status === 'active' || m.status === 'ACTIVE') && m.frequency !== 'As needed').map((med, i) => {
               const cfg = MED_TYPE_CFG[med.type] || MED_TYPE_CFG['Other'];
