@@ -8,6 +8,15 @@ import XBtn from '../ui/XBtn';
 function TopicModal({topic, onClose}) {
   const { t, i18n } = useTranslation();
   const [search, setSearch] = useState('');
+  const topicLabelT = (id) => ({
+    'started':  t('support.topicStarted','Getting Started'),
+    'records':  t('support.topicRecords','Health Records'),
+    'vaccines': t('support.topicVaccines','Vaccine Tracker'),
+    'account':  t('support.topicAccount','Account & Privacy'),
+    'privacy':  t('support.topicAccount','Account & Privacy'),
+    'ai':       t('support.topicAI','AI Assistant'),
+    'billing':  t('support.topicBilling','Billing & Plans'),
+  }[id] || id);
   const titleT = (title) => {
     if (i18n.language !== 'de') return title;
     const titles = t('support.titles', {returnObjects: true});
@@ -181,7 +190,7 @@ function TopicModal({topic, onClose}) {
             <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
               <button type="button" onClick={()=>setActiveArticle(null)} style={{display:'flex',alignItems:'center',gap:5,background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)',fontSize:'.52rem',padding:0}}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-                {topic.label}
+                {topicLabelT(topic.id)}
               </button>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
               <span style={{fontSize:'.52rem',color:'var(--ink)',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:200}}>{titleT(activeArticle.title)}</span>
@@ -192,8 +201,8 @@ function TopicModal({topic, onClose}) {
                 {topic.icon}
               </div>
               <div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>{topic.label}</div>
-                <div style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{topic.articles} articles</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>{topicLabelT(topic.id)}</div>
+                <div style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{topic.articles} {t('support.articles','articles')}</div>
               </div>
             </div>
           )}
