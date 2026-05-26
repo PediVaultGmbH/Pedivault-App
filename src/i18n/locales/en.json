@@ -42,7 +42,8 @@
     "entries": "entries",
     "uploaded": "uploaded",
     "upcoming": "upcoming",
-    "upToDate": "All vaccines are up to date"
+    "upToDate": "All vaccines are up to date",
+    "tagline": "Child Health Records"
   },
   "auth": {
     "signIn": "Sign in",

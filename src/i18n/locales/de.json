@@ -42,7 +42,8 @@
     "entries": "Einträge",
     "uploaded": "hochgeladen",
     "upcoming": "bevorstehend",
-    "upToDate": "Alle Impfungen sind aktuell"
+    "upToDate": "Alle Impfungen sind aktuell",
+    "tagline": "Kindergesundheitsakte"
   },
   "auth": {
     "signIn": "Anmelden",

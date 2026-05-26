@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Logo } from './Logo';
 
 export default function MobileHeader() {
+  const { t } = useTranslation();
   return (
     <div className="pv-mob-header">
       {/* Petals clipped to header */}
@@ -13,7 +15,7 @@ export default function MobileHeader() {
         <div className="pv-mob-logo-box"><Logo /></div>
         <div>
           <div className="pv-mob-brand-name">Pedi<em>Vault</em></div>
-          <div className="pv-mob-brand-sub">Child Health Records</div>
+          <div className="pv-mob-brand-sub">{t('common.tagline','Child Health Records')}</div>
         </div>
       </div>
       <div className="pv-mob-tagline">

@@ -18,7 +18,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
       <div className="pv-sb-logo">
         <div className="pv-logo-row">
           <div className="pv-logo-box"><FlowerLogo size={22}/></div>
-          <div><div className="pv-logo-mark">Pedi<em>Vault</em></div><div className="pv-logo-sub">Child Health Records</div></div>
+          <div><div className="pv-logo-mark">Pedi<em>Vault</em></div><div className="pv-logo-sub">{t('common.tagline','Child Health Records')}</div></div>
         </div>
       </div>
       {NAV.map(g=>(
