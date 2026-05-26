@@ -51,7 +51,7 @@ export function SearchPanel({open,onClose,onNav}) {
               <div key={mod} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 0',cursor:'pointer',borderBottom:'1px solid var(--line2)',transition:'color .12s'}}
                 onClick={()=>{onNav(mod);onClose();}}>
                 <span style={{fontSize:'.9rem'}}>{modIcons[mod]}</span>
-                <span style={{fontSize:'.6rem',color:'var(--ink-2)',textTransform:'capitalize',fontWeight:400}}>{mod}</span>
+                <span style={{fontSize:'.6rem',color:'var(--ink-2)',textTransform:'capitalize',fontWeight:400}}>{t(`nav.${mod}`,mod)}</span>
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.2" style={{marginLeft:'auto'}}><path d="M9 18l6-6-6-6"/></svg>
               </div>
             ))}
