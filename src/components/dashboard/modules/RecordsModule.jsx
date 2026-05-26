@@ -51,6 +51,15 @@ function RecordDetailModal({ open, onClose, record }) {
   const { t } = useTranslation();
   if (!record) return null;
   const cfg     = RECORD_TYPE_CFG[record.type] || RECORD_TYPE_CFG['OTHER'];
+  const TYPE_LABELS = {
+    'LAB_REPORT':       t('records.labReport','Lab Report'),
+    'PRESCRIPTION':     t('records.prescription','Prescription'),
+    'VACCINATION_CARD': t('records.vaccinationCard','Vaccination Card'),
+    'SCAN':             t('records.scan','Scan / X-ray'),
+    'GROWTH_CHART':     t('records.growthChart','Growth Chart'),
+    'OTHER':            t('records.document','Document'),
+  };
+  const typeLabel = TYPE_LABELS[record.type] || cfg.label;
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', { day:'numeric', month:'long', year:'numeric' }) : '—';
   const fileExt = record.name?.match(/\.(pdf|jpg|jpeg|png|doc|docx)$/i)?.[1]?.toUpperCase() || 'DOC';
 
@@ -81,7 +90,7 @@ function RecordDetailModal({ open, onClose, record }) {
       <div className="pv-mbody">
         <div style={{ background:`linear-gradient(135deg,${cfg.bg},var(--cream-2))`, border:`1.5px solid ${cfg.border}`, borderRadius:12, padding:'28px 20px', textAlign:'center', marginBottom:16 }}>
           <div style={{ fontSize:'2.8rem', marginBottom:8 }}>{cfg.icon}</div>
-          <div style={{ fontSize:'.64rem', fontWeight:500, color:cfg.color, marginBottom:3 }}>{cfg.label}</div>
+          <div style={{ fontSize:'.64rem', fontWeight:500, color:cfg.color, marginBottom:3 }}>{typeLabel}</div>
           <div style={{ fontSize:'.52rem', color:'var(--ink-3)' }}>{fileExt}</div>
           {record.fileUrl && (
             <>
@@ -105,7 +114,7 @@ function RecordDetailModal({ open, onClose, record }) {
 
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:12 }}>
           {[
-            { lbl: t('records.documentType','Document type'), val: cfg.label },
+            { lbl: t('records.documentType','Document type'), val: typeLabel },
             { lbl: t('appointments.date','Date'), val: fmtDate(record.date || record.createdAt) },
             { lbl: t('records.source','Source'), val: record.source || '—' },
             { lbl: t('records.file','File'), val: record.fileUrl ? fileExt : t('records.noFile','No file') },
