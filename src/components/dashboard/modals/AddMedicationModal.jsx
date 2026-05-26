@@ -38,7 +38,7 @@ export function AddMedicationModal({open,onClose,onSuccess}) {
       <ModalSuccess color="var(--green)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><path d="M10.5 20.5L3.5 13.5a5 5 0 017.07-7.07l7 7a5 5 0 01-7.07 7.07z"/><line x1="14" y1="7" x2="7" y2="14"/></svg>}
         title={t('modals.addMed_success','Medication added!')}
-        sub={`${f.name} ${f.dosage} has been added.\nReminder schedule is now active.`}/>
+        sub={`${f.name} ${f.dosage} ${t('modals.addMed_success_sub','has been added.\nReminder schedule is now active.')}`}/>
     </Modal>
   );
 

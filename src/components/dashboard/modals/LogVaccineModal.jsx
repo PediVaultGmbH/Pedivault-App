@@ -59,7 +59,7 @@ export function LogVaccineModal({open,onClose,onSuccess}) {
       <ModalSuccess color="var(--rose)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4z"/><path d="M14.5 5.5l4 4"/><path d="M12 8l-8 8 1 3 3 1 8-8"/></svg>}
         title={t('modals.vaccine_success','Vaccine logged!')}
-        sub={`${displayName} ${f.dose} recorded on ${f.date?new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}):'—'}.\nImmunisation schedule updated.`}/>
+        sub={`${displayName} ${f.dose} ${t('modals.vaccine_success_sub','recorded on')} ${f.date?new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}):'—'}.\n${t('modals.vaccine_success_sub','Immunisation schedule updated.')}`}/>
     </Modal>
   );
 

@@ -662,6 +662,12 @@
     "noFile": "No file",
     "openDownload": "Open / Download",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "addMed_success_sub": "has been added.\nReminder schedule is now active.",
+    "vaccine_success_sub": "recorded on\nImmunisation schedule updated.",
+    "growth_success_sub": "kg recorded on\nGrowth chart has been updated.",
+    "bookVisit_success_sub": "Your visit has been scheduled for",
+    "bookVisit_success_sub2": "You'll receive a reminder before your appointment.",
+    "upload_success_sub": "has been securely stored.\nEncrypted and accessible from your records."
   }
 }

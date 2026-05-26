@@ -44,7 +44,7 @@ export function GrowthEntryModal({open,onClose,onSuccess}) {
       <ModalSuccess color="var(--green)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
         title={t('modals.growth_success','Measurement saved!')}
-        sub={`${f.weight} kg recorded on ${f.date ? new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}) : '—'}.\nGrowth chart has been updated.`}/>
+        sub={`${f.weight} ${t('modals.growth_success_sub','kg recorded on')} ${f.date ? new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}) : '—'}.\n${t('modals.growth_success_sub','Growth chart has been updated.')}`}/>
     </Modal>
   );
 

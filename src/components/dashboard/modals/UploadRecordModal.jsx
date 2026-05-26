@@ -47,7 +47,7 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <ModalSuccess color="var(--green)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13l2 2 4-4"/></svg>}
-        title={t('modals.upload_success','Record uploaded!')} sub={`${f.name} has been securely stored.\nEncrypted and accessible from your records.`}/>
+        title={t('modals.upload_success','Record uploaded!')} sub={`${f.name} ${t('modals.upload_success_sub','has been securely stored.\nEncrypted and accessible from your records.')}`}/>
     </Modal>
   );
 

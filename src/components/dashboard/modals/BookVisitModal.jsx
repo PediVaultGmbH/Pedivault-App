@@ -40,7 +40,7 @@ export function BookVisitModal({open,onClose,onSuccess}) {
       <ModalSuccess color="var(--blue)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 14l2 2 4-4"/></svg>}
         title={t('modals.bookVisit_success','Appointment booked!')}
-        sub={`Your visit has been scheduled for ${f.date ? new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}) : '—'} at ${f.time}.\nYou'll receive a reminder before your appointment.`}
+        sub={`${t('modals.bookVisit_success_sub','Your visit has been scheduled for')} ${f.date ? new Date(f.date).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}) : '—'} ${t('common.done','at')} ${f.time}.\n${t('modals.bookVisit_success_sub2',"You'll receive a reminder before your appointment.")}`}
       />
     </Modal>
   );

@@ -731,6 +731,12 @@
     "noFile": "Keine Datei",
     "openDownload": "Öffnen / Herunterladen",
     "cancel": "Abbrechen",
-    "close": "Schließen"
+    "close": "Schließen",
+    "addMed_success_sub": "wurde hinzugefügt.\nErinnerungsplan ist jetzt aktiv.",
+    "vaccine_success_sub": "eingetragen am\nImpfplan aktualisiert.",
+    "growth_success_sub": "kg eingetragen am\nWachstumsdiagramm aktualisiert.",
+    "bookVisit_success_sub": "Dein Termin wurde geplant für",
+    "bookVisit_success_sub2": "Du erhältst eine Erinnerung vor deinem Termin.",
+    "upload_success_sub": "wurde sicher gespeichert.\nVerschlüsselt und in deinen Dokumenten zugänglich."
   }
 }
