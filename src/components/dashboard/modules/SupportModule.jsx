@@ -303,7 +303,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       <div style={{background:'linear-gradient(135deg,var(--rose-pale),var(--jc,#FFF5EC),var(--cream-2))',border:'1px solid var(--rose-lt)',borderRadius:20,padding:'28px 28px 24px',marginBottom:20,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:160,height:160,borderRadius:'50%',background:'radial-gradient(ellipse,var(--rose-lt) 0%,transparent 70%)',opacity:.5,pointerEvents:'none'}}/>
         <div style={{position:'relative',zIndex:1}}>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',fontWeight:300,color:'var(--ink)',marginBottom:6}}>{t('support.title','How can we ')} <em style={{color:'var(--rose)',fontStyle:'italic'}}>{t('support.title','help?')}</em></div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',fontWeight:300,color:'var(--ink)',marginBottom:6}}>{t('support.title','How can we help?').split(' ').slice(0,-1).join(' ')} <em style={{color:'var(--rose)',fontStyle:'italic'}}>{t('support.title','help?').split(' ').slice(-1)[0]}</em></div>
           <div style={{fontSize:'.58rem',fontWeight:300,color:'var(--ink-3)',marginBottom:18}}>{t('support.subtitle','Search articles, browse FAQs, or reach our support team')}</div>
           <div style={{position:'relative',maxWidth:520}}>
             <svg style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)'}} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>

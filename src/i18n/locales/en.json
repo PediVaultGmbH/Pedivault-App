@@ -311,6 +311,8 @@
     "thankYouSub": "Your feedback helps us improve PediVault.",
     "searchInArticles": "Search within articles…",
     "noArticles": "No articles match",
-    "noResults": "clear filter"
+    "noResults": "clear filter",
+    "titleStart": "How can we",
+    "titleEnd": "help?"
   }
 }
