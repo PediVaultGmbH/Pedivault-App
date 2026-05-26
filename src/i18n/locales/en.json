@@ -257,5 +257,19 @@
     "currentMedications": "Current Medications",
     "generatedOn": "Generated",
     "print": "Print / Save as PDF"
+  },
+  "ai": {
+    "title": "PediVault AI",
+    "subtitle": "Paediatric health assistant",
+    "welcome": "Hello! I'm your PediVault AI assistant",
+    "suggested": "Suggested questions",
+    "disclaimer": "Not a substitute for medical advice",
+    "placeholder": "Ask anything about {name}'s health…",
+    "online": "Online",
+    "clear": "Clear",
+    "dismiss": "Dismiss",
+    "suggestions": "Suggestions",
+    "enterToSend": "Enter to send · Shift+Enter for new line",
+    "poweredBy": "Powered by Gemini · Always consult your paediatrician"
   }
 }

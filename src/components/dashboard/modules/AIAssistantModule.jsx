@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../../../api/client';
 
 function buildSuggestedPrompts(childName, childData) {
@@ -26,6 +27,7 @@ function buildSuggestedPrompts(childName, childData) {
 }
 
 export function AIAssistantModule({ activeChild, activeChildData, growthData, vaccineEntries = [], medications = [] }) {
+  const { t } = useTranslation();
   const [messages,        setMessages]        = useState([]);
   const [input,           setInput]           = useState('');
   const [loading,         setLoading]         = useState(false);
@@ -120,7 +122,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
           </div>
           <div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'.9rem', fontWeight:400, color:'var(--ink)' }}>PediVault <em style={{ color:'var(--rose)' }}>AI</em></div>
-            <div style={{ fontSize:'.45rem', fontWeight:300, color:'var(--ink-3)' }}>Paediatric health assistant · Context-aware for {childName}</div>
+            <div style={{ fontSize:'.45rem', fontWeight:300, color:'var(--ink-3)' }}>{t('ai.subtitle','Paediatric health assistant')} · {childName}</div>
           </div>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
@@ -132,7 +134,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
           )}
           <div style={{ display:'flex', alignItems:'center', gap:5, height:24, padding:'0 9px', borderRadius:20, background:'var(--green-bg)', border:'1px solid var(--green-lt)' }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:'var(--green)', animation:'ping 2s ease-out infinite' }}/>
-            <span style={{ fontSize:'.44rem', fontWeight:600, color:'var(--green)' }}>Online</span>
+            <span style={{ fontSize:'.44rem', fontWeight:600, color:'var(--green)' }}>{t('ai.online','Online')}</span>
           </div>
         </div>
       </div>
@@ -149,18 +151,18 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.7" strokeLinecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5V11h-4V9.5A4 4 0 0112 2z"/><rect x="8" y="11" width="8" height="5" rx="1"/><path d="M10 16v3M14 16v3M7 19h10"/></svg>
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:6 }}>
-                  Hello! I'm your PediVault AI assistant
+                  Hello! I'm your PediVault AI
                 </div>
                 <div style={{ fontSize:'.55rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.75, maxWidth:380, margin:'0 auto' }}>
                   I have full context of {childName}'s health records — growth data, vaccine schedule, medications and more. Ask me anything about {childName}'s health or general paediatric questions.
                 </div>
                 <div style={{ marginTop:12, display:'inline-flex', alignItems:'center', gap:5, fontSize:'.46rem', color:'var(--ink-3)', background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:20, padding:'4px 10px' }}>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  Powered by Gemini · Not a substitute for medical advice
+                  {t('ai.disclaimer','Not a substitute for medical advice')}
                 </div>
               </div>
               <div style={{ marginBottom:8 }}>
-                <div style={{ fontSize:'.46rem', fontWeight:600, letterSpacing:'.18em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:10 }}>Suggested questions</div>
+                <div style={{ fontSize:'.46rem', fontWeight:600, letterSpacing:'.18em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:10 }}>{t('ai.suggested','Suggested questions')}</div>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
                   {suggestedPrompts.map((p, i) => (
                     <div key={i} onClick={() => sendMessage(p.text)} style={{ display:'flex', alignItems:'center', gap:9, padding:'10px 13px', background:'var(--white)', border:'1px solid var(--line2)', borderRadius:12, cursor:'pointer', transition:'all .15s', userSelect:'none', animation:`fadeUp .25s ease ${i * .04}s both` }}>
@@ -210,7 +212,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
               <div style={{ display:'flex', alignItems:'center', gap:9, padding:'10px 14px', background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.18)', borderRadius:12, fontSize:'.56rem', color:'var(--red)' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 {error}
-                <span style={{ marginLeft:'auto', cursor:'pointer', fontWeight:500, textDecoration:'underline' }} onClick={() => setError(null)}>Dismiss</span>
+                <span style={{ marginLeft:'auto', cursor:'pointer', fontWeight:500, textDecoration:'underline' }} onClick={() => setError(null)}>{t('ai.dismiss','Dismiss')}</span>
               </div>
             )}
 
@@ -238,7 +240,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-              placeholder={`Ask anything about ${childName}'s health…`}
+              placeholder={t('ai.placeholder','Ask anything…').replace('{name}', childName)}
               style={{ flex:1, border:'none', outline:'none', background:'transparent', fontFamily:"'DM Sans',sans-serif", fontSize:'.64rem', color:'var(--ink)', resize:'none', lineHeight:1.5, overflow:'hidden', minHeight:24, maxHeight:120, paddingTop:4 }}
             />
             <button
@@ -255,14 +257,14 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
           </div>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:7 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-              <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>Enter to send · Shift+Enter for new line</span>
+              <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>{t('ai.enterToSend','Enter to send · Shift+Enter for new line')}</span>
               {messages.length > 0 && (
                 <button type="button" onClick={() => setShowSuggestions(s => !s)} style={{ height:20, padding:'0 8px', borderRadius:20, background:showSuggestions ? 'var(--rose-pale)' : 'var(--cream-2)', border:`1px solid ${showSuggestions ? 'var(--rose-lt)' : 'var(--line2)'}`, fontSize:'.43rem', fontWeight:500, color:showSuggestions ? 'var(--rose)' : 'var(--ink-3)', cursor:'pointer', transition:'all .15s' }}>
-                  💡 Suggestions
+                  💡 {t('ai.suggestions','Suggestions')}
                 </button>
               )}
             </div>
-            <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>Powered by Gemini · Always consult your paediatrician</span>
+            <span style={{ fontSize:'.43rem', fontWeight:300, color:'var(--ink-3)' }}>{t('ai.poweredBy','Powered by Gemini · Always consult your paediatrician')}</span>
           </div>
         </div>
       </div>

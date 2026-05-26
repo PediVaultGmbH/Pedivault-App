@@ -257,5 +257,19 @@
     "currentMedications": "Aktuelle Medikamente",
     "generatedOn": "Erstellt am",
     "print": "Drucken / Als PDF speichern"
+  },
+  "ai": {
+    "title": "PediVault KI",
+    "subtitle": "Pädiatrischer Gesundheitsassistent",
+    "welcome": "Hallo! Ich bin dein PediVault KI-Assistent",
+    "suggested": "Vorgeschlagene Fragen",
+    "disclaimer": "Kein Ersatz für medizinischen Rat",
+    "placeholder": "Frag alles über {name}s Gesundheit…",
+    "online": "Online",
+    "clear": "Löschen",
+    "dismiss": "Schließen",
+    "suggestions": "Vorschläge",
+    "enterToSend": "Enter zum Senden · Shift+Enter für neue Zeile",
+    "poweredBy": "Powered by Gemini · Immer einen Arzt konsultieren"
   }
 }
