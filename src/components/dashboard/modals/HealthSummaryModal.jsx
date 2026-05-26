@@ -98,8 +98,8 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
                 <div style={{fontSize:'11px',color:'#888',marginTop:2}}>Child Health Records</div>
               </div>
               <div className="meta">
-                <div>Health Summary Report</div>
-                <div>Generated: {today}</div>
+                <div>{t('modals.healthSummaryReport','Health Summary Report')}</div>
+                <div>{t('modals.generated','Generated')}: {today}</div>
               </div>
             </div>
 

@@ -36,7 +36,7 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
         const saved = res.data || {};
         setDone(true);
         setTimeout(() => {
-          onSuccess(`${f.name} has been added to your vault ✓`);
+          onSuccess(`${f.name} ${t('modals.addedToVault','has been added to your vault ✓')}`);
           if (onChildAdded) onChildAdded({ ...f, id: saved.id, name: f.name });
           onClose();
           setDone(false);

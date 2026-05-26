@@ -753,6 +753,7 @@
     "currentMedications": "Aktuelle Medikamente",
     "healthSummaryReport": "Gesundheitsbericht",
     "generated": "Erstellt",
-    "selfRecorded": "Selbst eingetragen"
+    "selfRecorded": "Selbst eingetragen",
+    "addedToVault": "wurde zu deinem Vault hinzugefügt ✓"
   }
 }

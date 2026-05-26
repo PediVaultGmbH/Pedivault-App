@@ -684,6 +684,7 @@
     "currentMedications": "Current Medications",
     "healthSummaryReport": "Health Summary Report",
     "generated": "Generated",
-    "selfRecorded": "Self-recorded"
+    "selfRecorded": "Self-recorded",
+    "addedToVault": "has been added to your vault ✓"
   }
 }
