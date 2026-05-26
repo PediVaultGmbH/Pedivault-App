@@ -185,7 +185,12 @@
     "type": "Type",
     "date": "Date",
     "time": "Time",
-    "notes": "Notes"
+    "notes": "Notes",
+    "today": "Today",
+    "nextVisit": "Next Visit",
+    "reschedule": "Reschedule",
+    "keepIt": "Keep it",
+    "cancelVisit": "Cancel visit"
   },
   "medications": {
     "title": "Medications",

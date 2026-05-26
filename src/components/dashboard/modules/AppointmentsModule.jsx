@@ -23,10 +23,10 @@ function CancelApptModal({open, onClose, onConfirm, appt}) {
         </div>
       </div>
       <div className="pv-mfoot" style={{borderTop:'none',background:'transparent',padding:'16px 28px 24px',justifyContent:'center',gap:10}}>
-        <button type="button" className="fb fb-g" style={{flex:1,maxWidth:160}} onClick={onClose}>{t('common.cancel','Keep it')}</button>
+        <button type="button" className="fb fb-g" style={{flex:1,maxWidth:160}} onClick={onClose}>{t('appointments.keepIt','Keep it')}</button>
         <button type="button" className="fb fb-d" style={{flex:1,maxWidth:160}} onClick={onConfirm}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          {t('appointments.cancel','Cancel visit')}
+          {t('appointments.cancelVisit','Cancel visit')}
         </button>
       </div>
     </Modal>
@@ -146,7 +146,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                 <span style={{fontSize:'.42rem',fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',
                   color:'#fff',background:isToday?'var(--red)':cfg.color,
                   borderRadius:20,padding:'2px 8px'}}>
-                  {isToday?t('common.done','Today'):t('home.nextAppointment','Next Visit')}
+                  {isToday?t('appointments.today','Today'):t('appointments.nextVisit','Next Visit')}
                 </span>
                 <span style={{fontSize:'.56rem',fontWeight:600,color:'var(--ink)'}}>{next.type}</span>
               </div>
@@ -239,7 +239,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                     color:isPast?'var(--ink-3)':isToday?cfg.color:cfg.color,
                   }}>{fmtDay(appt.date)}</div>
                   <div style={{fontSize:'.4rem',fontWeight:600,letterSpacing:'.14em',color:isPast?'var(--ink-3)':cfg.color,marginTop:1}}>{fmtMonth(appt.date)}</div>
-                  {isToday&&<div style={{fontSize:'.38rem',fontWeight:700,color:'#fff',background:'var(--red)',borderRadius:20,padding:'1px 5px',margin:'4px auto 0',display:'inline-block'}}>TODAY</div>}
+                  {isToday&&<div style={{fontSize:'.38rem',fontWeight:700,color:'#fff',background:'var(--red)',borderRadius:20,padding:'1px 5px',margin:'4px auto 0',display:'inline-block'}}>{t('appointments.today','TODAY')}</div>}
                 </div>
 
                 {/* Main content */}
@@ -254,7 +254,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                       background:isToday?'var(--red-bg)':isUpcoming?cfg.bg:'transparent',
                       border:`1px solid ${isToday?'rgba(185,40,20,.2)':isUpcoming?cfg.border:'transparent'}`,
                     }}>
-                      {isToday?`${t('common.done','Today')} · ${appt.time}`:isUpcoming?appt.time:t('appointments.completed','Completed')}
+                      {isToday?`${t('appointments.today','Today')} · ${appt.time}`:isUpcoming?appt.time:t('appointments.completed','Completed')}
                     </span>
                   </div>
                   <div style={{fontSize:'.6rem',fontWeight:500,color:isPast?'var(--ink-3)':'var(--ink)',marginBottom:2}}>
@@ -277,7 +277,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                       background:'var(--cream-2)',border:'1px solid var(--line2)',
                       color:'var(--ink-2)',fontSize:'.48rem',fontWeight:500,cursor:'pointer',
                       transition:'all .15s',
-                    }}>{t('appointments.book','Reschedule')}</button>
+                    }}>{t('appointments.reschedule','Reschedule')}</button>
                   )}
                   {isUpcoming && appt.isNew && (
                     <button type="button" onClick={()=>setCancelAppt(appt)} style={{

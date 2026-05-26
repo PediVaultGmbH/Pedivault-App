@@ -185,7 +185,12 @@
     "type": "Art",
     "date": "Datum",
     "time": "Uhrzeit",
-    "notes": "Notizen"
+    "notes": "Notizen",
+    "today": "Heute",
+    "nextVisit": "Nächster Termin",
+    "reschedule": "Verschieben",
+    "keepIt": "Behalten",
+    "cancelVisit": "Termin absagen"
   },
   "medications": {
     "title": "Medikamente",
