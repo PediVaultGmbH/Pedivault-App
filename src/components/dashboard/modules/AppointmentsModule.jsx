@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmptyState from '../ui/EmptyState';
 import Modal from '../ui/Modal';
 import { APPT_TYPE_CFG, BASE_APPTS_AANYA } from '../../../data/appointmentsData';
@@ -6,6 +7,7 @@ import { getApptStatus } from '../../../utils/dateUtils';
 import XBtn from '../ui/XBtn';
 
 function CancelApptModal({open, onClose, onConfirm, appt}) {
+  const { t } = useTranslation();
   if(!appt) return null;
   const cfg = APPT_TYPE_CFG[appt.type] || APPT_TYPE_CFG['Other'];
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE',{day:'numeric',month:'long',year:'numeric'}) : '—';
@@ -14,17 +16,17 @@ function CancelApptModal({open, onClose, onConfirm, appt}) {
       <div className="pv-mhdr" style={{textAlign:'center',borderBottom:'none',padding:'32px 28px 8px'}}>
         <XBtn onClick={onClose}/>
         <div style={{width:56,height:56,borderRadius:16,background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.2)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 14px',fontSize:'1.6rem'}}>{cfg.icon}</div>
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',fontWeight:400,color:'var(--ink)',marginBottom:6}}>Cancel this appointment?</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',fontWeight:400,color:'var(--ink)',marginBottom:6}}>{t('appointments.cancel','Cancel this appointment?')}</div>
         <div style={{fontSize:'.56rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>
           <strong style={{color:'var(--ink)',fontWeight:500}}>{appt.type}</strong> with {appt.doctor}<br/>
           {fmtDate(appt.date)} at {appt.time}
         </div>
       </div>
       <div className="pv-mfoot" style={{borderTop:'none',background:'transparent',padding:'16px 28px 24px',justifyContent:'center',gap:10}}>
-        <button type="button" className="fb fb-g" style={{flex:1,maxWidth:160}} onClick={onClose}>Keep it</button>
+        <button type="button" className="fb fb-g" style={{flex:1,maxWidth:160}} onClick={onClose}>{t('common.cancel','Keep it')}</button>
         <button type="button" className="fb fb-d" style={{flex:1,maxWidth:160}} onClick={onConfirm}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          Cancel visit
+          {t('appointments.cancel','Cancel visit')}
         </button>
       </div>
     </Modal>
@@ -32,6 +34,7 @@ function CancelApptModal({open, onClose, onConfirm, appt}) {
 }
 
 export function AppointmentsModule({activeChild, showModal, newBookings=[], onCancelBooking}) {
+  const { t } = useTranslation();
   const [filter,    setFilter]    = useState('upcoming');
   const [sort,      setSort]      = useState('soonest');
   const [cancelAppt,setCancelAppt]= useState(null);
@@ -82,9 +85,9 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
     <div className="pv-page" style={{animation:'fadeUp .3s ease both'}}>
       <EmptyState color="var(--blue)"
         icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.5" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>}
-        title="No appointments yet"
+        title={t('appointments.noAppointments','No appointments yet')}
         sub={`Book ${activeChild==='aanya'?'Aanya':'Rohan'}'s first paediatric visit. Your schedule will appear here.`}
-        btnLabel="Book First Visit"
+        btnLabel={t('appointments.book','Book First Visit')}
         onBtn={()=>showModal('book')}/>
     </div>
   );
@@ -95,28 +98,28 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
       {/* ── STAT STRIP ── */}
       <div className="stat-strip" style={{marginBottom:20}}>
         <div className="stat-card sc-info" style={{cursor:'pointer'}} onClick={()=>setFilter('upcoming')}>
-          <div className="stat-label">Upcoming</div>
+          <div className="stat-label">{t('appointments.upcoming','Upcoming')}</div>
           <div className="stat-val">{counts.upcoming}</div>
-          <div className="stat-meta"><span className="pill blue">Scheduled</span></div>
-          <div className="stat-card-cta">View upcoming →</div>
+          <div className="stat-meta"><span className="pill blue">{t('appointments.upcoming','Scheduled')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} upcoming →</div>
         </div>
         <div className="stat-card sc-normal" style={{cursor:'pointer'}} onClick={()=>setFilter('past')}>
-          <div className="stat-label">Past Visits</div>
+          <div className="stat-label">{t('appointments.completed','Past Visits')}</div>
           <div className="stat-val">{counts.past}</div>
-          <div className="stat-meta"><span className="pill rose">Completed</span></div>
-          <div className="stat-card-cta">View history →</div>
+          <div className="stat-meta"><span className="pill rose">{t('appointments.completed','Completed')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} history →</div>
         </div>
         <div className="stat-card sc-healthy" style={{cursor:'pointer'}} onClick={()=>setFilter('all')}>
-          <div className="stat-label">Total</div>
+          <div className="stat-label">{t('records.title','Total')}</div>
           <div className="stat-val">{counts.total}</div>
-          <div className="stat-meta"><span className="pill green">All visits</span></div>
-          <div className="stat-card-cta">View all →</div>
+          <div className="stat-meta"><span className="pill green">{t('home.viewAll','All visits')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View all')} →</div>
         </div>
         <div className="stat-card sc-warning" style={{cursor:'pointer'}} onClick={()=>showModal('book')}>
-          <div className="stat-label">Book New</div>
+          <div className="stat-label">{t('appointments.book','Book New')}</div>
           <div className="stat-val"><span style={{fontSize:'1.4rem'}}>+</span></div>
-          <div className="stat-meta"><span className="pill amber">Schedule visit</span></div>
-          <div className="stat-card-cta">Open calendar →</div>
+          <div className="stat-meta"><span className="pill amber">{t('appointments.book','Schedule visit')}</span></div>
+          <div className="stat-card-cta">{t('appointments.book','Open calendar')} →</div>
         </div>
       </div>
 
@@ -143,7 +146,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                 <span style={{fontSize:'.42rem',fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',
                   color:'#fff',background:isToday?'var(--red)':cfg.color,
                   borderRadius:20,padding:'2px 8px'}}>
-                  {isToday?'Today':'Next Visit'}
+                  {isToday?t('common.done','Today'):t('home.nextAppointment','Next Visit')}
                 </span>
                 <span style={{fontSize:'.56rem',fontWeight:600,color:'var(--ink)'}}>{next.type}</span>
               </div>
@@ -166,17 +169,17 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:8,flexWrap:'wrap',marginBottom:14}}>
         <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
           {[
-            {k:'upcoming',label:`Upcoming (${counts.upcoming})`},
-            {k:'past',    label:`Past (${counts.past})`},
-            {k:'all',     label:`All (${counts.total})`},
-          ].map(t=>(
-            <div key={t.k} onClick={()=>setFilter(t.k)} style={{
+            {k:'upcoming',label:`${t('appointments.upcoming','Upcoming')} (${counts.upcoming})`},
+            {k:'past',    label:`${t('appointments.completed','Past')} (${counts.past})`},
+            {k:'all',     label:`${t('home.viewAll','All')} (${counts.total})`},
+          ].map(tab=>(
+            <div key={tab.k} onClick={()=>setFilter(tab.k)} style={{
               height:28,padding:'0 13px',borderRadius:20,cursor:'pointer',userSelect:'none',
-              fontSize:'.52rem',fontWeight:filter===t.k?600:400,
-              color:filter===t.k?'#fff':'var(--ink-2)',
-              background:filter===t.k?'var(--blue)':'var(--cream-2)',
-              border:`1px solid ${filter===t.k?'transparent':'var(--line2)'}`,
-              transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{t.label}</div>
+              fontSize:'.52rem',fontWeight:filter===tab.k?600:400,
+              color:filter===tab.k?'#fff':'var(--ink-2)',
+              background:filter===tab.k?'var(--blue)':'var(--cream-2)',
+              border:`1px solid ${filter===tab.k?'transparent':'var(--line2)'}`,
+              transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{tab.label}</div>
           ))}
         </div>
         <div style={{display:'flex',gap:6,alignItems:'center',flexShrink:0}}>
@@ -185,9 +188,9 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
             background:'var(--white)',color:'var(--ink-2)',fontSize:'.55rem',
             fontFamily:"'DM Sans',sans-serif",cursor:'pointer',outline:'none',appearance:'none',
           }}>
-            <option value="soonest">Soonest first</option>
-            <option value="latest">Latest first</option>
-            <option value="type">By type</option>
+            <option value="soonest">{t('records.newestFirst','Soonest first')}</option>
+            <option value="latest">{t('records.oldestFirst','Latest first')}</option>
+            <option value="type">{t('records.byType','By type')}</option>
           </select>
           <button type="button" onClick={()=>showModal('book')} style={{
             height:32,padding:'0 14px',borderRadius:9,background:'var(--rose)',color:'#fff',border:'none',
@@ -195,7 +198,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
             boxShadow:'0 2px 10px rgba(155,58,86,.28)',
           }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            Book Visit
+            {t('appointments.book','Book Visit')}
           </button>
         </div>
       </div>
@@ -204,8 +207,8 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
       {visible.length===0 ? (
         <div className="card" style={{textAlign:'center',padding:'32px 20px'}}>
           <div style={{fontSize:'1.8rem',marginBottom:8}}>📅</div>
-          <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:4}}>No {filter} appointments</div>
-          {filter==='upcoming' && <button type="button" onClick={()=>showModal('book')} className="pv-empty-btn" style={{marginTop:14}}>Book a Visit</button>}
+          <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:4}}>{t('appointments.noAppointments','No')} {filter} {t('appointments.title','appointments')}</div>
+          {filter==='upcoming' && <button type="button" onClick={()=>showModal('book')} className="pv-empty-btn" style={{marginTop:14}}>{t('appointments.book','Book a Visit')}</button>}
         </div>
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:0,borderRadius:14,overflow:'hidden',boxShadow:'var(--shadow-card)'}}>
@@ -251,7 +254,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                       background:isToday?'var(--red-bg)':isUpcoming?cfg.bg:'transparent',
                       border:`1px solid ${isToday?'rgba(185,40,20,.2)':isUpcoming?cfg.border:'transparent'}`,
                     }}>
-                      {isToday?`Today · ${appt.time}`:isUpcoming?appt.time:'Completed'}
+                      {isToday?`${t('common.done','Today')} · ${appt.time}`:isUpcoming?appt.time:t('appointments.completed','Completed')}
                     </span>
                   </div>
                   <div style={{fontSize:'.6rem',fontWeight:500,color:isPast?'var(--ink-3)':'var(--ink)',marginBottom:2}}>
@@ -274,14 +277,14 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
                       background:'var(--cream-2)',border:'1px solid var(--line2)',
                       color:'var(--ink-2)',fontSize:'.48rem',fontWeight:500,cursor:'pointer',
                       transition:'all .15s',
-                    }}>Reschedule</button>
+                    }}>{t('appointments.book','Reschedule')}</button>
                   )}
                   {isUpcoming && appt.isNew && (
                     <button type="button" onClick={()=>setCancelAppt(appt)} style={{
                       height:26,padding:'0 10px',borderRadius:7,
                       background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.18)',
                       color:'var(--red)',fontSize:'.48rem',fontWeight:500,cursor:'pointer',
-                    }}>Cancel</button>
+                    }}>{t('appointments.cancel','Cancel')}</button>
                   )}
                   {isPast && (
                     <div style={{
