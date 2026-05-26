@@ -77,7 +77,7 @@ export default function PediVaultAuth({ onLogin }) {
         <LeftPanel  screen={screen} />
         <RightPanel screen={screen} />
         <div className="pv-wrap" style={{position:'relative'}}>
-          <div style={{position:'absolute',top:16,right:16,zIndex:200}}><LanguageSwitcher/></div>
+          <div style={{position:'absolute',top:16,right:16,zIndex:200}}><LanguageSwitcher compact={true}/></div>
           <div className="pv-card">
             {screen === 'signin'  && <SignIn        {...sharedProps} />}
             {screen === 'create'  && <CreateAccount {...sharedProps} />}
@@ -91,7 +91,7 @@ export default function PediVaultAuth({ onLogin }) {
         <MobileHeader />
         <div className="pv-mob-sheet" style={{position:'relative'}}>
           <div className="pv-mob-sheet-handle" />
-          <div style={{position:'absolute',top:12,right:16,zIndex:200}}><LanguageSwitcher/></div>
+          <div style={{position:'absolute',top:12,right:16,zIndex:200}}><LanguageSwitcher compact={true}/></div>
           {screen === 'signin'  && <SignIn        {...sharedProps} />}
           {screen === 'create'  && <CreateAccount {...sharedProps} />}
           {screen === 'forgot'  && <Forgot        {...sharedProps} />}
