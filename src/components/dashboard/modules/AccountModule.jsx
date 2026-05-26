@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 import { updateMe, changePassword, getSessions, revokeAllSessions, deleteAccount, getNotifications, updateNotifications, setup2FA, verify2FA, disable2FA } from '../../../api/auth.api';
@@ -72,6 +73,7 @@ function ToggleSwitch({on, onChange, label, sub, color='var(--rose)'}) {
 }
 
 export function AccountModule({userName='Lena', userProfile=null, onSignOut}) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState('profile');
   const [userPlan, setUserPlan] = useState(userProfile?.plan || 'FREE');
 
@@ -172,10 +174,10 @@ useEffect(() => {
   const isPremium = userPlan === 'PREMIUM';
 
   const tabs = [
-    {k:'profile',      icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0112 0v1"/></svg>, label:'Profile'},
-    {k:'security',     icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>, label:'Security'},
-    {k:'notifications',icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>, label:'Notifications'},
-    {k:'plan',         icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:'Plan'},
+    {k:'profile',      icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0112 0v1"/></svg>, label:t('account.profile','Profile')},
+    {k:'security',     icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>, label:t('account.security','Security')},
+    {k:'notifications',icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>, label:t('account.notifications','Notifications')},
+    {k:'plan',         icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('account.plan','Plan')},
   ];
 
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
@@ -191,8 +193,8 @@ useEffect(() => {
             <div style={{width:60,height:60,borderRadius:18,background:'var(--red-bg)',border:'1.5px solid rgba(185,40,20,.2)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.15rem',textAlign:'center',color:'var(--ink)',marginBottom:6}}>Delete your account?</div>
-            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',textAlign:'center',lineHeight:1.75,marginBottom:20}}>This will permanently and irreversibly remove:</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.15rem',textAlign:'center',color:'var(--ink)',marginBottom:6}}>{t('account.deleteModal1','Delete your account?')}</div>
+            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',textAlign:'center',lineHeight:1.75,marginBottom:20}}>{t('account.deleteModal1Sub','This will permanently and irreversibly remove:')}</div>
             {["All children's health records",'Vaccine history and certificates','Uploaded documents and scans','Appointments, medications & growth data','Your account and login credentials'].map((item,i)=>(
               <div key={i} style={{display:'flex',alignItems:'center',gap:10,padding:'7px 0',borderBottom:i<4?'1px solid var(--line2)':'none'}}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -200,15 +202,15 @@ useEffect(() => {
               </div>
             ))}
             <div style={{marginTop:20,display:'flex',gap:10}}>
-              <button type="button" className="fb fb-g" style={{flex:1}} onClick={()=>setDeleteStep(0)}>Cancel</button>
-              <button type="button" onClick={()=>setDeleteStep(2)} style={{flex:1,height:40,borderRadius:10,background:'var(--red)',color:'#fff',border:'none',fontSize:'.6rem',fontWeight:500,cursor:'pointer'}}>I understand, continue</button>
+              <button type="button" className="fb fb-g" style={{flex:1}} onClick={()=>setDeleteStep(0)}>{t('account.deleteCancel','Cancel')}</button>
+              <button type="button" onClick={()=>setDeleteStep(2)} style={{flex:1,height:40,borderRadius:10,background:'var(--red)',color:'#fff',border:'none',fontSize:'.6rem',fontWeight:500,cursor:'pointer'}}>{t('account.deleteContinue','I understand, continue')}</button>
             </div>
           </div>
         )}
         {deleteStep===2 && (
           <div style={{padding:'32px 28px 24px'}}>
             <XBtn onClick={()=>{setDeleteStep(0);setDeleteInput('');}}/>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.05rem',color:'var(--ink)',marginBottom:6,textAlign:'center'}}>Final confirmation</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.05rem',color:'var(--ink)',marginBottom:6,textAlign:'center'}}>{t('account.deleteConfirm','Final confirmation')}</div>
             <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',textAlign:'center',lineHeight:1.75,marginBottom:20}}>
               Type <strong style={{color:'var(--red)',fontFamily:'monospace',letterSpacing:'.1em'}}>DELETE</strong> to permanently delete your account.
             </div>
@@ -232,8 +234,8 @@ useEffect(() => {
             <div style={{width:64,height:64,borderRadius:20,background:'var(--red-bg)',border:'1.5px solid rgba(185,40,20,.2)',display:'flex',alignItems:'center',justifyContent:'center',animation:'pvSuccessPop .4s ease both'}}>
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
             </div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>Account deleted</div>
-            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>All your data has been permanently removed. Signing you out…</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>{t('account.accountDeleted','Account deleted')}</div>
+            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.7}}>{t('account.accountDeletedSub','All your data has been permanently removed. Signing you out…')}</div>
             <div style={{width:48,height:3,borderRadius:3,background:'linear-gradient(90deg,var(--red),rgba(185,40,20,.3))',animation:'pvBarGrow 2s ease both'}}/>
           </div>
         )}
@@ -248,8 +250,8 @@ useEffect(() => {
               <div style={{display:'inline-flex',alignItems:'center',justifyContent:'center',width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',marginBottom:12}}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
               </div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.25rem',color:'var(--ink)',marginBottom:4}}>Upgrade to Premium</div>
-              <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)'}}>Everything your growing family needs</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.25rem',color:'var(--ink)',marginBottom:4}}>{t('account.upgradeToPremium','Upgrade to Premium')}</div>
+              <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)'}}>{t('account.upgradeTagline','Everything your growing family needs')}</div>
             </div>
             <div style={{display:'flex',background:'var(--cream-2)',borderRadius:12,padding:4,marginBottom:20,gap:4}}>
               {[{k:'monthly',label:'Monthly',price:'€4.99/mo'},{k:'annual',label:'Annual',price:'€44.99/yr',save:'Save 25%'}].map(p=>(
@@ -276,7 +278,7 @@ useEffect(() => {
             <button type="button" onClick={()=>setUpgradeStep(2)} style={{width:'100%',height:44,marginTop:20,borderRadius:12,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.66rem',fontWeight:600,cursor:'pointer',boxShadow:'0 4px 16px rgba(155,58,86,.32)',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
               Continue to payment →
             </button>
-            <div style={{fontSize:'.46rem',color:'var(--ink-3)',textAlign:'center',marginTop:10}}>Cancel anytime · No commitment · GDPR compliant</div>
+            <div style={{fontSize:'.46rem',color:'var(--ink-3)',textAlign:'center',marginTop:10}}>{t('account.cancelAnytime','Cancel anytime · No commitment · GDPR compliant')}</div>
           </div>
         )}
         {upgradeStep===2 && (
@@ -285,7 +287,7 @@ useEffect(() => {
             <button type="button" onClick={()=>setUpgradeStep(1)} style={{display:'flex',alignItems:'center',gap:5,background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)',fontSize:'.52rem',marginBottom:16,padding:0}}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back to plans
             </button>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)',marginBottom:4}}>Payment details</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)',marginBottom:4}}>{t('account.paymentDetails','Payment details')}</div>
             <div style={{fontSize:'.52rem',color:'var(--ink-3)',marginBottom:18}}>{plan==='monthly'?'€4.99/month · cancel anytime':'€44.99/year · 25% saving vs monthly'}</div>
             <Elements stripe={stripePromise}>
               <StripePaymentForm plan={plan} onSuccess={handleUpgradeSuccess}/>
@@ -297,7 +299,7 @@ useEffect(() => {
             <div style={{width:72,height:72,borderRadius:22,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'2px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',animation:'pvSuccessPop .5s ease both',boxShadow:'0 8px 28px rgba(155,58,86,.2)'}}>
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="2.2" strokeLinecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             </div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.3rem',color:'var(--ink)'}}>Welcome to Premium!</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.3rem',color:'var(--ink)'}}>{t('account.welcomePremium','Welcome to Premium!')}</div>
             <div style={{fontSize:'.56rem',fontWeight:300,color:'var(--ink-3)',lineHeight:1.8,maxWidth:280}}>Your account has been upgraded. All Premium features are now active. Thank you for supporting PediVault! 🌸</div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center'}}>
               {['5 children','50 GB storage','Unlimited AI','Certificates','Priority support'].map(f=>(
@@ -335,7 +337,7 @@ useEffect(() => {
       {/* TABS */}
       <div style={{display:'flex',gap:6,marginBottom:18,flexWrap:'wrap'}}>
         {tabs.map(t=>(
-          <button key={t.k} type="button" onClick={()=>setTab(t.k)} style={{height:32,padding:'0 14px',borderRadius:20,border:'none',cursor:'pointer',fontSize:'.56rem',fontWeight:tab===t.k?600:400,color:tab===t.k?'#fff':'var(--ink-2)',background:tab===t.k?'var(--rose)':'var(--cream-2)',display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,transition:'all .15s',lineHeight:1,boxShadow:tab===t.k?'0 2px 10px rgba(155,58,86,.28)':'none'}}>
+          <button key={t.k} type="button" onClick={()=>setTab(tab.k)} style={{height:32,padding:'0 14px',borderRadius:20,border:'none',cursor:'pointer',fontSize:'.56rem',fontWeight:tab===tab.k?600:400,color:tab===tab.k?'#fff':'var(--ink-2)',background:tab===tab.k?'var(--rose)':'var(--cream-2)',display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,transition:'all .15s',lineHeight:1,boxShadow:tab===tab.k?'0 2px 10px rgba(155,58,86,.28)':'none'}}>
             {t.icon}{t.label}
           </button>
         ))}
@@ -345,33 +347,33 @@ useEffect(() => {
       {tab==='profile' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
           <div className="card">
-            <div className="sh" style={{marginBottom:14}}><div className="sh-title">Personal Information</div></div>
+            <div className="sh" style={{marginBottom:14}}><div className="sh-title">{t('account.personalInfo','Personal Information')}</div></div>
             <div className="two-col">
               <div>
-                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>First name</div>
+                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.firstName','First name')}</div>
                 <input className="fi" value={profile.firstName} onChange={e=>setProfile(p=>({...p,firstName:e.target.value}))} style={{width:'100%',boxSizing:'border-box'}} placeholder="First name"/>
               </div>
               <div>
-                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Last name</div>
+                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.lastName','Last name')}</div>
                 <input className="fi" value={profile.lastName} onChange={e=>setProfile(p=>({...p,lastName:e.target.value}))} style={{width:'100%',boxSizing:'border-box'}} placeholder="Last name"/>
               </div>
             </div>
             <div style={{marginTop:12}}>
-              <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Email address</div>
+              <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.email','Email address')}</div>
               <input className="fi" type="email" value={profile.email} disabled style={{width:'100%',boxSizing:'border-box',opacity:.6,cursor:'not-allowed'}}/>
-              <div style={{fontSize:'.44rem',color:'var(--ink-3)',marginTop:4}}>Email cannot be changed. Contact support if needed.</div>
+              <div style={{fontSize:'.44rem',color:'var(--ink-3)',marginTop:4}}>{t('account.emailNote','Email cannot be changed. Contact support if needed.')}</div>
             </div>
             <div style={{marginTop:12}}>
-              <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Phone number</div>
+              <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.phone','Phone number')}</div>
               <input className="fi" type="tel" value={profile.phone} onChange={e=>setProfile(p=>({...p,phone:e.target.value}))} style={{width:'100%',boxSizing:'border-box'}} placeholder="+49 151 0000 0000"/>
             </div>
             <div className="two-col" style={{marginTop:12}}>
               <div>
-               <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Language</div>
+               <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.language','Language')}</div>
                 <LanguageSwitcher compact={false}/>
               </div>
               <div>
-                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>Timezone</div>
+                <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{t('account.timezone','Timezone')}</div>
                 <select className="fi" value={profile.timezone} onChange={e=>setProfile(p=>({...p,timezone:e.target.value}))} style={{width:'100%',boxSizing:'border-box',cursor:'pointer'}}>
                   <option>Europe/Berlin (CET)</option><option>Europe/Vienna (CET)</option>
                   <option>Europe/Zurich (CET)</option><option>Europe/London (GMT)</option>
@@ -381,20 +383,20 @@ useEffect(() => {
             </div>
             <div style={{marginTop:16,display:'flex',gap:10,justifyContent:'flex-end',alignItems:'center'}}>
               {profileError && <div style={{fontSize:'.52rem',color:'var(--red)'}}>{profileError}</div>}
-              {profileSaved && <div style={{display:'flex',alignItems:'center',gap:6,fontSize:'.54rem',color:'var(--green)'}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>Changes saved</div>}
+              {profileSaved && <div style={{display:'flex',alignItems:'center',gap:6,fontSize:'.54rem',color:'var(--green)'}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>{t('account.saved','Changes saved')}</div>}
               <button type="button" onClick={handleSaveProfile} disabled={profileSaving} style={{height:36,padding:'0 20px',borderRadius:10,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.6rem',fontWeight:500,cursor:'pointer',boxShadow:'0 2px 10px rgba(155,58,86,.28)',opacity:profileSaving?.6:1}}>
-                {profileSaving?'Saving…':'Save changes'}
+                {profileSaving?t('account.saving','Saving…'):t('account.saveChanges','Save changes')}
               </button>
             </div>
           </div>
           <div className="card" style={{borderColor:'rgba(185,40,20,.15)'}}>
-            <div className="sh" style={{marginBottom:12}}><div className="sh-title" style={{color:'var(--red)'}}>Danger Zone</div></div>
+            <div className="sh" style={{marginBottom:12}}><div className="sh-title" style={{color:'var(--red)'}}>{t('account.dangerZone','Danger Zone')}</div></div>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:14}}>
               <div>
-                <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:3}}>Delete account</div>
-                <div style={{fontSize:'.5rem',fontWeight:300,color:'var(--ink-3)'}}>Permanently removes your account and all children's health records. This cannot be undone.</div>
+                <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:3}}>{t('account.deleteAccount','Delete account')}</div>
+                <div style={{fontSize:'.5rem',fontWeight:300,color:'var(--ink-3)'}}>{t('account.deleteAccountSub','Permanently removes your account and all health records.')}</div>
               </div>
-              <button type="button" style={{height:34,padding:'0 14px',borderRadius:9,flexShrink:0,background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.25)',color:'var(--red)',fontSize:'.56rem',fontWeight:500,cursor:'pointer',transition:'all .15s',whiteSpace:'nowrap'}} onClick={()=>setDeleteStep(1)}>Delete account</button>
+              <button type="button" style={{height:34,padding:'0 14px',borderRadius:9,flexShrink:0,background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.25)',color:'var(--red)',fontSize:'.56rem',fontWeight:500,cursor:'pointer',transition:'all .15s',whiteSpace:'nowrap'}} onClick={()=>setDeleteStep(1)}>{t('account.deleteAccount','Delete account')}</button>
             </div>
           </div>
         </div>
@@ -404,25 +406,25 @@ useEffect(() => {
       {tab==='security' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
           <div className="card">
-            <div className="sh" style={{marginBottom:14}}><div className="sh-title">Change Password</div></div>
-            {[{label:'Current password',k:'current',ac:'current-password'},{label:'New password',k:'next',ac:'new-password'},{label:'Confirm new password',k:'confirm',ac:'new-password'}].map(f=>(
+            <div className="sh" style={{marginBottom:14}}><div className="sh-title">{t('account.changePassword','Change Password')}</div></div>
+            {[{label:t('account.currentPassword','Current password'),k:'current',ac:'current-password'},{label:t('account.newPassword','New password'),k:'next',ac:'new-password'},{label:t('account.confirmPassword','Confirm new password'),k:'confirm',ac:'new-password'}].map(f=>(
               <div key={f.k} style={{marginBottom:12}}>
                 <div style={{fontSize:'.5rem',fontWeight:600,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:5}}>{f.label}</div>
                 <input className="fi" type="password" autoComplete={f.ac} value={pwd[f.k]} onChange={e=>setPwd(p=>({...p,[f.k]:e.target.value}))} style={{width:'100%',boxSizing:'border-box'}} placeholder="••••••••"/>
               </div>
             ))}
-            {pwd.next&&pwd.confirm&&pwd.next!==pwd.confirm&&<div style={{fontSize:'.52rem',color:'var(--red)',marginBottom:8}}>Passwords do not match.</div>}
+            {pwd.next&&pwd.confirm&&pwd.next!==pwd.confirm&&<div style={{fontSize:'.52rem',color:'var(--red)',marginBottom:8}}>{t('account.passwordMismatch','Passwords do not match.')}</div>}
             {pwdError&&<div style={{fontSize:'.52rem',color:'var(--red)',marginBottom:8}}>{pwdError}</div>}
             {pwdMsg&&<div style={{fontSize:'.52rem',color:'var(--green)',marginBottom:8}}>{pwdMsg}</div>}
             <div style={{display:'flex',justifyContent:'flex-end',marginTop:4}}>
               <button type="button" onClick={handleChangePassword} disabled={pwdSaving||!pwd.current||!pwd.next||pwd.next!==pwd.confirm}
                 style={{height:36,padding:'0 20px',borderRadius:10,border:'none',fontSize:'.6rem',fontWeight:500,cursor:'pointer',transition:'all .2s',opacity:pwdSaving?.6:1,background:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'var(--rose)':'var(--cream-2)',color:pwd.current&&pwd.next&&pwd.next===pwd.confirm?'#fff':'var(--ink-3)'}}>
-                {pwdSaving?'Updating…':'Update password'}
+                {pwdSaving?t('account.updating','Updating…'):t('account.updatePassword','Update password')}
               </button>
             </div>
           </div>
           <div className="card">
-            <div className="sh" style={{marginBottom:14}}><div className="sh-title">Two-Factor Authentication</div></div>
+            <div className="sh" style={{marginBottom:14}}><div className="sh-title">{t('account.twoFA','Two-Factor Authentication')}</div></div>
             <ToggleSwitch on={twoFA} onChange={async()=>{
               if(!twoFA){
                 setTfaError(''); setTfaCode('');
@@ -436,7 +438,7 @@ useEffect(() => {
               } else {
                 try { await disable2FA(); setTwoFA(false); setShow2FA(false); setQrCode(''); } catch(e){ setTfaError(e.message||'Failed to disable 2FA'); }
               }
-            }} label="Enable 2FA" sub={twoFA?'2FA is active — your account is protected':'Secure your account with an authenticator app (TOTP)'}/>
+            }} label={t('account.enable2FA','Enable 2FA')} sub={twoFA?t('account.twoFAActive','2FA is active'):t('account.twoFADisabled','Secure your account with TOTP')}/>
             {tfaError&&<div style={{fontSize:'.52rem',color:'var(--red)',marginTop:8}}>{tfaError}</div>}
             {show2FA&&!twoFA&&qrCode&&(
               <div style={{marginTop:14,padding:'14px',background:'var(--cream-2)',borderRadius:12,border:'1px solid var(--line2)'}}>
@@ -462,13 +464,13 @@ useEffect(() => {
             )}
             {twoFA&&<div style={{marginTop:10,padding:'10px 12px',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:10,display:'flex',alignItems:'center',gap:8}}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-              <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>2FA is enabled — toggle off to disable</span>
+              <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>{t('account.twoFAEnabled','2FA is enabled — toggle off to disable')}</span>
             </div>}
           </div>
           <div className="card">
-            <div className="sh" style={{marginBottom:12}}><div className="sh-title">Active Sessions</div></div>
-            {sessionsLoading?<div style={{fontSize:'.56rem',color:'var(--ink-3)',padding:'12px 0'}}>Loading sessions…</div>
-            :sessions.length===0?<div style={{fontSize:'.56rem',color:'var(--ink-3)',padding:'12px 0'}}>No active sessions found.</div>
+            <div className="sh" style={{marginBottom:12}}><div className="sh-title">{t('account.activeSessions','Active Sessions')}</div></div>
+            {sessionsLoading?<div style={{fontSize:'.56rem',color:'var(--ink-3)',padding:'12px 0'}}>{t('account.loadingSessions','Loading sessions…')}</div>
+            :sessions.length===0?<div style={{fontSize:'.56rem',color:'var(--ink-3)',padding:'12px 0'}}>{t('account.noSessions','No active sessions found.')}</div>
             :sessions.map((s,i)=>(
               <div key={s.id||i} style={{display:'flex',alignItems:'center',gap:12,padding:'11px 0',borderBottom:i<sessions.length-1?'1px solid var(--line2)':'none'}}>
                 <div style={{width:36,height:36,borderRadius:10,background:'var(--cream-2)',border:'1px solid var(--line2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1rem',flexShrink:0}}>
@@ -480,11 +482,11 @@ useEffect(() => {
 </div>
                   <div style={{fontSize:'.48rem',color:'var(--ink-3)'}}>Created {fmtDate(s.createdAt)} · Expires {fmtDate(s.expiresAt)}</div>
                 </div>
-                <span style={{fontSize:'.44rem',fontWeight:600,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:20,padding:'2px 8px'}}>Active</span>
+                <span style={{fontSize:'.44rem',fontWeight:600,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:20,padding:'2px 8px'}}>{t('account.active','Active')}</span>
               </div>
             ))}
             <button type="button" onClick={handleRevokeAll} disabled={revokingAll} style={{marginTop:12,height:32,width:'100%',borderRadius:9,background:'var(--cream-2)',border:'1px solid var(--line2)',fontSize:'.56rem',color:'var(--ink-2)',cursor:'pointer',transition:'all .15s',opacity:revokingAll?.6:1}}>
-              {revokingAll?'Revoking…':'Sign out all other devices'}
+              {revokingAll?t('account.revoking','Revoking…'):t('account.signOutAll','Sign out all other devices')}
             </button>
           </div>
         </div>
@@ -494,13 +496,13 @@ useEffect(() => {
       {tab==='notifications' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
          <div className="card">
-            <div className="sh" style={{marginBottom:2}}><div className="sh-title">Delivery Channels</div></div>
-            <ToggleSwitch on={notifs.pushDelivery} onChange={()=>toggleNotif('pushDelivery')} label="Push notifications" sub="In-app and browser notifications"/>
-            <ToggleSwitch on={notifs.emailDelivery} onChange={()=>toggleNotif('emailDelivery')} label="Email notifications" sub={profile.email}/>
+            <div className="sh" style={{marginBottom:2}}><div className="sh-title">{t('account.deliveryChannels','Delivery Channels')}</div></div>
+            <ToggleSwitch on={notifs.pushDelivery} onChange={()=>toggleNotif('pushDelivery')} label={t('account.pushNotifs','Push notifications')} sub={t('account.pushSub','In-app and browser notifications')}/>
+            <ToggleSwitch on={notifs.emailDelivery} onChange={()=>toggleNotif('emailDelivery')} label={t('account.emailNotifs','Email notifications')} sub={profile.email}/>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 0',borderBottom:'1px solid var(--line2)'}}>
               <div>
-                <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>SMS notifications</div>
-                <div style={{fontSize:'.5rem',fontWeight:300,color:'var(--ink-3)'}}>{profile.phone||'No phone number set'}</div>
+                <div style={{fontSize:'.64rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{t('account.smsNotifs','SMS notifications')}</div>
+                <div style={{fontSize:'.5rem',fontWeight:300,color:'var(--ink-3)'}}>{profile.phone||t('account.noPhone','No phone number set')}</div>
               </div>
               <button type="button" onClick={async()=>{
                 try {
@@ -514,16 +516,16 @@ useEffect(() => {
             </div>
           </div>
           <div className="card">
-            <div className="sh" style={{marginBottom:2}}><div className="sh-title">Health Reminders</div></div>
-            <ToggleSwitch on={notifs.vaccineReminder} onChange={()=>toggleNotif('vaccineReminder')} label="Vaccine reminders" sub="Alerts when doses are due or overdue"/>
-            <ToggleSwitch on={notifs.apptReminder} onChange={()=>toggleNotif('apptReminder')} label="Appointment reminders" sub="24 hours and 1 hour before each visit"/>
-            <ToggleSwitch on={notifs.medReminder} onChange={()=>toggleNotif('medReminder')} label="Medication reminders" sub="Daily reminders for active medications"/>
-            <ToggleSwitch on={notifs.growthAlert} onChange={()=>toggleNotif('growthAlert')} label="Growth milestone alerts" sub="When your child reaches a new milestone"/>
+            <div className="sh" style={{marginBottom:2}}><div className="sh-title">{t('account.healthReminders','Health Reminders')}</div></div>
+            <ToggleSwitch on={notifs.vaccineReminder} onChange={()=>toggleNotif('vaccineReminder')} label={t('account.vaccineReminder','Vaccine reminders')} sub={t('account.vaccineReminderSub','Alerts when doses are due or overdue')}/>
+            <ToggleSwitch on={notifs.apptReminder} onChange={()=>toggleNotif('apptReminder')} label={t('account.apptReminder','Appointment reminders')} sub={t('account.apptReminderSub','24 hours and 1 hour before each visit')}/>
+            <ToggleSwitch on={notifs.medReminder} onChange={()=>toggleNotif('medReminder')} label={t('account.medReminder','Medication reminders')} sub={t('account.medReminderSub','Daily reminders for active medications')}/>
+            <ToggleSwitch on={notifs.growthAlert} onChange={()=>toggleNotif('growthAlert')} label={t('account.growthAlert','Growth milestone alerts')} sub={t('account.growthAlertSub','When your child reaches a new milestone')}/>
           </div>
           <div className="card">
-            <div className="sh" style={{marginBottom:2}}><div className="sh-title">Reports & Updates</div></div>
-            <ToggleSwitch on={notifs.weeklySummary} onChange={()=>toggleNotif('weeklySummary')} label="Weekly health summary" sub="Every Sunday — overview of the past week"/>
-            <ToggleSwitch on={notifs.appUpdates} onChange={()=>toggleNotif('appUpdates')} label="App updates & tips" sub="New features and paediatric health tips"/>
+            <div className="sh" style={{marginBottom:2}}><div className="sh-title">{t('account.reportsUpdates','Reports & Updates')}</div></div>
+            <ToggleSwitch on={notifs.weeklySummary} onChange={()=>toggleNotif('weeklySummary')} label={t('account.weeklySummary','Weekly health summary')} sub={t('account.weeklySummarySub','Every Sunday — overview of the past week')}/>
+            <ToggleSwitch on={notifs.appUpdates} onChange={()=>toggleNotif('appUpdates')} label={t('account.appUpdates','App updates & tips')} sub={t('account.appUpdatesSub','New features and paediatric health tips')}/>
           </div>
         </div>
       )}
@@ -534,9 +536,9 @@ useEffect(() => {
           <div className="card" style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.06),rgba(255,255,255,.9))':'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.9))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`}}>
             <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12,marginBottom:16}}>
               <div>
-                <div style={{fontSize:'.48rem',fontWeight:600,letterSpacing:'.2em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:4}}>Current plan</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.5rem',color:'var(--ink)',lineHeight:1,marginBottom:6}}>{isPremium?'Premium':'Free'}</div>
-                <div style={{fontSize:'.54rem',color:'var(--ink-3)'}}>{isPremium?'Unlimited children · 50 GB storage · All features':'Up to 2 children · 500 MB storage · Basic features'}</div>
+                <div style={{fontSize:'.48rem',fontWeight:600,letterSpacing:'.2em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:4}}>{t('account.currentPlan','Current plan')}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.5rem',color:'var(--ink)',lineHeight:1,marginBottom:6}}>{isPremium?t('account.premiumPlan','Premium'):t('account.freePlan','Free')}</div>
+                <div style={{fontSize:'.54rem',color:'var(--ink-3)'}}>{isPremium?t('account.premiumPlanSub','Unlimited children · 50 GB storage · All features'):t('account.freePlanSub','Up to 2 children · 500 MB storage · Basic features')}</div>
               </div>
               <span style={{fontSize:'.46rem',fontWeight:700,color:isPremium?'var(--green)':'var(--rose)',background:isPremium?'var(--green-bg)':'var(--rose-pale)',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'3px 10px',flexShrink:0}}>{isPremium?'✨ PREMIUM':'FREE'}</span>
             </div>
@@ -544,7 +546,7 @@ useEffect(() => {
               <>
                 <div style={{marginBottom:16}}>
                   <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
-                    <span style={{fontSize:'.5rem',color:'var(--ink-3)'}}>Storage used</span>
+                    <span style={{fontSize:'.5rem',color:'var(--ink-3)'}}>{t('account.storageUsed','Storage used')}</span>
                     <span style={{fontSize:'.5rem',fontWeight:500,color:'var(--ink)'}}>12.4 MB of 500 MB</span>
                   </div>
                   <div style={{height:6,borderRadius:3,background:'var(--line2)',overflow:'hidden'}}>
@@ -561,13 +563,13 @@ useEffect(() => {
             {isPremium && (
               <div style={{padding:'12px',background:'var(--green-bg)',borderRadius:10,border:'1px solid var(--green-lt)',display:'flex',alignItems:'center',gap:8}}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-                <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>All Premium features are active on your account.</span>
+                <span style={{fontSize:'.54rem',color:'var(--green)',fontWeight:500}}>{t('account.allPremiumActive','All Premium features are active.')}</span>
               </div>
             )}
           </div>
           {!isPremium && (
             <div className="card">
-              <div className="sh" style={{marginBottom:14}}><div className="sh-title">Free vs Premium</div></div>
+              <div className="sh" style={{marginBottom:14}}><div className="sh-title">{t('account.freeVsPremium','Free vs Premium')}</div></div>
               {[
                 {feature:'Children profiles',free:'Up to 2',premium:'Unlimited'},
                 {feature:'Storage',free:'500 MB',premium:'10 GB'},
@@ -591,7 +593,7 @@ useEffect(() => {
             </div>
           )}
           <div className="card">
-            <div className="sh" style={{marginBottom:12}}><div className="sh-title">Billing Information</div></div>
+            <div className="sh" style={{marginBottom:12}}><div className="sh-title">{t('account.billingInfo','Billing Information')}</div></div>
             {billing && billing.status !== 'none' ? (
               <div style={{display:'flex',flexDirection:'column',gap:10}}>
                 <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'1px solid var(--line2)'}}>
@@ -621,7 +623,7 @@ useEffect(() => {
                     } catch(e){ alert('Failed to cancel: '+e.message); }
                     finally { setCancelling(false); }
                   }} disabled={cancelling} style={{height:34,padding:'0 16px',borderRadius:9,background:'var(--red-bg)',border:'1px solid rgba(185,40,20,.2)',color:'var(--red)',fontSize:'.56rem',fontWeight:500,cursor:'pointer',alignSelf:'flex-start',opacity:cancelling?.6:1}}>
-                    {cancelling?'Cancelling…':'Cancel subscription'}
+                    {cancelling?t('account.cancelling','Cancelling…'):t('account.cancelSubscription','Cancel subscription')}
                   </button>
                 ) : (
                   <div style={{fontSize:'.52rem',color:'var(--amber)',padding:'8px 12px',background:'var(--amber-bg)',borderRadius:9,border:'1px solid var(--amber-lt)'}}>
