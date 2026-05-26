@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
 import { FAQ_ITEMS, EMERGENCY_NUMBERS, HELP_TOPICS } from '../../../data/supportData';
 import XBtn from '../ui/XBtn';
@@ -216,7 +217,7 @@ function TopicModal({topic, onClose}) {
                 <div style={{padding:'12px 14px',background:`${topic.color}08`,border:`1px solid ${topic.color}20`,borderRadius:10,display:'flex',gap:10,alignItems:'flex-start'}}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={topic.color} strokeWidth="1.8" strokeLinecap="round" style={{flexShrink:0,marginTop:2}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                   <div>
-                    <div style={{fontSize:'.52rem',fontWeight:600,color:topic.color,marginBottom:2}}>{t('support.stillQuestions','Still have questions?')}</div>
+                    <div style={{fontSize:'.52rem',fontWeight:600,color:topic.color,marginBottom:2}}>{t('support.stillQuestions','{t('support.stillQuestions','Still have questions?')}')}</div>
                     <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>Email us at <strong style={{color:'var(--ink)'}}>support@pedivault.de</strong> or use the Send Feedback form below.</div>
                   </div>
                 </div>
@@ -257,7 +258,7 @@ function TopicModal({topic, onClose}) {
 
         <div style={{padding:'12px 24px',borderTop:'1px solid var(--line2)',display:'flex',gap:10}}>
           {activeArticle
-            ? <button type="button" className="fb fb-p" style={{flex:1}} onClick={()=>setActiveArticle(null)}>{t('support.backToList','← Back to list')}</button>
+            ? <button type="button" className="fb fb-p" style={{flex:1}} onClick={()=>setActiveArticle(null)}>{t('support.backToList','{t('support.backToList','← Back to list')}')}</button>
             : <>
                 <button type="button" className="fb fb-g" style={{flex:1}} onClick={()=>{onClose();setSearch('');}}>Close</button>
                 <button type="button" style={{flex:1,height:38,background:topic.color,color:'#fff',border:'none',borderRadius:10,fontSize:'.6rem',fontWeight:500,cursor:'pointer',transition:'opacity .15s'}}
@@ -303,7 +304,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
         <div style={{position:'absolute',top:-30,right:-30,width:160,height:160,borderRadius:'50%',background:'radial-gradient(ellipse,var(--rose-lt) 0%,transparent 70%)',opacity:.5,pointerEvents:'none'}}/>
         <div style={{position:'relative',zIndex:1}}>
           <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',fontWeight:300,color:'var(--ink)',marginBottom:6}}>{t('support.title','How can we ')} <em style={{color:'var(--rose)',fontStyle:'italic'}}>{t('support.title','help?')}</em></div>
-          <div style={{fontSize:'.58rem',fontWeight:300,color:'var(--ink-3)',marginBottom:18}}>{t('support.subtitle','Search articles, browse FAQs, or reach our support team')}</div>
+          <div style={{fontSize:'.58rem',fontWeight:300,color:'var(--ink-3)',marginBottom:18}}>{t('support.subtitle','{t('support.subtitle','Search articles, browse FAQs, or reach our support team')}')}</div>
           <div style={{position:'relative',maxWidth:520}}>
             <svg style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)'}} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('support.searchPlaceholder','Search help articles…')}
@@ -401,7 +402,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
                 <div style={{padding:'0 17px 14px 59px',fontSize:'.57rem',fontWeight:300,color:'var(--ink-2)',lineHeight:1.75}}>
                   {item.a}
                   <div style={{marginTop:10,display:'flex',alignItems:'center',gap:7}}>
-                    <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{t('support.wasHelpful','Was this helpful?')}</span>
+                    <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{t('support.wasHelpful','{t('support.wasHelpful','Was this helpful?')}')}</span>
                     {[t('common.yes','Yes'), t('common.no','No')].map((lbl,j)=>(
                       <button key={j} type="button" style={{display:'flex',alignItems:'center',gap:4,height:22,padding:'0 9px',borderRadius:20,border:'1px solid var(--line2)',background:'var(--cream-2)',cursor:'pointer',fontSize:'.46rem',color:'var(--ink-3)',transition:'all .15s',justifyContent:'center',lineHeight:1}} onMouseEnter={e=>{e.currentTarget.style.background='var(--rose-pale)';e.currentTarget.style.borderColor='var(--rose-lt)';e.currentTarget.style.color='var(--rose)'}} onMouseLeave={e=>{e.currentTarget.style.background='var(--cream-2)';e.currentTarget.style.borderColor='var(--line2)';e.currentTarget.style.color='var(--ink-3)'}}>{lbl}</button>
                     ))}
@@ -476,8 +477,8 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             <div style={{width:52,height:52,borderRadius:16,background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:'1px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px'}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
             </div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'.95rem',color:'var(--ink)',marginBottom:6}}>{t('support.thankYou','Thank you! 🌸')}</div>
-            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)'}}>{t('support.thankYouSub','Your feedback helps us improve PediVault.')}</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'.95rem',color:'var(--ink)',marginBottom:6}}>{t('support.thankYou','{t('support.thankYou','Thank you! 🌸')}')}</div>
+            <div style={{fontSize:'.54rem',fontWeight:300,color:'var(--ink-3)'}}>{t('support.thankYouSub','{t('support.thankYouSub','Your feedback helps us improve PediVault.')}')}</div>
             <button type="button" onClick={()=>{setSubmitted(false);setFeedback({type:'Bug',message:'',rating:0});}} style={{marginTop:14,height:30,padding:'0 16px',borderRadius:9,background:'var(--cream-2)',border:'1px solid var(--line2)',fontSize:'.54rem',color:'var(--ink-2)',cursor:'pointer'}}>{t('support.sendAnother','Send another')}</button>
           </div>
         ) : (
@@ -505,7 +506,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
               <textarea value={feedback.message} onChange={e=>setFeedback(f=>({...f,message:e.target.value}))} placeholder={t('support.feedbackPlaceholder','Tell us what\'s working well...')} rows={4} style={{width:'100%',border:'1.5px solid var(--line2)',borderRadius:10,padding:'10px 12px',fontFamily:"'DM Sans',sans-serif",fontSize:'.6rem',color:'var(--ink)',resize:'vertical',outline:'none',background:'var(--cream-2)',boxSizing:'border-box',lineHeight:1.55,transition:'border-color .2s'}} onFocus={e=>e.target.style.borderColor='var(--rose)'} onBlur={e=>e.target.style.borderColor='var(--line2)'}/>
             </div>
             <button type="button" onClick={submitFeedback} disabled={!feedback.message.trim()||submitting} style={{height:38,borderRadius:10,border:'none',cursor:feedback.message.trim()&&!submitting?'pointer':'default',background:feedback.message.trim()?'var(--rose)':'var(--cream-2)',color:feedback.message.trim()?'#fff':'var(--ink-3)',fontSize:'.6rem',fontWeight:500,display:'flex',alignItems:'center',justifyContent:'center',gap:7,boxShadow:feedback.message.trim()?'0 2px 10px rgba(155,58,86,.28)':'none',transition:'all .2s',lineHeight:1}}>
-              {submitting?<><div style={{width:13,height:13,borderRadius:'50%',border:'2px solid rgba(255,255,255,.3)',borderTopColor:'#fff',animation:'pvSpin .7s linear infinite'}}/> {t('support.sending','Sending…')}</>:<><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg> {t('support.sendButton','Send feedback')}</>}
+              {submitting?<><div style={{width:13,height:13,borderRadius:'50%',border:'2px solid rgba(255,255,255,.3)',borderTopColor:'#fff',animation:'pvSpin .7s linear infinite'}}/> {t('support.sending','{t('support.sending','Sending…')}')}</>:<><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg> {t('support.sendButton','{t('support.sendButton','Send feedback')}')}</>}
             </button>
           </div>
         )}
