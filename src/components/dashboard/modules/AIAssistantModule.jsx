@@ -147,7 +147,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
           {/* Welcome state */}
           {messages.length === 0 && (
             <>
-              <div style={{ background:'linear-gradient(135deg,var(--rose-pale),rgba(253,250,248,.8))', border:'1px solid var(--rose-lt)', borderRadius:16, padding:'20px 22px', marginBottom:22, textAlign:'center' }}>
+              <div style={{ background:'linear-gradient(135deg,var(--rose-pale))', border:'1px solid var(--rose-lt)', borderRadius:16, padding:'20px 22px', marginBottom:22, textAlign:'center' }}>
                 <div style={{ width:52, height:52, borderRadius:15, background:'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))', border:'1px solid var(--rose-lt)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 14px' }}>
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.7" strokeLinecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5V11h-4V9.5A4 4 0 0112 2z"/><rect x="8" y="11" width="8" height="5" rx="1"/><path d="M10 16v3M14 16v3M7 19h10"/></svg>
                 </div>

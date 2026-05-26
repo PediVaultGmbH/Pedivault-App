@@ -118,7 +118,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                     </div>
                   </div>
                   {med.notes && (
-                    <div style={{ marginTop:9, padding:'8px 11px', background:'rgba(255,255,255,.7)', borderRadius:8, border:'1px solid var(--line2)' }}>
+                    <div style={{ marginTop:9, padding:'8px 11px', background:'var(--white)', borderRadius:8, border:'1px solid var(--line2)' }}>
                       <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.6 }}>
                         <strong style={{ fontWeight:500, color:'var(--ink-2)' }}>{t('medications.instructions','Instructions')}: </strong>{med.notes}
                       </div>
@@ -250,7 +250,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       )}
 
       {/* Safety footer */}
-      <div className="card" style={{ marginTop:16, padding:'13px 18px', background:'linear-gradient(135deg,rgba(185,40,20,.04),rgba(253,250,248,.9))' }}>
+      <div className="card" style={{ marginTop:16, padding:'13px 18px', background:'linear-gradient(135deg,rgba(185,40,20,.04))' }}>
         <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
           <div style={{ width:32, height:32, borderRadius:9, background:'var(--red-bg)', border:'1px solid rgba(185,40,20,.18)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>

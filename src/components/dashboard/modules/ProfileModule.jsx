@@ -240,7 +240,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
               </div>
             </div>
 
-            <div className="card" style={{ background:'linear-gradient(135deg,var(--blue-bg),rgba(253,250,248,.8))' }}>
+            <div className="card" style={{ background:'linear-gradient(135deg,var(--blue-bg))' }}>
               <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
                 <div style={{ width:32, height:32, borderRadius:9, background:'var(--blue-bg)', border:'1px solid var(--blue-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>

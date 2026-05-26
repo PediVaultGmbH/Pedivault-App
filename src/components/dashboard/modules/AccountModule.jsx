@@ -314,7 +314,7 @@ useEffect(() => {
       </Modal>
 
       {/* HERO */}
-      <div style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.08),rgba(255,255,255,.9))':'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.8))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'24px',marginBottom:22,display:'flex',alignItems:'center',gap:18,position:'relative',overflow:'hidden'}}>
+      <div style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.08))':'linear-gradient(135deg,var(--rose-pale))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,borderRadius:20,padding:'24px',marginBottom:22,display:'flex',alignItems:'center',gap:18,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',right:-30,top:-30,width:120,height:120,borderRadius:'50%',background:isPremium?'var(--green-lt)':'var(--rose-lt)',opacity:.3,pointerEvents:'none'}}/>
         <div style={{width:70,height:70,borderRadius:20,flexShrink:0,background:isPremium?'linear-gradient(135deg,var(--green-bg),var(--green-lt))':'linear-gradient(135deg,var(--rose-pale),var(--rose-lt))',border:`2px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Playfair Display',serif",fontSize:'1.8rem',color:isPremium?'var(--green)':'var(--rose)',boxShadow:`0 4px 20px ${isPremium?'rgba(42,158,98,.2)':'rgba(155,58,86,.2)'}`,position:'relative',zIndex:1}}>
           {(profile.firstName||userName||'L')[0]}
@@ -533,7 +533,7 @@ useEffect(() => {
       {/* PLAN TAB */}
       {tab==='plan' && (
         <div style={{display:'flex',flexDirection:'column',gap:14}}>
-          <div className="card" style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.06),rgba(255,255,255,.9))':'linear-gradient(135deg,var(--rose-pale),rgba(255,255,255,.9))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`}}>
+          <div className="card" style={{background:isPremium?'linear-gradient(135deg,rgba(42,158,98,.06))':'linear-gradient(135deg,var(--rose-pale))',border:`1.5px solid ${isPremium?'var(--green-lt)':'var(--rose-lt)'}`}}>
             <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12,marginBottom:16}}>
               <div>
                 <div style={{fontSize:'.48rem',fontWeight:600,letterSpacing:'.2em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:4}}>{t('account.currentPlan','Current plan')}</div>

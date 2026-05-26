@@ -132,7 +132,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
         return (
           <div style={{
             display:'flex',alignItems:'center',gap:14,
-            background:`linear-gradient(135deg,${cfg.bg},rgba(253,250,248,.9))`,
+            background:`linear-gradient(135deg,${cfg.bg})`,
             border:`1.5px solid ${cfg.border}`,borderLeft:`3px solid ${cfg.color}`,
             borderRadius:14,padding:'14px 18px',marginBottom:20,
           }}>
@@ -303,7 +303,7 @@ export function AppointmentsModule({activeChild, showModal, newBookings=[], onCa
       )}
 
       {/* ── TIPS FOOTER ── */}
-      <div className="card" style={{marginTop:16,padding:'13px 18px',background:'linear-gradient(135deg,var(--blue-bg),rgba(253,250,248,.8))'}}>
+      <div className="card" style={{marginTop:16,padding:'13px 18px',background:'linear-gradient(135deg,var(--blue-bg))'}}>
         <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
           <div style={{width:32,height:32,borderRadius:9,background:'var(--blue-bg)',border:'1px solid var(--blue-lt)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>

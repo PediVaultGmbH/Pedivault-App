@@ -338,7 +338,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       <TopicModal topic={activeTopic} onClose={()=>setActiveTopic(null)}/>
 
       {/* ── HERO ── */}
-      <div style={{background:'linear-gradient(135deg,var(--rose-pale),var(--jc,#FFF5EC),var(--cream-2))',border:'1px solid var(--rose-lt)',borderRadius:20,padding:'28px 28px 24px',marginBottom:20,position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,var(--rose-pale),var(--cream-2))',border:'1px solid var(--rose-lt)',borderRadius:20,padding:'28px 28px 24px',marginBottom:20,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:160,height:160,borderRadius:'50%',background:'radial-gradient(ellipse,var(--rose-lt) 0%,transparent 70%)',opacity:.5,pointerEvents:'none'}}/>
         <div style={{position:'relative',zIndex:1}}>
           <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',fontWeight:300,color:'var(--ink)',marginBottom:6}}>{t('support.title','How can we help?').split(' ').slice(0,-1).join(' ')} <em style={{color:'var(--rose)',fontStyle:'italic'}}>{t('support.title','help?').split(' ').slice(-1)[0]}</em></div>
@@ -346,7 +346,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
           <div style={{position:'relative',maxWidth:520}}>
             <svg style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)'}} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('support.searchPlaceholder','Search help articles…')}
-              style={{width:'100%',height:42,padding:'0 36px 0 38px',borderRadius:50,border:'1.5px solid var(--line2)',background:'rgba(255,255,255,.9)',fontFamily:"'DM Sans',sans-serif",fontSize:'.66rem',color:'var(--ink)',outline:'none',boxSizing:'border-box',transition:'border-color .2s,box-shadow .2s'}}
+              style={{width:'100%',height:42,padding:'0 36px 0 38px',borderRadius:50,border:'1.5px solid var(--line2)',background:'var(--white)',fontFamily:"'DM Sans',sans-serif",fontSize:'.66rem',color:'var(--ink)',outline:'none',boxSizing:'border-box',transition:'border-color .2s,box-shadow .2s'}}
               onFocus={e=>{e.target.style.borderColor='var(--rose)';e.target.style.boxShadow='0 0 0 3px var(--rose-pale)'}}
               onBlur={e=>{e.target.style.borderColor='var(--line2)';e.target.style.boxShadow='none'}}/>
             {search&&<button type="button" onClick={()=>setSearch('')} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)',fontSize:'1rem',lineHeight:1}}>×</button>}
@@ -551,7 +551,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       </div>
 
       {/* DSGVO footer */}
-      <div className="card" style={{background:'linear-gradient(135deg,var(--cream-2),rgba(253,250,248,.8))'}}>
+      <div className="card" style={{background:'linear-gradient(135deg,var(--cream-2))'}}>
         <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
           <div style={{width:32,height:32,borderRadius:9,background:'var(--rose-pale)',border:'1px solid var(--rose-lt)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>

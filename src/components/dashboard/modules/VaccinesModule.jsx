@@ -441,7 +441,7 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
       </div>
 
       {/* STIKO info footer */}
-      <div className="card" style={{ marginTop:16, padding:'14px 18px', background:'linear-gradient(135deg,var(--rose-pale),rgba(253,250,248,.8))' }}>
+      <div className="card" style={{ marginTop:16, padding:'14px 18px', background:'linear-gradient(135deg,var(--rose-pale))' }}>
         <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
           <div style={{ width:32, height:32, borderRadius:9, background:'var(--rose-pale)', border:'1px solid var(--rose-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
