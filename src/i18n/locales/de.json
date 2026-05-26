@@ -158,7 +158,12 @@
       "quote": "PediVault hat die Navigation im Impfpass mühelos gemacht — in unserer Sprache, mit Erinnerungen vor jedem Termin.",
       "quoteRole": "Mutter von 2 · Berlin",
       "badge": "Daten auf EU-Servern gespeichert · Frankfurt"
-    }
+    },
+    "signOutTitle": "Von PediVault abmelden?",
+    "signOutSub": "Alle Gesundheitsdaten deines Kindes sind sicher verschlüsselt und warten auf dich.",
+    "seeYouSoon": "Bis bald",
+    "staySignedIn": "Angemeldet bleiben",
+    "signOut": "Abmelden"
   },
   "home": {
     "welcome": "Willkommen zurück",

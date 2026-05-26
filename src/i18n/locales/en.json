@@ -158,7 +158,12 @@
       "quote": "PediVault made navigating the Impfpass effortless — in our language, with reminders before every appointment.",
       "quoteRole": "Mother of 2 · Berlin",
       "badge": "Data stored on EU servers · Frankfurt"
-    }
+    },
+    "signOutTitle": "Sign out of PediVault?",
+    "signOutSub": "All your child's health records are safely encrypted and will be waiting when you come back.",
+    "seeYouSoon": "See you soon",
+    "staySignedIn": "Stay signed in",
+    "signOut": "Sign out"
   },
   "home": {
     "welcome": "Welcome back",
