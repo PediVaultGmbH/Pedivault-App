@@ -427,6 +427,10 @@
     "bug": "Fehler",
     "featureRequest": "Funktionswunsch",
     "question": "Frage",
-    "compliment": "Lob"
+    "compliment": "Lob",
+    "read": "Lesezeit",
+    "views": "Aufrufe",
+    "stillQuestionsSub": "Schreib uns an",
+    "stillQuestionsSub2": "oder nutze das Feedback-Formular unten."
   }
 }

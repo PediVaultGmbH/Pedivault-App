@@ -216,9 +216,9 @@ function TopicModal({topic, onClose}) {
               <div style={{width:6,height:6,borderRadius:'50%',background:topic.color}}/>
               <span style={{fontSize:'.46rem',color:topic.color,fontWeight:600}}>{topic.label}</span>
               <span style={{color:'var(--line)',fontSize:'.5rem'}}>·</span>
-              <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{activeArticle.time} read</span>
+              <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{activeArticle.time} {t('support.read','read')}</span>
               <span style={{color:'var(--line)',fontSize:'.5rem'}}>·</span>
-              <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{activeArticle.views} views</span>
+              <span style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{activeArticle.views} {t('support.views','views')}</span>
             </div>
             {getContent(activeArticle.title) ? (
               <>
@@ -232,12 +232,12 @@ function TopicModal({topic, onClose}) {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={topic.color} strokeWidth="1.8" strokeLinecap="round" style={{flexShrink:0,marginTop:2}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                   <div>
                     <div style={{fontSize:'.52rem',fontWeight:600,color:topic.color,marginBottom:2}}>{t('support.stillQuestions','Still have questions?')}</div>
-                    <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>Email us at <strong style={{color:'var(--ink)'}}>support@pedivault.de</strong> or use the Send Feedback form below.</div>
+                    <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{t('support.stillQuestionsSub','Email us at')} <strong style={{color:'var(--ink)'}}>support@pedivault.de</strong> {t('support.stillQuestionsSub2','or use the Send Feedback form below.')}</div>
                   </div>
                 </div>
               </>
             ) : (
-              <div style={{textAlign:'center',padding:'24px 0',color:'var(--ink-3)',fontSize:'.6rem'}}>Content loading…</div>
+              <div style={{textAlign:'center',padding:'24px 0',color:'var(--ink-3)',fontSize:'.6rem'}}>{t('common.loading','Content loading…')}</div>
             )}
           </div>
         ) : (
@@ -260,7 +260,7 @@ function TopicModal({topic, onClose}) {
                   <div style={{width:24,height:24,borderRadius:8,background:`${topic.color}15`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'.52rem',fontWeight:600,color:topic.color}}>{a.n}</div>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:'.62rem',fontWeight:500,color:'var(--ink)',marginBottom:2}}>{titleT(a.title)}</div>
-                    <div style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{a.time} read · {a.views} views</div>
+                    <div style={{fontSize:'.46rem',color:'var(--ink-3)'}}>{a.time} {t('support.read','read')} · {a.views} {t('support.views','views')}</div>
                   </div>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={topic.color} strokeWidth="2.2" strokeLinecap="round"><path d="M9 18l6-6-6-6"/></svg>
                 </div>

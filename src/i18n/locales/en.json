@@ -358,6 +358,10 @@
     "faq_tag_vaccines": "Vaccines",
     "faq_tag_healthcare": "Healthcare",
     "faq_tag_ai": "AI",
-    "faq_tag_growth": "Growth"
+    "faq_tag_growth": "Growth",
+    "read": "read",
+    "views": "views",
+    "stillQuestionsSub": "Email us at",
+    "stillQuestionsSub2": "or use the Send Feedback form below."
   }
 }
