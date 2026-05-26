@@ -760,6 +760,18 @@
     "healthSummaryReport": "Gesundheitsbericht",
     "generated": "Erstellt",
     "selfRecorded": "Selbst eingetragen",
-    "addedToVault": "wurde zu deinem Vault hinzugefügt ✓"
+    "addedToVault": "wurde zu deinem Vault hinzugefügt ✓",
+    "errSelectDate": "Bitte Datum auswählen",
+    "errWeightRequired": "Gewicht ist erforderlich",
+    "errDocName": "Bitte Dokumentname eingeben",
+    "errChildName": "Bitte Namen des Kindes eingeben",
+    "errDOB": "Bitte Geburtsdatum eingeben",
+    "errSelectVaccine": "Bitte Impfstoff auswählen",
+    "errSelectDateGiven": "Bitte Impfdatum auswählen",
+    "errDoctor": "Bitte Arzt oder Klinik eingeben",
+    "errSelectDateAppt": "Bitte Datum auswählen",
+    "errSelectTime": "Bitte Uhrzeit auswählen",
+    "errMedName": "Bitte Medikamentenname eingeben",
+    "errDosage": "Bitte Dosierung eingeben"
   }
 }

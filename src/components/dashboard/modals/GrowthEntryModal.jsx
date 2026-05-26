@@ -13,8 +13,8 @@ export function GrowthEntryModal({open,onClose,onSuccess}) {
   const [f,setF] = useState({date:'',weight:'',height:'',head:'',doctor:''});
   const [done,setDone] = useState(false);
   const {errors,validate,clearError} = useFormValidation({
-    date:{required:true,message:'Please select the date'},
-    weight:{required:true,message:'Weight is required'},
+    date:{required:true,message:t('modals.errSelectDate','Please select the date')},
+    weight:{required:true,message:t('modals.errWeightRequired','Weight is required')},
   });
   const {loading,run} = useLoading(1000);
   const set = k=>e=>{ setF(p=>({...p,[k]:e.target.value})); clearError(k); };

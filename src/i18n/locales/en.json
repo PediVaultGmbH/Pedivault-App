@@ -691,6 +691,18 @@
     "healthSummaryReport": "Health Summary Report",
     "generated": "Generated",
     "selfRecorded": "Self-recorded",
-    "addedToVault": "has been added to your vault ✓"
+    "addedToVault": "has been added to your vault ✓",
+    "errSelectDate": "Please select the date",
+    "errWeightRequired": "Weight is required",
+    "errDocName": "Please enter a document name",
+    "errChildName": "Please enter the child's name",
+    "errDOB": "Please enter date of birth",
+    "errSelectVaccine": "Please select a vaccine",
+    "errSelectDateGiven": "Please select the date given",
+    "errDoctor": "Please enter doctor or clinic name",
+    "errSelectDateAppt": "Please select a date",
+    "errSelectTime": "Please select a time slot",
+    "errMedName": "Please enter the medication name",
+    "errDosage": "Please enter the dosage"
   }
 }

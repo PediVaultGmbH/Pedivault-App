@@ -13,8 +13,8 @@ export function AddMedicationModal({open,onClose,onSuccess}) {
   const [f,setF] = useState(empty);
   const [done,setDone] = useState(false);
   const {errors,validate,clearError} = useFormValidation({
-    name:   {required:true, message:'Please enter the medication name'},
-    dosage: {required:true, message:'Please enter the dosage'},
+    name:   {required:true, message:t('modals.errMedName','Please enter the medication name')},
+    dosage: {required:true, message:t('modals.errDosage','Please enter the dosage')},
   });
   const {loading,run} = useLoading(1000);
   const set = k=>e=>{ setF(p=>({...p,[k]:e.target.value})); clearError(k); };

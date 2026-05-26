@@ -14,8 +14,8 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
   const [f, setF]     = useState(empty);
   const [done, setDone] = useState(false);
   const {errors, validate, clearError} = useFormValidation({
-    name: {required:true, message:'Please enter the child\'s name'},
-    dob:  {required:true, message:'Please enter date of birth'},
+    name: {required:true, message:t('modals.errChildName',"Please enter the child's name")},
+    dob:  {required:true, message:t('modals.errDOB','Please enter date of birth')},
   });
   const {loading, run} = useLoading(1100);
   const set = k => e => { setF(p => ({...p, [k]: e.target.value})); clearError(k); };

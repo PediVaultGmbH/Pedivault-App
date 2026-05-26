@@ -24,8 +24,8 @@ export function LogVaccineModal({open,onClose,onSuccess}) {
   const [f,setF] = useState({name:'',dose:'Dose 1',date:'',doctor:'',lot:'',site:'Left thigh'});
   const [done,setDone] = useState(false);
   const {errors,validate,clearError} = useFormValidation({
-    name:{required:true,message:'Please select a vaccine'},
-    date:{required:true,message:'Please select the date given'},
+    name:{required:true,message:t('modals.errSelectVaccine','Please select a vaccine')},
+    date:{required:true,message:t('modals.errSelectDateGiven','Please select the date given')},
   });
   const {loading,run} = useLoading(1000);
   const set = k=>e=>{ setF(p=>({...p,[k]:e.target.value})); clearError(k); };

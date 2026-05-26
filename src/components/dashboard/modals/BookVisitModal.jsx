@@ -14,9 +14,9 @@ export function BookVisitModal({open,onClose,onSuccess}) {
   const [f,setF] = useState({type:'Vaccination',doctor:'',date:'',time:'',notes:''});
   const [done, setDone] = useState(false);
   const {errors,validate,clearError} = useFormValidation({
-    doctor:{required:true,message:'Please enter doctor or clinic name'},
-    date:{required:true,message:'Please select a date'},
-    time:{required:true,message:'Please select a time slot'},
+    doctor:{required:true,message:t('modals.errDoctor','Please enter doctor or clinic name')},
+    date:{required:true,message:t('modals.errSelectDateAppt','Please select a date')},
+    time:{required:true,message:t('modals.errSelectTime','Please select a time slot')},
   });
   const {loading,run} = useLoading(1200);
   const set = k=>e=>{ setF(p=>({...p,[k]:e.target.value})); clearError(k); };

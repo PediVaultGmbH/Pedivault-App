@@ -14,7 +14,7 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
   const [drag,setDrag] = useState(false);
   const [done,setDone] = useState(false);
   const {errors,validate,clearError} = useFormValidation({
-    name:{required:true,message:'Please enter a document name'},
+    name:{required:true,message:t('modals.errDocName','Please enter a document name')},
   });
   const {loading,run} = useLoading(1200);
   const set = k=>e=>{ setF(p=>({...p,[k]:e.target.value})); clearError(k); };
