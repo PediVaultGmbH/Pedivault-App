@@ -43,7 +43,8 @@
     "uploaded": "hochgeladen",
     "upcoming": "bevorstehend",
     "upToDate": "Alle Impfungen sind aktuell",
-    "tagline": "Kindergesundheitsakte"
+    "tagline": "Kindergesundheitsakte",
+    "hello": "Hallo"
   },
   "auth": {
     "welcomeBack": "Willkommen zurück",

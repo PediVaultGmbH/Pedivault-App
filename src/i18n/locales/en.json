@@ -43,7 +43,8 @@
     "uploaded": "uploaded",
     "upcoming": "upcoming",
     "upToDate": "All vaccines are up to date",
-    "tagline": "Child Health Records"
+    "tagline": "Child Health Records",
+    "hello": "Hello"
   },
   "auth": {
     "welcomeBack": "Welcome back",

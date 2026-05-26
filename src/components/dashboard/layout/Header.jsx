@@ -58,7 +58,7 @@ export function Header({
       {isHome
         ? <div className="pv-hdr-greeting">
             <div className="pv-hdr-hi">{greeting}</div>
-            <div className="pv-hdr-name">Hello, <em>{activeChildName}</em> 👋</div>
+            <div className="pv-hdr-name">{t('common.hello','Hello')}, <em>{activeChildName}</em> 👋</div>
           </div>
         : <div className="pv-hdr-title">{titles[active] || active}</div>
       }
