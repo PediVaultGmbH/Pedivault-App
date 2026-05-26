@@ -319,6 +319,15 @@
     "topicVaccines": "Vaccine Tracker",
     "topicAccount": "Account & Privacy",
     "topicAI": "AI Assistant",
-    "topicBilling": "Billing & Plans"
+    "topicBilling": "Billing & Plans",
+    "privacyPolicy": "Privacy Policy",
+    "termsLink": "Terms of Use",
+    "gdpr": "DSGVO / GDPR",
+    "faqLink": "FAQ",
+    "imprint": "Impressum",
+    "accountProfileSub": "Name, email, password, preferences",
+    "privacyDataSub": "DSGVO rights, data export, deletion",
+    "subscriptionSub": "Free plan · Upgrade to Premium €4.99/mo",
+    "termsSub": "Usage rules and medical disclaimer"
   }
 }

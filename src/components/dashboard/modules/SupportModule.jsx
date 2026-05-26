@@ -281,6 +281,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
     'records':  t('support.topicRecords','Health Records'),
     'vaccines': t('support.topicVaccines','Vaccine Tracker'),
     'account':  t('support.topicAccount','Account & Privacy'),
+    'privacy':  t('support.topicAccount','Account & Privacy'),
     'ai':       t('support.topicAI','AI Assistant'),
     'billing':  t('support.topicBilling','Billing & Plans'),
   }[id] || id);
@@ -348,7 +349,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
               {topic.icon}
             </div>
             <div style={{fontSize:'.66rem',fontWeight:600,color:'var(--ink)',marginBottom:3}}>{topicLabel(topic.id)}</div>
-            <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{topic.articles} articles</div>
+            <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{topic.articles} {t('support.articles','articles')}</div>
           </div>
         ))}
       </div>
@@ -447,10 +448,10 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       <div className="sh"><div className="sh-title">{t('support.appAccount','App & Account')}</div></div>
       <div style={{display:'flex',flexDirection:'column',gap:0,borderRadius:14,overflow:'hidden',boxShadow:'var(--shadow-card)',marginBottom:20}}>
         {[
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,   label:t('support.accountProfile','Account & Profile'), sub:'Name, email, password, preferences',       action:()=>onNav('account')},
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                             label:t('support.privacyData','Privacy & Data'), sub:'DSGVO rights, data export, deletion',        legalHash:'privacy'},
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('support.subscription','Subscription & Payments'), sub:'Free plan · Upgrade to Premium €4.99/mo', badge:'FREE'},
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, label:t('support.termsOfUse','Terms of Use'), sub:'Usage rules and medical disclaimer',        legalHash:'terms'},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,   label:t('support.accountProfile','Account & Profile'), sub:t('support.accountProfileSub','Name, email, password, preferences'),       action:()=>onNav('account')},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                             label:t('support.privacyData','Privacy & Data'), sub:t('support.privacyDataSub','DSGVO rights, data export, deletion'),        legalHash:'privacy'},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('support.subscription','Subscription & Payments'), sub:t('support.subscriptionSub','Free plan · Upgrade to Premium €4.99/mo'), badge:'FREE'},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, label:t('support.termsOfUse','Terms of Use'), sub:t('support.termsSub','Usage rules and medical disclaimer'),        legalHash:'terms'},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>,                       label:t('support.aboutApp','About PediVault'), sub:'Version 1.0.0 · PediVault GmbH Berlin'},
         ].map((item,i,arr)=>(
           <div key={i}
@@ -529,7 +530,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
           <div style={{flex:1}}>
             <div style={{fontSize:'.6rem',fontWeight:600,color:'var(--rose)',marginBottom:4}}>Privacy & Legal</div>
             <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
-              {[{label:t('support.privacyLegal','Privacy Policy'),hash:'privacy'},{label:t('support.termsOfUse','Terms of Use'),hash:'terms'},{label:'DSGVO / GDPR',hash:'privacy'},{label:t('support.faq','FAQ'),hash:'faq'},{label:'Impressum',hash:'imprint'}].map((l,i)=>(
+              {[{label:t('support.privacyPolicy','Privacy Policy'),hash:'privacy'},{label:t('support.termsLink','Terms of Use'),hash:'terms'},{label:t('support.gdpr','DSGVO / GDPR'),hash:'privacy'},{label:t('support.faqLink','FAQ'),hash:'faq'},{label:t('support.imprint','Impressum'),hash:'imprint'}].map((l,i)=>(
                 <button key={i} type="button" onClick={()=>{ const w=window.open(`pedivault-legal.html#${l.hash}`,'pedivault_legal','noopener,width=900,height=700,scrollbars=yes'); if(!w) showToast('Please allow pop-ups to view legal documents'); }} style={{fontSize:'.5rem',fontWeight:400,color:'var(--rose)',background:'none',border:'none',borderBottom:'1px solid var(--rose-lt)',padding:0,cursor:'pointer',transition:'color .15s'}}>{l.label}</button>
               ))}
             </div>

@@ -319,6 +319,16 @@
     "topicVaccines": "Impfverfolgung",
     "topicAccount": "Konto & Datenschutz",
     "topicAI": "KI-Assistent",
-    "topicBilling": "Abonnement & Preise"
+    "topicBilling": "Abonnement & Preise",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsLink": "Nutzungsbedingungen",
+    "gdpr": "DSGVO / GDPR",
+    "faqLink": "FAQ",
+    "imprint": "Impressum",
+    "accountProfileSub": "Name, E-Mail, Passwort, Einstellungen",
+    "privacyDataSub": "DSGVO-Rechte, Datenexport, Löschung",
+    "subscriptionSub": "Kostenloses Abo · Upgrade auf Premium €4,99/Mo",
+    "termsSub": "Nutzungsregeln und medizinischer Haftungsausschluss",
+    "documentation": "Dokumentation"
   }
 }
