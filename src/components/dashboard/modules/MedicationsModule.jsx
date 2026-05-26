@@ -91,7 +91,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       {/* Active highlight */}
       {counts.active > 0 && (filter === 'all' || filter === 'active') && (
         <div style={{ marginBottom:20 }}>
-          <div className="sh"><div className="sh-title">{t('medications.active','Currently Active')}</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ {t('medications.add','Add')} →</button></div>
+          <div className="sh"><div className="sh-title">{t('medications.active','Currently Active')}</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ {t('common.add','Add')} →</button></div>
           <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
             {allMeds.filter(m => (m.status === 'active' || m.status === 'ACTIVE') && m.frequency !== 'As needed').map((med, i) => {
               const cfg = MED_TYPE_CFG[med.type] || MED_TYPE_CFG['Other'];
@@ -120,7 +120,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                   {med.notes && (
                     <div style={{ marginTop:9, padding:'8px 11px', background:'rgba(255,255,255,.7)', borderRadius:8, border:'1px solid var(--line2)' }}>
                       <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.6 }}>
-                        <strong style={{ fontWeight:500, color:'var(--ink-2)' }}>Instructions: </strong>{med.notes}
+                        <strong style={{ fontWeight:500, color:'var(--ink-2)' }}>{t('medications.instructions','Instructions')}: </strong>{med.notes}
                       </div>
                     </div>
                   )}
@@ -155,7 +155,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                   {med.notes && (
                     <div style={{ marginTop:9, padding:'8px 11px', background:'var(--blue-bg)', borderRadius:8, border:'1px solid var(--blue-lt)' }}>
                       <div style={{ fontSize:'.5rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.6 }}>
-                        <strong style={{ fontWeight:500, color:'var(--ink-2)' }}>When to use: </strong>{med.notes}
+                        <strong style={{ fontWeight:500, color:'var(--ink-2)' }}>{t('medications.whenToUse','When to use')}: </strong>{med.notes}
                       </div>
                     </div>
                   )}

@@ -206,7 +206,9 @@
     "prescribedBy": "Prescribed by",
     "startDate": "Start date",
     "endDate": "End date",
-    "markComplete": "Mark as completed"
+    "markComplete": "Mark as completed",
+    "instructions": "Instructions",
+    "whenToUse": "When to use"
   },
   "profile": {
     "title": "Profile",
