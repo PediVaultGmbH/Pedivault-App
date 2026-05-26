@@ -423,6 +423,10 @@
     "faq_tag_vaccines": "Impfungen",
     "faq_tag_healthcare": "Gesundheit",
     "faq_tag_ai": "KI",
-    "faq_tag_growth": "Wachstum"
+    "faq_tag_growth": "Wachstum",
+    "bug": "Fehler",
+    "featureRequest": "Funktionswunsch",
+    "question": "Frage",
+    "compliment": "Lob"
   }
 }
