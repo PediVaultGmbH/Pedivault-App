@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ARTICLE_CONTENT_DE } from '../../../i18n/locales/support_de';
 import { useTranslation } from 'react-i18next';
-import { ARTICLE_CONTENT_DE } from '../../../i18n/locales/support_de';
 import Modal from '../ui/Modal';
 import { FAQ_ITEMS, EMERGENCY_NUMBERS, HELP_TOPICS } from '../../../data/supportData';
 import XBtn from '../ui/XBtn';
