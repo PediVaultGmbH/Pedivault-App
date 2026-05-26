@@ -377,7 +377,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       )}
 
       {/* Footer */}
-      <div className="card" style={{ marginTop:16, padding:'13px 18px', background:'linear-gradient(135deg,var(--green-bg),rgba(253,250,248,.8))' }}>
+      <div className="card" style={{ marginTop:16, padding:'13px 18px', background:'var(--green-bg)' }}>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <div style={{ width:32, height:32, borderRadius:9, background:'var(--green-bg)', border:'1px solid var(--green-lt)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
