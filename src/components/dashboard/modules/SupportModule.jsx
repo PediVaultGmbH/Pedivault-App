@@ -13,6 +13,11 @@ function TopicModal({topic, onClose}) {
     const titles = t('support.titles', {returnObjects: true});
     return (titles && titles[title]) ? titles[title] : title;
   };
+  const titleT = (title) => {
+    if (i18n.language !== 'de') return title;
+    const titles = t('support.titles', {returnObjects: true});
+    return (titles && titles[title]) ? titles[title] : title;
+  };
   const [activeArticle, setActiveArticle] = useState(null);
 
   /* Article content map — keyed by article title */
