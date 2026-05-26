@@ -285,15 +285,15 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
 
       {/* Filter tabs */}
       <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginBottom:12 }}>
-        {filterTypes.map(t => {
-          const count    = t === 'all' ? allRecords.length : allRecords.filter(r => r.type === t).length;
-          if (t !== 'all' && count === 0) return null;
-          const cfg      = t === 'all' ? null : RECORD_TYPE_CFG[t];
-          const isActive = filter === t;
+        {filterTypes.map(ftype => {
+          const count    = ftype === 'all' ? allRecords.length : allRecords.filter(r => r.type === ftype).length;
+          if (ftype !== 'all' && count === 0) return null;
+          const cfg      = ftype === 'all' ? null : RECORD_TYPE_CFG[ftype];
+          const isActive = filter === ftype;
           return (
-            <div key={t} onClick={() => setFilter(t)} style={{ height:26, padding:'0 11px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.5rem', fontWeight: isActive ? 600 : 400, color: isActive ? '#fff' : 'var(--ink-2)', background: isActive ? (cfg ? cfg.color : 'var(--rose)') : 'var(--cream-2)', border:`1px solid ${isActive ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:4, lineHeight:1 }}>
+            <div key={ftype} onClick={() => setFilter(ftype)} style={{ height:26, padding:'0 11px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.5rem', fontWeight: isActive ? 600 : 400, color: isActive ? '#fff' : 'var(--ink-2)', background: isActive ? (cfg ? cfg.color : 'var(--rose)') : 'var(--cream-2)', border:`1px solid ${isActive ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:4, lineHeight:1 }}>
               {cfg && <span style={{ fontSize:'.65rem' }}>{cfg.icon}</span>}
-              {t === 'all' ? t('home.viewAll','All') : getLabelFromType(t)}
+              {ftype === 'all' ? t('home.viewAll','All') : getLabelFromType(ftype)}
               <span style={{ opacity:.65 }}>({count})</span>
             </div>
           );
