@@ -217,7 +217,7 @@ function TopicModal({topic, onClose}) {
                 <div style={{padding:'12px 14px',background:`${topic.color}08`,border:`1px solid ${topic.color}20`,borderRadius:10,display:'flex',gap:10,alignItems:'flex-start'}}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={topic.color} strokeWidth="1.8" strokeLinecap="round" style={{flexShrink:0,marginTop:2}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                   <div>
-                    <div style={{fontSize:'.52rem',fontWeight:600,color:topic.color,marginBottom:2}}>{t('support.stillQuestions','{t('support.stillQuestions','Still have questions?')}')}</div>
+                    <div style={{fontSize:'.52rem',fontWeight:600,color:topic.color,marginBottom:2}}>{t('support.stillQuestions','Still have questions?')}</div>
                     <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>Email us at <strong style={{color:'var(--ink)'}}>support@pedivault.de</strong> or use the Send Feedback form below.</div>
                   </div>
                 </div>
