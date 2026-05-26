@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 
@@ -18,6 +19,7 @@ const RECORD_TYPE_CFG = {
 };
 
 export function RecordDetailModal({ open, onClose, record }) {
+  const { t } = useTranslation();
   if (!record) return null;
 
   const cfg     = RECORD_TYPE_CFG[record.type] || RECORD_TYPE_CFG['OTHER'];
@@ -45,7 +47,7 @@ export function RecordDetailModal({ open, onClose, record }) {
     <Modal open={open} onClose={onClose} maxWidth={480}>
       <div className="pv-mhdr">
 
-        <div className="pv-mhdr-eyebrow">Health Record</div>
+        <div className="pv-mhdr-eyebrow">{t('modals.recordDetail_eyebrow','Health Record')}</div>
         <div className="pv-mhdr-title" style={{ paddingRight: 32 }}>{record.name}</div>
         <div className="pv-mhdr-sub">{record.source || '—'} · {fmtDate(record.date || record.createdAt)}</div>
         <XBtn onClick={onClose}/>
@@ -79,7 +81,7 @@ export function RecordDetailModal({ open, onClose, record }) {
                 fontSize: '.54rem', fontWeight: 500, cursor: 'pointer',
               }}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Open / Download {fileExt}
+                {t('modals.openDownload','Open / Download')} {fileExt}
               </div>
             </>
           )}
@@ -87,10 +89,10 @@ export function RecordDetailModal({ open, onClose, record }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
           {[
-            { lbl: 'Document type', val: cfg.label },
-            { lbl: 'Date',          val: fmtDate(record.date || record.createdAt) },
-            { lbl: 'Source',        val: record.source || '—' },
-            { lbl: 'File',          val: record.fileUrl ? fileExt : 'No file' },
+            { lbl: t('modals.documentType','Document type'), val: cfg.label },
+            { lbl: t('modals.date','Date'), val: fmtDate(record.date || record.createdAt) },
+            { lbl: t('modals.source','Source'), val: record.source || '—' },
+            { lbl: t('modals.file','File'), val: record.fileUrl ? fileExt : t('modals.noFile','No file') },
           ].map(d => (
             <div key={d.lbl} style={{ background: 'var(--cream-2)', borderRadius: 9, padding: '9px 12px', border: '1px solid var(--line2)' }}>
               <div style={{ fontSize: '.42rem', fontWeight: 600, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 3 }}>{d.lbl}</div>
@@ -101,14 +103,14 @@ export function RecordDetailModal({ open, onClose, record }) {
 
         {record.notes && (
           <div style={{ background: 'var(--cream-2)', borderRadius: 9, padding: '10px 13px', border: '1px solid var(--line2)' }}>
-            <div style={{ fontSize: '.42rem', fontWeight: 600, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 4 }}>Notes</div>
+            <div style={{ fontSize: '.42rem', fontWeight: 600, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 4 }}>{t('modals.notes','Notes')}</div>
             <div style={{ fontSize: '.57rem', fontWeight: 300, color: 'var(--ink-2)', lineHeight: 1.65 }}>{record.notes}</div>
           </div>
         )}
       </div>
 
       <div className="pv-mfoot">
-        <button type="button" className="fb fb-g" onClick={onClose}>Close</button>
+        <button type="button" className="fb fb-g" onClick={onClose}>{t('modals.close','Close')}</button>
         {record.fileUrl && (
           <button type="button" className="fb fb-p" onClick={handleDownload}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>

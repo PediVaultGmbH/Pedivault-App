@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
 import ModalSuccess from '../ui/ModalSuccess';
 import XBtn from '../ui/XBtn';
@@ -7,6 +8,7 @@ import { useFormValidation } from '../../../hooks/useFormValidation';
 import { useLoading } from '../../../hooks/useLoading';
 
 export function UploadRecordModal({open,onClose,onSuccess}) {
+  const { t } = useTranslation();
   const [f,setF] = useState({name:'',type:'Lab Report',source:'',date:''});
   const [file,setFile] = useState(null);
   const [drag,setDrag] = useState(false);
@@ -45,7 +47,7 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <ModalSuccess color="var(--green)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13l2 2 4-4"/></svg>}
-        title="Record uploaded!" sub={`${f.name} has been securely stored.\nEncrypted and accessible from your records.`}/>
+        title={t('modals.upload_success','Record uploaded!')} sub={`${f.name} has been securely stored.\nEncrypted and accessible from your records.`}/>
     </Modal>
   );
 
@@ -53,9 +55,9 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
     <Modal open={open} onClose={handleClose} maxWidth={500}>
       <div className="pv-mhdr">
 
-        <div className="pv-mhdr-eyebrow">Health Records</div>
-        <div className="pv-mhdr-title">Upload Document</div>
-        <div className="pv-mhdr-sub">Add a health document, report or certificate</div>
+        <div className="pv-mhdr-eyebrow">{t('modals.upload_eyebrow','Health Records')}</div>
+        <div className="pv-mhdr-title">{t('modals.upload_title','Upload Document')}</div>
+        <div className="pv-mhdr-sub">{t('modals.upload_sub','Add a health document, report or certificate')}</div>
         <XBtn onClick={handleClose}/>
       </div>
       <div className="pv-mbody">
@@ -72,29 +74,29 @@ export function UploadRecordModal({open,onClose,onSuccess}) {
           {file
             ? <div><div style={{fontSize:'1.5rem',marginBottom:4}}>📄</div><div style={{fontSize:'.65rem',fontWeight:500,color:'var(--ink)'}}>{file.name}</div><div style={{fontSize:'.5rem',color:'var(--ink-3)',marginTop:2}}>{(file.size/1024/1024).toFixed(1)} MB</div></div>
             : <div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose-mid)" strokeWidth="1.5" strokeLinecap="round" style={{margin:'0 auto 7px',display:'block'}}><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <div style={{fontSize:'.59rem',color:'var(--ink-2)'}}>Drop file here or <span style={{color:'var(--rose)'}}>browse</span></div>
-              <div style={{fontSize:'.48rem',color:'var(--ink-3)',marginTop:3}}>PDF, JPG, PNG, DOC · Max 10 MB</div></div>
+              <div style={{fontSize:'.59rem',color:'var(--ink-2)'}}>{t('modals.dropFile','Drop file here or')} <span style={{color:'var(--rose)'}}>{t('modals.browse','browse')}</span></div>
+              <div style={{fontSize:'.48rem',color:'var(--ink-3)',marginTop:3}}>{t('modals.maxSize','PDF, JPG, PNG, DOC · Max 10 MB')}</div></div>
           }
         </div>
         <div className="fg">
-          <label className="fl">Document name</label>
+          <label className="fl">{t('modals.docName','Document name')}</label>
           <input className={`fi${errors.name?' err':''}`} placeholder="e.g. Blood Test Report Apr 2025" value={f.name} onChange={set('name')}/>
           <FieldErr msg={errors.name}/>
         </div>
         <div className="fr">
-          <div className="fg"><label className="fl">Document type</label>
+          <div className="fg"><label className="fl">{t('modals.docType','Document type')}</label>
             <select className="fi" style={{cursor:'pointer'}} value={f.type} onChange={set('type')}>
-              <option>Lab Report</option><option>Prescription</option><option>Vaccination Certificate</option><option>Scan / X-ray</option><option>Discharge Summary</option><option>Other</option>
+              <option>{t('records.labReport','Lab Report')}</option><option>{t('records.prescription','Prescription')}</option><option>{t('records.vaccinationCard','Vaccination Certificate')}</option><option>{t('records.scan','Scan / X-ray')}</option><option>{t('records.document','Discharge Summary')}</option><option>{t('modals.other','Other')}</option>
             </select>
           </div>
-          <div className="fg"><label className="fl">Date of document</label><input className="fi" type="date" value={f.date} onChange={set('date')}/></div>
+          <div className="fg"><label className="fl">{t('modals.docDate','Date of document')}</label><input className="fi" type="date" value={f.date} onChange={set('date')}/></div>
         </div>
-        <div className="fg"><label className="fl">Source / Hospital</label><input className="fi" placeholder="Apollo Diagnostics" value={f.source} onChange={set('source')}/></div>
+        <div className="fg"><label className="fl">{t('modals.sourceHospital','Source / Hospital')}</label><input className="fi" placeholder="Apollo Diagnostics" value={f.source} onChange={set('source')}/></div>
       </div>
       <div className="pv-mfoot">
-        <button type="button" className="fb fb-g" onClick={handleClose} disabled={loading}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Cancel</button>
+        <button type="button" className="fb fb-g" onClick={handleClose} disabled={loading}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>{t('modals.cancel','Cancel')}</button>
         <button type="button" className={`fb fb-p${loading?' fb-loading':''}`} onClick={submit}>
-          {loading?<><div className="pv-spinner"/>&nbsp;Uploading…</>:<><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload Record</>}
+          {loading?<><div className="pv-spinner"/>&nbsp;{t('modals.uploading','Uploading…')}</>:<><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>{t('modals.uploadRecord','Upload Record')}</>}
         </button>
       </div>
     </Modal>

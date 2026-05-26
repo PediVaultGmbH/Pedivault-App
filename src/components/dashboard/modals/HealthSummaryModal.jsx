@@ -1,8 +1,10 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 
 export default function HealthSummaryModal({ open, onClose, child, growthData, vaccines, medications }) {
+  const { t } = useTranslation();
   const printRef = useRef(null);
 
   if (!child) return null;
@@ -82,8 +84,8 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/></svg>
           </div>
           <div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>Health Summary</div>
-            <div style={{fontSize:'.52rem',color:'var(--ink-3)'}}>Print or save as PDF to share with your doctor</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.1rem',color:'var(--ink)'}}>{t('modals.healthSummary_title','Health Summary')}</div>
+            <div style={{fontSize:'.52rem',color:'var(--ink-3)'}}>{t('modals.healthSummary_sub','Print or save as PDF to share with your doctor')}</div>
           </div>
         </div>
 
@@ -172,7 +174,7 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
         </div>
 
         <div style={{display:'flex',gap:10,marginTop:16,justifyContent:'flex-end'}}>
-          <button type="button" onClick={onClose} style={{height:38,padding:'0 18px',borderRadius:10,border:'1px solid var(--line2)',background:'var(--cream-2)',color:'var(--ink-2)',fontSize:'.6rem',cursor:'pointer'}}>Close</button>
+          <button type="button" onClick={onClose} style={{height:38,padding:'0 18px',borderRadius:10,border:'1px solid var(--line2)',background:'var(--cream-2)',color:'var(--ink-2)',fontSize:'.6rem',cursor:'pointer'}}>{t('modals.close','Close')}</button>
           <button type="button" onClick={handlePrint} style={{height:38,padding:'0 22px',borderRadius:10,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.6rem',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:8,boxShadow:'0 2px 10px rgba(155,58,86,.28)'}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             Print / Save as PDF

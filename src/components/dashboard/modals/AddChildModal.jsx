@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Modal from '../ui/Modal';
+import { useState } from 'react';
 import Modal from '../ui/Modal';
 import ModalSuccess from '../ui/ModalSuccess';
 import { useFormValidation } from '../../../hooks/useFormValidation';
@@ -8,6 +11,7 @@ import FieldErr from '../ui/FieldErr';
 import { createChild } from '../../../api/children.api';
 
 export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
+  const { t } = useTranslation();
   const empty = {name:'', dob:'', gender:'girl', bloodGroup:'', notes:'', color:'#C47A92'};
   const [f, setF]     = useState(empty);
   const [done, setDone] = useState(false);
@@ -52,8 +56,8 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
     <Modal open={open} onClose={handleClose}>
       <ModalSuccess color="var(--rose)"
         icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>}
-        title={`${f.name} is in your vault!`}
-        sub={`${f.name}'s health profile has been created.\nYou can now log vaccines, track growth and book visits.`}
+        title={`${f.name} ${t('modals.addChild_success_title','is in your vault!')}`}
+        sub={`${t('modals.addChild_success_sub',"health profile has been created.\nYou can now log vaccines, track growth and book visits.")}`}
       />
     </Modal>
   );
@@ -62,35 +66,35 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
     <Modal open={open} onClose={handleClose}>
       <div className="pv-mhdr">
         
-        <div className="pv-mhdr-eyebrow">Family</div>
-        <div className="pv-mhdr-title">Add a child</div>
-        <div className="pv-mhdr-sub">Create a health profile for your child</div>
+        <div className="pv-mhdr-eyebrow">{t('modals.addChild_eyebrow','Family')}</div>
+        <div className="pv-mhdr-title">{t('modals.addChild_title','Add a child')}</div>
+        <div className="pv-mhdr-sub">{t('modals.addChild_sub','Create a health profile for your child')}</div>
         <XBtn onClick={handleClose}/>
       </div>
       <div className="pv-mbody">
         <div className="fr">
           <div className="fg">
-            <label className="fl">Full name</label>
+            <label className="fl">{t('modals.fullName','Full name')}</label>
             <input className={`fi${errors.name?' err':''}`} placeholder="e.g. Emma Müller" value={f.name} onChange={set('name')}/>
             <FieldErr msg={errors.name}/>
           </div>
           <div className="fg">
-            <label className="fl">Date of birth</label>
+            <label className="fl">{t('modals.dateOfBirth','Date of birth')}</label>
             <input className={`fi${errors.dob?' err':''}`} type="date" value={f.dob} onChange={set('dob')}/>
             <FieldErr msg={errors.dob}/>
           </div>
         </div>
         <div className="fr">
           <div className="fg">
-            <label className="fl">Gender</label>
+            <label className="fl">{t('modals.gender','Gender')}</label>
             <select className="fi" style={{cursor:'pointer'}} value={f.gender} onChange={set('gender')}>
-              <option value="girl">Girl</option>
-              <option value="boy">Boy</option>
-              <option value="other">Other / Prefer not to say</option>
+              <option value="girl">{t('modals.girl','Girl')}</option>
+              <option value="boy">{t('modals.boy','Boy')}</option>
+              <option value="other">{t('modals.otherGender','Other / Prefer not to say')}</option>
             </select>
           </div>
           <div className="fg">
-            <label className="fl">Blood group <span>(optional)</span></label>
+            <label className="fl">{t('modals.bloodGroup','Blood group')} <span>({t('modals.optional','optional')})</span></label>
             <select className="fi" style={{cursor:'pointer'}} value={f.bloodGroup} onChange={set('bloodGroup')}>
               <option value="">Select…</option>
               {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(bg => <option key={bg}>{bg}</option>)}
@@ -98,11 +102,11 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
           </div>
         </div>
         <div className="fg">
-          <label className="fl">Notes <span>(optional)</span></label>
+          <label className="fl">{t('modals.notes','Notes')} <span>({t('modals.optional','optional')})</span></label>
           <textarea className="ft" placeholder="Any allergies, conditions or important notes…" value={f.notes} onChange={set('notes')}/>
         </div>
         <div className="fg">
-          <label className="fl">Profile colour</label>
+          <label className="fl">{t('modals.profileColour','Profile colour')}</label>
           <div style={{display:'flex', gap:8, flexWrap:'wrap', alignItems:'center'}}>
             {['#C47A92','#3478B0','#2A9E62','#BA7018','#7B52B0','#B82810'].map(c => (
               <div key={c} onClick={() => setF(p => ({...p, color:c}))}
@@ -119,12 +123,12 @@ export function AddChildModal({open, onClose, onSuccess, onChildAdded}) {
       <div className="pv-mfoot">
         <button type="button" className="fb fb-g" onClick={handleClose} disabled={loading}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          Cancel
+          {t('modals.cancel','Cancel')}
         </button>
         <button type="button" className={`fb fb-p${loading?' fb-loading':''}`} onClick={submit}>
           {loading
-            ? <><div className="pv-spinner"/>&nbsp;Adding…</>
-            : <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Add Child</>
+            ? <><div className="pv-spinner"/>&nbsp;{t('modals.adding','Adding…')}</>
+            : <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{t('modals.addChild','Add Child')}</>
           }
         </button>
       </div>
