@@ -345,7 +345,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
                         {rec.ipfsHash && <IPFSBadge hash={rec.ipfsHash}/>}
                         {rec.blockchainTx && <BlockchainBadge txHash={rec.blockchainTx}/>}
                       </div>
-                      {rec.notes && <div style={{ fontSize:'.48rem', color:'var(--ink-3)', marginTop:4 }}>{rec.notes}</div>}
+                      {rec.notes && <div style={{ fontSize:'.48rem', color:'var(--ink-3)', marginTop:4 }}>{rec.notes.replace('Document date:', t('records.date','Document date:'))}</div>}
                     </div>
                     <div style={{ display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
                       {rec.fileUrl && (

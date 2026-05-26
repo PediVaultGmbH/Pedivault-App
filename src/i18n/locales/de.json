@@ -145,7 +145,7 @@
     "documentName": "Dokumentname",
     "documentType": "Dokumenttyp",
     "source": "Quelle / Krankenhaus",
-    "date": "Dokumentdatum",
+    "date": "Dokumentdatum:",
     "file": "Datei",
     "noFile": "Keine Datei",
     "blockchainVerified": "Blockchain-verifiziert",
