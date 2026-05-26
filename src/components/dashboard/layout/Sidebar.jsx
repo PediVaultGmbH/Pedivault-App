@@ -4,6 +4,7 @@ import FlowerLogo from '../ui/FlowerLogo';
 import { a11yClick } from '../../../utils/a11y';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
+import ThemeToggle from '../ui/ThemeToggle';
 
 export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildren=[],userName='Lena'}) {
   const childCount = apiChildren.length + extraChildren.length;
