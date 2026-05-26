@@ -151,10 +151,10 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.7" strokeLinecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5V11h-4V9.5A4 4 0 0112 2z"/><rect x="8" y="11" width="8" height="5" rx="1"/><path d="M10 16v3M14 16v3M7 19h10"/></svg>
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:6 }}>
-                  Hello! I'm your PediVault AI
+                  {t('ai.welcome','Hello! I\'m your PediVault AI assistant')}
                 </div>
                 <div style={{ fontSize:'.55rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.75, maxWidth:380, margin:'0 auto' }}>
-                  I have full context of {childName}'s health records — growth data, vaccine schedule, medications and more. Ask me anything about {childName}'s health or general paediatric questions.
+                  {t('ai.contextInfo','I have full context of')} {childName}'s {t('ai.contextInfo2','health records — growth data, vaccine schedule, medications and more.')}
                 </div>
                 <div style={{ marginTop:12, display:'inline-flex', alignItems:'center', gap:5, fontSize:'.46rem', color:'var(--ink-3)', background:'var(--cream-2)', border:'1px solid var(--line2)', borderRadius:20, padding:'4px 10px' }}>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>

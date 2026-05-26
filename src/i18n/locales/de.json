@@ -270,6 +270,8 @@
     "dismiss": "Schließen",
     "suggestions": "Vorschläge",
     "enterToSend": "Enter zum Senden · Shift+Enter für neue Zeile",
-    "poweredBy": "Powered by Gemini · Immer einen Arzt konsultieren"
+    "poweredBy": "Powered by Gemini · Immer einen Arzt konsultieren",
+    "contextInfo": "Ich kenne alle Gesundheitsdaten von",
+    "contextInfo2": "— Wachstum, Impfplan, Medikamente und mehr."
   }
 }

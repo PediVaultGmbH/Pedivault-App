@@ -270,6 +270,8 @@
     "dismiss": "Dismiss",
     "suggestions": "Suggestions",
     "enterToSend": "Enter to send · Shift+Enter for new line",
-    "poweredBy": "Powered by Gemini · Always consult your paediatrician"
+    "poweredBy": "Powered by Gemini · Always consult your paediatrician",
+    "contextInfo": "I have full context of",
+    "contextInfo2": "health records — growth data, vaccine schedule, medications and more."
   }
 }
