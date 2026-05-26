@@ -737,6 +737,22 @@
     "growth_success_sub": "kg eingetragen am\nWachstumsdiagramm aktualisiert.",
     "bookVisit_success_sub": "Dein Termin wurde geplant für",
     "bookVisit_success_sub2": "Du erhältst eine Erinnerung vor deinem Termin.",
-    "upload_success_sub": "wurde sicher gespeichert.\nVerschlüsselt und in deinen Dokumenten zugänglich."
+    "upload_success_sub": "wurde sicher gespeichert.\nVerschlüsselt und in deinen Dokumenten zugänglich.",
+    "vaccine_th": "Impfstoff",
+    "dose_th": "Dosis",
+    "date_th": "Datum",
+    "administeredBy_th": "Verabreicht von",
+    "medication_th": "Medikament",
+    "dosage_th": "Dosierung",
+    "frequency_th": "Häufigkeit",
+    "prescribedBy_th": "Verschrieben von",
+    "latestMeasurements": "Aktuelle Messungen",
+    "vaccinationHistory": "Impfhistorie",
+    "dosesRecorded": "Dosen eingetragen",
+    "noVaccines": "Noch keine Impfungen eingetragen.",
+    "currentMedications": "Aktuelle Medikamente",
+    "healthSummaryReport": "Gesundheitsbericht",
+    "generated": "Erstellt",
+    "selfRecorded": "Selbst eingetragen"
   }
 }

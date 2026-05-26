@@ -116,7 +116,7 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
 
             {latestGrowth && (
               <div className="section">
-                <div className="section-title">Latest Measurements — {fmtDate(latestGrowth.date)}</div>
+                <div className="section-title">{t('modals.latestMeasurements','Latest Measurements')} — {fmtDate(latestGrowth.date)}</div>
                 <div className="grid">
                   <div className="stat"><div className="stat-label">Weight</div><div className="stat-val">{latestGrowth.weight||'—'}<span className="stat-unit"> kg</span></div></div>
                   <div className="stat"><div className="stat-label">Height</div><div className="stat-val">{latestGrowth.height||'—'}<span className="stat-unit"> cm</span></div></div>
@@ -127,19 +127,19 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
             )}
 
             <div className="section">
-              <div className="section-title">Vaccination History ({completedVaccines.length} doses recorded)</div>
+              <div className="section-title">{t('modals.vaccinationHistory','Vaccination History')} ({completedVaccines.length} {t('modals.dosesRecorded','doses recorded')})</div>
               {completedVaccines.length === 0 ? (
-                <div className="empty">No vaccines recorded yet.</div>
+                <div className="empty">{t('modals.noVaccines','No vaccines recorded yet.')}</div>
               ) : (
                 <table>
-                  <thead><tr><th>Vaccine</th><th>Dose</th><th>Date</th><th>Administered by</th></tr></thead>
+                  <thead><tr><th>{t('modals.vaccine_th','Vaccine')}</th><th>{t('modals.dose_th','Dose')}</th><th>{t('modals.date_th','Date')}</th><th>{t('modals.administeredBy_th','Administered by')}</th></tr></thead>
                   <tbody>
                     {completedVaccines.slice(0,20).map((v,i)=>(
                       <tr key={i}>
                         <td>{v.vaccineName||v.name}</td>
                         <td>{v.dose}</td>
                         <td>{fmtDate(v.date)}</td>
-                        <td>{v.doctor||'Self-recorded'}</td>
+                        <td>{v.doctor||t('modals.selfRecorded','Self-recorded')}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -149,9 +149,9 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
 
             {activeMeds.length > 0 && (
               <div className="section">
-                <div className="section-title">Current Medications ({activeMeds.length})</div>
+                <div className="section-title">{t('modals.currentMedications','Current Medications')} ({activeMeds.length})</div>
                 <table>
-                  <thead><tr><th>Medication</th><th>Dosage</th><th>Frequency</th><th>Prescribed by</th></tr></thead>
+                  <thead><tr><th>{t('modals.medication_th','Medication')}</th><th>{t('modals.dosage_th','Dosage')}</th><th>{t('modals.frequency_th','Frequency')}</th><th>{t('modals.prescribedBy_th','Prescribed by')}</th></tr></thead>
                   <tbody>
                     {activeMeds.map((m,i)=>(
                       <tr key={i}>
@@ -177,7 +177,7 @@ export default function HealthSummaryModal({ open, onClose, child, growthData, v
           <button type="button" onClick={onClose} style={{height:38,padding:'0 18px',borderRadius:10,border:'1px solid var(--line2)',background:'var(--cream-2)',color:'var(--ink-2)',fontSize:'.6rem',cursor:'pointer'}}>{t('modals.close','Close')}</button>
           <button type="button" onClick={handlePrint} style={{height:38,padding:'0 22px',borderRadius:10,border:'none',background:'var(--rose)',color:'#fff',fontSize:'.6rem',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:8,boxShadow:'0 2px 10px rgba(155,58,86,.28)'}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            Print / Save as PDF
+            {t('modals.printPDF','Print / Save as PDF')}
           </button>
         </div>
       </div>
