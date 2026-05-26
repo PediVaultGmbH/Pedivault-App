@@ -168,7 +168,9 @@
     "signOutSub": "Alle Gesundheitsdaten deines Kindes sind sicher verschlüsselt und warten auf dich.",
     "seeYouSoon": "Bis bald",
     "staySignedIn": "Angemeldet bleiben",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "signInFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
+    "resetFailed": "Zurücksetzen fehlgeschlagen. Der Link ist möglicherweise abgelaufen."
   },
   "home": {
     "welcome": "Willkommen zurück",

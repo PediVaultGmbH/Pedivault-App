@@ -168,7 +168,9 @@
     "signOutSub": "All your child's health records are safely encrypted and will be waiting when you come back.",
     "seeYouSoon": "See you soon",
     "staySignedIn": "Stay signed in",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "signInFailed": "Sign in failed. Please try again.",
+    "resetFailed": "Reset failed. The link may have expired."
   },
   "home": {
     "welcome": "Welcome back",

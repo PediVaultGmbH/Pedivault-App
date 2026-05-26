@@ -24,7 +24,7 @@ export function ResetPassword({ goTo, token }) {
       setDone(true);
       setTimeout(() => goTo('signin'), 2500);
     } catch (err) {
-      setErr(err.message || 'Reset failed. The link may have expired.');
+      setErr(err.message || t('auth.resetFailed','Reset failed. The link may have expired.'));
     } finally {
       setLoading(false);
     }

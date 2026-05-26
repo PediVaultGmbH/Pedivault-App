@@ -33,7 +33,7 @@ export function SignIn({ goTo }) {
       }
       goTo('dashboard', res.firstName);
     } catch (err) {
-      setErr(err.message || 'Sign in failed. Please try again.');
+      setErr(err.message || t('auth.signInFailed','Sign in failed. Please try again.'));
     } finally {
       setLoading(false);
     }

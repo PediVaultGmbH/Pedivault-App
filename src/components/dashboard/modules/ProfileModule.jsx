@@ -64,7 +64,7 @@ export function ProfileModule({ activeChild, showModal, onDeleteChild, apiChildr
         icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>}
         title="Profile not found"
         sub="This child's profile hasn't been set up yet. Add them using the + button in the header."
-        btnLabel="Add Child"
+        btnLabel={t('children.addChild','Add Child')}
         onBtn={() => showModal('addchild')}/>
     </div>
   );
