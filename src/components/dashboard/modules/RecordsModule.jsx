@@ -288,7 +288,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
         </select>
         <button type="button" onClick={() => showModal('record')} style={{ height:36, padding:'0 14px', borderRadius:9, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.58rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:6, flexShrink:0, boxShadow:'0 2px 10px rgba(155,58,86,.28)' }}>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          Upload
+          {t('records.upload','Upload')}
         </button>
       </div>
 
@@ -329,7 +329,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ fontSize:'.66rem', fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{rec.name}</div>
                       <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-                        <span style={{ fontSize:'.46rem', fontWeight:500, color:cfg.color, background:cfg.bg, border:`1px solid ${cfg.border}`, borderRadius:20, padding:'1px 7px' }}>{cfg.label}</span>
+                        <span style={{ fontSize:'.46rem', fontWeight:500, color:cfg.color, background:cfg.bg, border:`1px solid ${cfg.border}`, borderRadius:20, padding:'1px 7px' }}>{getTypeLabel(rec.type)}</span>
                         {rec.source && <span style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>{rec.source}</span>}
                         <span style={{ fontSize:'.46rem', color:'var(--ink-3)' }}>·</span>
                         <span style={{ fontSize:'.48rem', color:'var(--ink-3)' }}>{fmtDate(rec.date || rec.createdAt)}</span>
