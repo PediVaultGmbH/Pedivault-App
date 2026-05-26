@@ -14,7 +14,7 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'pv_lang_v2',
+      lookupLocalStorage: 'pv_lang_v3',
     },
     interpolation: { escapeValue: false },
   });
