@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmptyState from '../ui/EmptyState';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
@@ -47,6 +48,7 @@ function BlockchainBadge({ txHash }) {
 }
 
 function RecordDetailModal({ open, onClose, record }) {
+  const { t } = useTranslation();
   if (!record) return null;
   const cfg     = RECORD_TYPE_CFG[record.type] || RECORD_TYPE_CFG['OTHER'];
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-DE', { day:'numeric', month:'long', year:'numeric' }) : '—';
@@ -95,7 +97,7 @@ function RecordDetailModal({ open, onClose, record }) {
               )}
               <div onClick={handleDownload} style={{marginTop:14,display:'inline-flex',alignItems:'center',gap:6,height:30,padding:'0 16px',borderRadius:9,background:cfg.color,color:'#fff',fontSize:'.54rem',fontWeight:500,cursor:'pointer'}}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Open / Download {fileExt}
+                {t('common.download','Open / Download')} {fileExt}
               </div>
             </>
           )}
@@ -103,10 +105,10 @@ function RecordDetailModal({ open, onClose, record }) {
 
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:12 }}>
           {[
-            { lbl:'Document type', val: cfg.label },
-            { lbl:'Date',          val: fmtDate(record.date || record.createdAt) },
-            { lbl:'Source',        val: record.source || '—' },
-            { lbl:'File',          val: record.fileUrl ? fileExt : 'No file' },
+            { lbl: t('records.documentType','Document type'), val: cfg.label },
+            { lbl: t('appointments.date','Date'), val: fmtDate(record.date || record.createdAt) },
+            { lbl: t('records.source','Source'), val: record.source || '—' },
+            { lbl: t('records.file','File'), val: record.fileUrl ? fileExt : t('records.noFile','No file') },
           ].map(d => (
             <div key={d.lbl} style={{ background:'var(--cream-2)', borderRadius:9, padding:'9px 12px', border:'1px solid var(--line2)' }}>
               <div style={{ fontSize:'.42rem', fontWeight:600, letterSpacing:'.14em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:3 }}>{d.lbl}</div>
@@ -153,11 +155,11 @@ function RecordDetailModal({ open, onClose, record }) {
         )}
       </div>
       <div className="pv-mfoot">
-        <button type="button" className="fb fb-g" onClick={onClose}>Close</button>
+        <button type="button" className="fb fb-g" onClick={onClose}>{t('common.close','Close')}</button>
         {record.fileUrl && (
           <button type="button" className="fb fb-p" onClick={handleDownload}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download {fileExt}
+            {t('common.download','Download')} {fileExt}
           </button>
         )}
       </div>
@@ -166,6 +168,7 @@ function RecordDetailModal({ open, onClose, record }) {
 }
 
 export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [sort,   setSort]   = useState('newest');
@@ -210,9 +213,9 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
       <EmptyState color="var(--green)"
         icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.5" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>}
-        title="No health records yet"
-        sub="Upload health documents — lab reports, prescriptions, vaccination certificates and more. All files are encrypted and securely stored."
-        btnLabel="Upload First Document"
+        title={t('records.noRecords','No health records yet')}
+        sub={t('records.noRecordsSub','Upload health documents — lab reports, prescriptions, vaccination certificates and more.')}
+        btnLabel={t('records.uploadDocument','Upload First Document')}
         onBtn={() => showModal('record')}/>
     </div>
   );
@@ -236,28 +239,28 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         <div className="stat-card sc-normal" style={{ cursor:'pointer' }} onClick={() => setFilter('all')}>
-          <div className="stat-label" style={{ color:'var(--rose-mid)' }}>Total Records</div>
+          <div className="stat-label" style={{ color:'var(--rose-mid)' }}>{t('records.title','Total Records')}</div>
           <div className="stat-val">{counts.total}</div>
-          <div className="stat-meta"><span className="pill rose">All documents</span></div>
-          <div className="stat-card-cta">View all →</div>
+          <div className="stat-meta"><span className="pill rose">{t('records.title','All documents')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View all')} →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('LAB_REPORT')}>
-          <div className="stat-label">Lab Reports</div>
+          <div className="stat-label">{t('records.documentType','Lab Reports')}</div>
           <div className="stat-val">{counts.lab}</div>
-          <div className="stat-meta"><span className="pill blue">Test results</span></div>
-          <div className="stat-card-cta">View reports →</div>
+          <div className="stat-meta"><span className="pill blue">{t('records.documentType','Test results')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} →</div>
         </div>
         <div className="stat-card sc-healthy" style={{ cursor:'pointer' }} onClick={() => setFilter('PRESCRIPTION')}>
-          <div className="stat-label">Prescriptions</div>
+          <div className="stat-label">{t('medications.name','Prescriptions')}</div>
           <div className="stat-val">{counts.rx}</div>
-          <div className="stat-meta"><span className="pill green">Medications</span></div>
-          <div className="stat-card-cta">View prescriptions →</div>
+          <div className="stat-meta"><span className="pill green">{t('medications.title','Medications')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} →</div>
         </div>
         <div className="stat-card sc-warning" style={{ cursor:'pointer' }} onClick={() => showModal('record')}>
-          <div className="stat-label">Recent (90d)</div>
+          <div className="stat-label">{t('home.recentActivity','Recent')} (90d)</div>
           <div className="stat-val">{counts.recent}</div>
-          <div className="stat-meta"><span className="pill amber">+ Upload new</span></div>
-          <div className="stat-card-cta">Upload document →</div>
+          <div className="stat-meta"><span className="pill amber">+ {t('records.upload','Upload')}</span></div>
+          <div className="stat-card-cta">{t('records.uploadDocument','Upload document')} →</div>
         </div>
       </div>
 
@@ -265,14 +268,14 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       <div style={{ display:'flex', gap:8, marginBottom:12, alignItems:'center', flexWrap:'wrap' }}>
         <div style={{ flex:1, minWidth:160, display:'flex', alignItems:'center', gap:8, height:36, background:'var(--white)', border:'1.5px solid var(--line2)', borderRadius:9, padding:'0 11px' }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input ref={searchRef} value={search} onChange={e => setSearch(e.target.value)} placeholder="Search records, source…" style={{ flex:1, border:'none', outline:'none', fontSize:'.62rem', color:'var(--ink)', background:'transparent', fontFamily:"'DM Sans',sans-serif" }}/>
+          <input ref={searchRef} value={search} onChange={e => setSearch(e.target.value)} placeholder={t('common.search','Search records, source…')} style={{ flex:1, border:'none', outline:'none', fontSize:'.62rem', color:'var(--ink)', background:'transparent', fontFamily:"'DM Sans',sans-serif" }}/>
           {search && <span style={{ cursor:'pointer', color:'var(--ink-3)', fontSize:'.7rem', lineHeight:1 }} onClick={() => setSearch('')}>✕</span>}
         </div>
         <select value={sort} onChange={e => setSort(e.target.value)} style={{ height:36, padding:'0 11px', borderRadius:9, border:'1.5px solid var(--line2)', background:'var(--white)', color:'var(--ink-2)', fontSize:'.58rem', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', outline:'none', appearance:'none' }}>
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
+          <option value="newest">{t('common.latest','Newest first')}</option>
+          <option value="oldest">{t('growth.history','Oldest first')}</option>
           <option value="name">Name A–Z</option>
-          <option value="type">By type</option>
+          <option value="type">{t('records.documentType','By type')}</option>
         </select>
         <button type="button" onClick={() => showModal('record')} style={{ height:36, padding:'0 14px', borderRadius:9, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.58rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:6, flexShrink:0, boxShadow:'0 2px 10px rgba(155,58,86,.28)' }}>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -290,7 +293,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
           return (
             <div key={t} onClick={() => setFilter(t)} style={{ height:26, padding:'0 11px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.5rem', fontWeight: isActive ? 600 : 400, color: isActive ? '#fff' : 'var(--ink-2)', background: isActive ? (cfg ? cfg.color : 'var(--rose)') : 'var(--cream-2)', border:`1px solid ${isActive ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:4, lineHeight:1 }}>
               {cfg && <span style={{ fontSize:'.65rem' }}>{cfg.icon}</span>}
-              {t === 'all' ? 'All' : getLabelFromType(t)}
+              {t === 'all' ? t('home.viewAll','All') : getLabelFromType(t)}
               <span style={{ opacity:.65 }}>({count})</span>
             </div>
           );
@@ -301,9 +304,9 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       {visible.length === 0 ? (
         <div className="card" style={{ textAlign:'center', padding:'32px 20px' }}>
           <div style={{ fontSize:'1.8rem', marginBottom:8 }}>🔍</div>
-          <div style={{ fontSize:'.64rem', fontWeight:500, color:'var(--ink)', marginBottom:4 }}>No records found</div>
+          <div style={{ fontSize:'.64rem', fontWeight:500, color:'var(--ink)', marginBottom:4 }}>{t('records.noRecords','No records found')}</div>
           <div style={{ fontSize:'.54rem', color:'var(--ink-3)' }}>{search ? `No results for "${search}"` : `No ${getLabelFromType(filter)} documents yet`}</div>
-          {!search && <button type="button" onClick={() => showModal('record')} className="pv-empty-btn" style={{ marginTop:14 }}>Upload Document</button>}
+          {!search && <button type="button" onClick={() => showModal('record')} className="pv-empty-btn" style={{ marginTop:14 }}>{t('records.uploadDocument','Upload Document')}</button>}
         </div>
       ) : (
         <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
