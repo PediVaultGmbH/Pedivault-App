@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ARTICLE_CONTENT_DE } from '../../../i18n/locales/support_de';
 import { useTranslation } from 'react-i18next';
+import { ARTICLE_CONTENT_DE } from '../../../i18n/locales/support_de';
 import Modal from '../ui/Modal';
 import { FAQ_ITEMS, EMERGENCY_NUMBERS, HELP_TOPICS } from '../../../data/supportData';
 import XBtn from '../ui/XBtn';
 
 function TopicModal({topic, onClose}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [search, setSearch] = useState('');
   const [activeArticle, setActiveArticle] = useState(null);
 
@@ -160,7 +162,7 @@ function TopicModal({topic, onClose}) {
       'The Family plan allows two parent/guardian accounts to share access to the same children\'s health records. Price: €7.99/month or €71.99/year (€3.99 per account vs €4.99 standalone — 20% saving). Each account has individual login credentials and full access to all shared children\'s records. Both accounts can add records, log vaccines, and book appointments. Notifications can be customised per account. The Family plan is ideal for co-parents, separated families, or parents who travel for work. To set up: subscribe to Premium and invite your partner from Account & Profile → Family Sharing. They receive an email invitation to join.',
   };
 
-  const getContent = (title) => ARTICLE_CONTENT[title] || null;
+  const getContent = (title) => (i18n.language === 'de' && ARTICLE_CONTENT_DE[title]) ? ARTICLE_CONTENT_DE[title] : (ARTICLE_CONTENT[title] || null);
 
   const filtered = topic ? topic.items.filter(a=>a.title.toLowerCase().includes(search.toLowerCase())) : [];
 
@@ -321,7 +323,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             <span style={{fontSize:'.48rem',fontWeight:500,color:'var(--green)'}}>{t('support.allSystems','All systems operational')}</span>
           </div>
           <span style={{fontSize:'.46rem',fontWeight:600,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:4,padding:'1px 6px'}}>LIVE</span>
-          <span style={{marginLeft:4}}>PediVault services are running normally · Last checked 2 min ago</span>
+          <span style={{marginLeft:4}}>{t('support.liveStatus','PediVault services are running normally')}</span>
         </div>
       </div>
 
@@ -486,8 +488,8 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             <div>
               <div style={{fontSize:'.46rem',fontWeight:600,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:7}}>{t('support.feedbackType','Type')}</div>
               <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-                {['Bug','Feature Request','Question','Compliment'].map(t=>(
-                  <div key={t} onClick={()=>setFeedback(f=>({...f,type:t}))} style={{height:26,padding:'0 12px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.52rem',fontWeight:feedback.type===t?600:400,color:feedback.type===t?'#fff':'var(--ink-2)',background:feedback.type===t?'var(--rose)':'var(--cream-2)',border:`1px solid ${feedback.type===t?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{t}</div>
+                {[t('support.bug','Bug'), t('support.featureRequest','Feature Request'), t('support.question','Question'), t('support.compliment','Compliment')].map(ftype=>(
+                  <div key={t} onClick={()=>setFeedback(f=>({...f,type:ftype}))} style={{height:26,padding:'0 12px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.52rem',fontWeight:feedback.type===ftype||feedback.type===ftype?600:400,color:feedback.type===ftype?'#fff':'var(--ink-2)',background:feedback.type===ftype?'var(--rose)':'var(--cream-2)',border:`1px solid ${feedback.type===ftype?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{ftype}</div>
                 ))}
               </div>
             </div>
