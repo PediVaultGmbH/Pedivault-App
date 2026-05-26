@@ -199,7 +199,7 @@
     "add": "Add medication",
     "active": "Active",
     "completed": "Completed",
-    "noMedications": "No medications yet",
+    "noMedications": "No medications logged",
     "name": "Medication name",
     "dosage": "Dosage",
     "frequency": "Frequency",

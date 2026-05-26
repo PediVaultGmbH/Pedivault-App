@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmptyState from '../ui/EmptyState';
 import { MED_TYPE_CFG } from '../../../data/medicationsData';
 import Modal from '../ui/Modal';
 import XBtn from '../ui/XBtn';
 
 export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMarkComplete }) {
+  const { t } = useTranslation();
   const [filter,      setFilter]      = useState('all');
   const [expanded,    setExpanded]    = useState(null);
   const [confirmDone, setConfirmDone] = useState(null);
@@ -37,7 +39,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
     return true;
   });
 
-  const sectionTitle = { all:'All Medications', active:'Active Medications', 'as-needed':'As Needed (PRN)', completed:'Completed Medications' }[filter] || 'All Medications';
+  const sectionTitle = { all:t('medications.title','All Medications'), active:t('medications.active','Active Medications'), 'as-needed':t('medications.add','As Needed (PRN)'), completed:t('medications.completed','Completed Medications') }[filter] || t('medications.title','All Medications');
 
   const handleDone = (med) => setConfirmDone(med);
   const confirmComplete = () => {
@@ -48,9 +50,9 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
     <div className="pv-page" style={{ animation:'fadeUp .3s ease both' }}>
       <EmptyState color="var(--green)"
         icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.5" strokeLinecap="round"><path d="M10.5 20.5L3.5 13.5a5 5 0 017.07-7.07l7 7a5 5 0 01-7.07 7.07z"/><line x1="14" y1="7" x2="7" y2="14"/></svg>}
-        title="No medications logged"
+        title={t('medications.noMedications','No medications logged')}
         sub="Log prescriptions, vitamins and ongoing medications. You'll get a full history and dosage reminders."
-        btnLabel="Add First Medication"
+        btnLabel={t('medications.add','Add First Medication')}
         onBtn={() => showModal('medication')}/>
     </div>
   );
@@ -61,35 +63,35 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         <div className="stat-card sc-healthy" style={{ cursor:'pointer' }} onClick={() => setFilter('active')}>
-          <div className="stat-label">Active</div>
+          <div className="stat-label">{t('medications.active','Active')}</div>
           <div className="stat-val">{counts.active}</div>
-          <div className="stat-meta"><span className="pill green">In progress</span></div>
-          <div className="stat-card-cta">View active →</div>
+          <div className="stat-meta"><span className="pill green">{t('medications.active','In progress')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} active →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('as-needed')}>
-          <div className="stat-label">As Needed</div>
+          <div className="stat-label">{t('medications.frequency','As Needed')}</div>
           <div className="stat-val">{counts.asNeeded}</div>
           <div className="stat-meta"><span className="pill blue">PRN</span></div>
-          <div className="stat-card-cta">View PRN →</div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} PRN →</div>
         </div>
         <div className="stat-card sc-normal" style={{ cursor:'pointer' }} onClick={() => setFilter('completed')}>
-          <div className="stat-label">Completed</div>
+          <div className="stat-label">{t('medications.completed','Completed')}</div>
           <div className="stat-val">{counts.completed}</div>
-          <div className="stat-meta"><span className="pill rose">Finished</span></div>
-          <div className="stat-card-cta">View history →</div>
+          <div className="stat-meta"><span className="pill rose">{t('medications.completed','Finished')}</span></div>
+          <div className="stat-card-cta">{t('home.viewAll','View')} history →</div>
         </div>
         <div className="stat-card sc-warning" style={{ cursor:'pointer' }} onClick={() => showModal('medication')}>
-          <div className="stat-label">Add New</div>
+          <div className="stat-label">{t('medications.add','Add New')}</div>
           <div className="stat-val"><span style={{ fontSize:'1.4rem' }}>+</span></div>
-          <div className="stat-meta"><span className="pill amber">Log medication</span></div>
-          <div className="stat-card-cta">Open form →</div>
+          <div className="stat-meta"><span className="pill amber">{t('medications.add','Log medication')}</span></div>
+          <div className="stat-card-cta">{t('medications.add','Open form')} →</div>
         </div>
       </div>
 
       {/* Active highlight */}
       {counts.active > 0 && (filter === 'all' || filter === 'active') && (
         <div style={{ marginBottom:20 }}>
-          <div className="sh"><div className="sh-title">Currently Active</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ Add →</button></div>
+          <div className="sh"><div className="sh-title">{t('medications.active','Currently Active')}</div><button type="button" className="sh-link" onClick={() => showModal('medication')}>+ Add →</button></div>
           <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
             {allMeds.filter(m => (m.status === 'active' || m.status === 'ACTIVE') && m.frequency !== 'As needed').map((med, i) => {
               const cfg = MED_TYPE_CFG[med.type] || MED_TYPE_CFG['Other'];
@@ -104,7 +106,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                       </div>
                       <div style={{ fontSize:'.56rem', fontWeight:500, color:cfg.color, marginBottom:2 }}>{med.dosage} · {med.frequency}</div>
                       <div style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>
-                        Started {fmtDate(med.startDate)}{med.doctor && ` · ${med.doctor}`}
+                        {t('medications.startDate','Started')} {fmtDate(med.startDate)}{med.doctor && ` · ${med.doctor}`}
                       </div>
                     </div>
                     <div style={{ flexShrink:0, display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6 }}>
@@ -112,7 +114,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                         <div style={{ width:5, height:5, borderRadius:'50%', background:'rgba(255,255,255,.6)' }}/>
                         Active
                       </div>
-                      <button type="button" onClick={() => handleDone(med)} style={{ height:22, padding:'0 9px', borderRadius:7, background:'var(--green-bg)', border:'1px solid var(--green-lt)', color:'var(--green)', fontSize:'.43rem', fontWeight:500, cursor:'pointer' }}>✓ Mark done</button>
+                      <button type="button" onClick={() => handleDone(med)} style={{ height:22, padding:'0 9px', borderRadius:7, background:'var(--green-bg)', border:'1px solid var(--green-lt)', color:'var(--green)', fontSize:'.43rem', fontWeight:500, cursor:'pointer' }}>{t('medications.markComplete','✓ Mark done')}</button>
                     </div>
                   </div>
                   {med.notes && (
@@ -132,7 +134,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       {/* PRN section */}
       {counts.asNeeded > 0 && (filter === 'all' || filter === 'as-needed') && (
         <div style={{ marginBottom:20 }}>
-          <div className="sh"><div className="sh-title">As Needed (PRN)</div></div>
+          <div className="sh"><div className="sh-title">{t('medications.frequency','As Needed (PRN)')}</div></div>
           <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
             {allMeds.filter(m => m.frequency === 'As needed').map((med, i) => {
               const cfg = MED_TYPE_CFG[med.type] || MED_TYPE_CFG['Other'];
@@ -145,8 +147,8 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                         <span style={{ fontSize:'.68rem', fontWeight:600, color:'var(--ink)' }}>{med.name}</span>
                         <span style={{ fontSize:'.46rem', fontWeight:600, color:cfg.color, background:cfg.bg, border:`1px solid ${cfg.border}`, borderRadius:20, padding:'1px 7px' }}>{med.type}</span>
                       </div>
-                      <div style={{ fontSize:'.56rem', fontWeight:500, color:'var(--blue)', marginBottom:2 }}>{med.dosage} · As needed</div>
-                      <div style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>{med.doctor && `${med.doctor} · `}Since {fmtDate(med.startDate)}</div>
+                      <div style={{ fontSize:'.56rem', fontWeight:500, color:'var(--blue)', marginBottom:2 }}>{med.dosage} · {t('medications.frequency','As needed')}</div>
+                      <div style={{ fontSize:'.48rem', fontWeight:300, color:'var(--ink-3)' }}>{med.doctor && `${med.doctor} · `}{t('medications.startDate','Since')} {fmtDate(med.startDate)}</div>
                     </div>
                     <span style={{ fontSize:'.46rem', fontWeight:600, padding:'3px 9px', borderRadius:20, flexShrink:0, color:'var(--blue)', background:'var(--blue-bg)', border:'1px solid var(--blue-lt)' }}>PRN</span>
                   </div>
@@ -168,17 +170,17 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:8, flexWrap:'wrap', marginBottom:14 }}>
         <div style={{ display:'flex', gap:4, flexWrap:'wrap' }}>
           {[
-            { k:'all',       label:`All (${counts.total})` },
-            { k:'active',    label:`Active (${counts.active})`,       hide: counts.active === 0 },
+            { k:'all',       label:`${t('home.viewAll','All')} (${counts.total})` },
+            { k:'active',    label:`${t('medications.active','Active')} (${counts.active})`,       hide: counts.active === 0 },
             { k:'as-needed', label:`PRN (${counts.asNeeded})`,        hide: counts.asNeeded === 0 },
-            { k:'completed', label:`Completed (${counts.completed})`, hide: counts.completed === 0 },
-          ].filter(t => !t.hide).map(t => (
-            <div key={t.k} onClick={() => setFilter(t.k)} style={{ height:28, padding:'0 12px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.52rem', fontWeight: filter === t.k ? 600 : 400, color: filter === t.k ? '#fff' : 'var(--ink-2)', background: filter === t.k ? 'var(--rose)' : 'var(--cream-2)', border:`1px solid ${filter === t.k ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', lineHeight:1 }}>{t.label}</div>
+            { k:'completed', label:`${t('medications.completed','Completed')} (${counts.completed})`, hide: counts.completed === 0 },
+          ].filter(tab => !tab.hide).map(tab => (
+            <div key={tab.k} onClick={() => setFilter(tab.k)} style={{ height:28, padding:'0 12px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.52rem', fontWeight: filter === tab.k ? 600 : 400, color: filter === tab.k ? '#fff' : 'var(--ink-2)', background: filter === tab.k ? 'var(--rose)' : 'var(--cream-2)', border:`1px solid ${filter === tab.k ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', lineHeight:1 }}>{tab.label}</div>
           ))}
         </div>
         <button type="button" onClick={() => showModal('medication')} style={{ height:32, padding:'0 14px', borderRadius:9, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.58rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:6, boxShadow:'0 2px 10px rgba(155,58,86,.28)', flexShrink:0 }}>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          Add Medication
+          {t('medications.add','Add Medication')}
         </button>
       </div>
 
@@ -187,9 +189,9 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
         <div className="card" style={{ textAlign:'center', padding:'28px 20px' }}>
           <div style={{ fontSize:'1.8rem', marginBottom:8 }}>💊</div>
           <div style={{ fontSize:'.64rem', fontWeight:500, color:'var(--ink)', marginBottom:4 }}>
-            {filter === 'all' ? 'No medications' : filter === 'as-needed' ? 'No PRN medications' : `No ${filter} medications`}
+            {t('medications.noMedications','No medications')}
           </div>
-          {filter !== 'completed' && <button type="button" onClick={() => showModal('medication')} className="pv-empty-btn" style={{ marginTop:12 }}>Add Medication</button>}
+          {filter !== 'completed' && <button type="button" onClick={() => showModal('medication')} className="pv-empty-btn" style={{ marginTop:12 }}>{t('medications.add','Add Medication')}</button>}
         </div>
       ) : (
         <div>
@@ -211,21 +213,21 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                       </div>
                       <div style={{ fontSize:'.52rem', fontWeight:300, color:'var(--ink-3)' }}>{med.dosage} · {med.frequency}</div>
                     </div>
-                    <span style={{ fontSize:'.44rem', fontWeight:600, padding:'3px 9px', borderRadius:20, flexShrink:0, color: isDone ? 'var(--ink-3)' : isPRN ? 'var(--blue)' : cfg.color, background: isDone ? 'var(--cream-2)' : isPRN ? 'var(--blue-bg)' : cfg.bg, border:`1px solid ${isDone ? 'var(--line2)' : isPRN ? 'var(--blue-lt)' : cfg.border}` }}>{isDone ? 'Completed' : isPRN ? 'PRN' : 'Active'}</span>
+                    <span style={{ fontSize:'.44rem', fontWeight:600, padding:'3px 9px', borderRadius:20, flexShrink:0, color: isDone ? 'var(--ink-3)' : isPRN ? 'var(--blue)' : cfg.color, background: isDone ? 'var(--cream-2)' : isPRN ? 'var(--blue-bg)' : cfg.bg, border:`1px solid ${isDone ? 'var(--line2)' : isPRN ? 'var(--blue-lt)' : cfg.border}` }}>{isDone ? t('medications.completed','Completed') : isPRN ? 'PRN' : t('medications.active','Active')}</span>
                     {!isDone && (
-                      <button type="button" onClick={e => { e.stopPropagation(); handleDone(med); }} style={{ height:24, padding:'0 9px', borderRadius:7, flexShrink:0, background:'var(--green-bg)', border:'1px solid var(--green-lt)', color:'var(--green)', fontSize:'.44rem', fontWeight:500, cursor:'pointer' }}>✓ Done</button>
+                      <button type="button" onClick={e => { e.stopPropagation(); handleDone(med); }} style={{ height:24, padding:'0 9px', borderRadius:7, flexShrink:0, background:'var(--green-bg)', border:'1px solid var(--green-lt)', color:'var(--green)', fontSize:'.44rem', fontWeight:500, cursor:'pointer' }}>{t('medications.markComplete','✓ Done')}</button>
                     )}
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="2.2" style={{ flexShrink:0, transform: isOpen ? 'rotate(180deg)' : 'none', transition:'transform .2s' }}><path d="M6 9l6 6 6-6"/></svg>
                   </div>
                   {isOpen && (
                     <div style={{ borderTop:'1px solid var(--line2)', background:'var(--cream-2)', padding:'12px 16px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                       {[
-                        { lbl:'Dosage',        val: med.dosage },
-                        { lbl:'Frequency',     val: med.frequency },
-                        { lbl:'Started',       val: fmtDate(med.startDate) },
-                        { lbl:'Prescribed by', val: med.doctor || '—' },
-                        { lbl:'Status',        val: isDone ? 'Completed' : isPRN ? 'As Needed' : 'Active' },
-                        { lbl:'Type',          val: med.type },
+                        { lbl: t('medications.dosage','Dosage'), val: med.dosage },
+                        { lbl: t('medications.frequency','Frequency'), val: med.frequency },
+                        { lbl: t('medications.startDate','Started'), val: fmtDate(med.startDate) },
+                        { lbl: t('medications.prescribedBy','Prescribed by'), val: med.doctor || '—' },
+                        { lbl: t('records.documentType','Status'), val: isDone ? t('medications.completed','Completed') : isPRN ? t('medications.frequency','As Needed') : t('medications.active','Active') },
+                        { lbl: t('records.byType','Type'), val: med.type },
                       ].map((d, j) => (
                         <div key={j} style={{ background:'var(--white)', borderRadius:8, padding:'8px 11px', border:'1px solid var(--line2)' }}>
                           <div style={{ fontSize:'.41rem', fontWeight:600, letterSpacing:'.13em', textTransform:'uppercase', color:'var(--ink-3)', marginBottom:3 }}>{d.lbl}</div>
@@ -269,16 +271,16 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
           <div style={{ width:48, height:48, borderRadius:14, background: MED_TYPE_CFG[confirmDone?.type]?.bg || 'var(--rose-pale)', border:`1px solid ${MED_TYPE_CFG[confirmDone?.type]?.border || 'var(--rose-lt)'}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
             {MED_TYPE_CFG[confirmDone?.type]?.icon || '💊'}
           </div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:6 }}>Mark as completed?</div>
+          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.05rem', color:'var(--ink)', marginBottom:6 }}>{t('medications.markComplete','Mark as completed?')}</div>
           <div style={{ fontSize:'.55rem', fontWeight:300, color:'var(--ink-3)', lineHeight:1.7 }}>
             <strong style={{ color:'var(--ink)', fontWeight:500 }}>{confirmDone?.name}</strong> will be moved to your completed medications history.
           </div>
         </div>
         <div className="pv-mfoot" style={{ borderTop:'none', background:'transparent', padding:'12px 28px 24px', gap:10, justifyContent:'center' }}>
-          <button type="button" className="fb fb-g" style={{ flex:1, maxWidth:150 }} onClick={() => setConfirmDone(null)}>Not yet</button>
+          <button type="button" className="fb fb-g" style={{ flex:1, maxWidth:150 }} onClick={() => setConfirmDone(null)}>{t('common.cancel','Not yet')}</button>
           <button type="button" className="fb fb-p" style={{ flex:1, maxWidth:150 }} onClick={confirmComplete}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Mark done
+            {t('medications.markComplete','Mark done')}
           </button>
         </div>
       </Modal>
