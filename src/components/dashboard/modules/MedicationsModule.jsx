@@ -112,7 +112,7 @@ export function MedicationsModule({ activeChild, showModal, extraMeds = [], onMa
                     <div style={{ flexShrink:0, display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6 }}>
                       <div style={{ height:24, padding:'0 10px', borderRadius:20, background:cfg.color, color:'#fff', fontSize:'.46rem', fontWeight:600, display:'flex', alignItems:'center', gap:4 }}>
                         <div style={{ width:5, height:5, borderRadius:'50%', background:'rgba(255,255,255,.6)' }}/>
-                        Active
+                        {t('medications.active','Active')}
                       </div>
                       <button type="button" onClick={() => handleDone(med)} style={{ height:22, padding:'0 9px', borderRadius:7, background:'var(--green-bg)', border:'1px solid var(--green-lt)', color:'var(--green)', fontSize:'.43rem', fontWeight:500, cursor:'pointer' }}>{t('medications.markComplete','✓ Mark done')}</button>
                     </div>
