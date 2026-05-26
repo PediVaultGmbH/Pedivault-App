@@ -169,6 +169,15 @@ function RecordDetailModal({ open, onClose, record }) {
 
 export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
   const { t } = useTranslation();
+  const TYPE_LABELS = {
+    'LAB_REPORT':       t('records.labReport','Lab Report'),
+    'PRESCRIPTION':     t('records.prescription','Prescription'),
+    'VACCINATION_CARD': t('records.vaccinationCard','Vaccination Card'),
+    'SCAN':             t('records.scan','Scan / X-ray'),
+    'GROWTH_CHART':     t('records.growthChart','Growth Chart'),
+    'OTHER':            t('records.document','Document'),
+  };
+  const getTypeLabel = type => TYPE_LABELS[type] || type || t('records.document','Document');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [sort,   setSort]   = useState('newest');
@@ -239,27 +248,27 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         <div className="stat-card sc-normal" style={{ cursor:'pointer' }} onClick={() => setFilter('all')}>
-          <div className="stat-label" style={{ color:'var(--rose-mid)' }}>{t('records.title','Total Records')}</div>
+          <div className="stat-label" style={{ color:'var(--rose-mid)' }}>{t('records.totalRecords','Total Records')}</div>
           <div className="stat-val">{counts.total}</div>
-          <div className="stat-meta"><span className="pill rose">{t('records.title','All documents')}</span></div>
+          <div className="stat-meta"><span className="pill rose">{t('records.allDocuments','All documents')}</span></div>
           <div className="stat-card-cta">{t('home.viewAll','View all')} →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('LAB_REPORT')}>
-          <div className="stat-label">{t('records.documentType','Lab Reports')}</div>
+          <div className="stat-label">{t('records.labReports','Lab Reports')}</div>
           <div className="stat-val">{counts.lab}</div>
-          <div className="stat-meta"><span className="pill blue">{t('records.documentType','Test results')}</span></div>
+          <div className="stat-meta"><span className="pill blue">{t('records.testResults','Test results')}</span></div>
           <div className="stat-card-cta">{t('home.viewAll','View')} →</div>
         </div>
         <div className="stat-card sc-healthy" style={{ cursor:'pointer' }} onClick={() => setFilter('PRESCRIPTION')}>
-          <div className="stat-label">{t('medications.name','Prescriptions')}</div>
+          <div className="stat-label">{t('records.prescriptions','Prescriptions')}</div>
           <div className="stat-val">{counts.rx}</div>
-          <div className="stat-meta"><span className="pill green">{t('medications.title','Medications')}</span></div>
+          <div className="stat-meta"><span className="pill green">{t('records.prescriptions','Prescriptions')}</span></div>
           <div className="stat-card-cta">{t('home.viewAll','View')} →</div>
         </div>
         <div className="stat-card sc-warning" style={{ cursor:'pointer' }} onClick={() => showModal('record')}>
-          <div className="stat-label">{t('home.recentActivity','Recent')} (90d)</div>
+          <div className="stat-label">{t('records.recent90','Recent (90d)')}</div>
           <div className="stat-val">{counts.recent}</div>
-          <div className="stat-meta"><span className="pill amber">+ {t('records.upload','Upload')}</span></div>
+          <div className="stat-meta"><span className="pill amber">+ {t('records.uploadNew','Upload new')}</span></div>
           <div className="stat-card-cta">{t('records.uploadDocument','Upload document')} →</div>
         </div>
       </div>
@@ -268,14 +277,14 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       <div style={{ display:'flex', gap:8, marginBottom:12, alignItems:'center', flexWrap:'wrap' }}>
         <div style={{ flex:1, minWidth:160, display:'flex', alignItems:'center', gap:8, height:36, background:'var(--white)', border:'1.5px solid var(--line2)', borderRadius:9, padding:'0 11px' }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input ref={searchRef} value={search} onChange={e => setSearch(e.target.value)} placeholder={t('common.search','Search records, source…')} style={{ flex:1, border:'none', outline:'none', fontSize:'.62rem', color:'var(--ink)', background:'transparent', fontFamily:"'DM Sans',sans-serif" }}/>
+          <input ref={searchRef} value={search} onChange={e => setSearch(e.target.value)} placeholder={t('records.searchPlaceholder','Search records, source…')} style={{ flex:1, border:'none', outline:'none', fontSize:'.62rem', color:'var(--ink)', background:'transparent', fontFamily:"'DM Sans',sans-serif" }}/>
           {search && <span style={{ cursor:'pointer', color:'var(--ink-3)', fontSize:'.7rem', lineHeight:1 }} onClick={() => setSearch('')}>✕</span>}
         </div>
         <select value={sort} onChange={e => setSort(e.target.value)} style={{ height:36, padding:'0 11px', borderRadius:9, border:'1.5px solid var(--line2)', background:'var(--white)', color:'var(--ink-2)', fontSize:'.58rem', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', outline:'none', appearance:'none' }}>
-          <option value="newest">{t('common.latest','Newest first')}</option>
-          <option value="oldest">{t('growth.history','Oldest first')}</option>
+          <option value="newest">{t('records.newestFirst','Newest first')}</option>
+          <option value="oldest">{t('records.oldestFirst','Oldest first')}</option>
           <option value="name">Name A–Z</option>
-          <option value="type">{t('records.documentType','By type')}</option>
+          <option value="type">{t('records.byType','By type')}</option>
         </select>
         <button type="button" onClick={() => showModal('record')} style={{ height:36, padding:'0 14px', borderRadius:9, background:'var(--rose)', color:'#fff', border:'none', fontSize:'.58rem', fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', gap:6, flexShrink:0, boxShadow:'0 2px 10px rgba(155,58,86,.28)' }}>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -293,7 +302,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
           return (
             <div key={ftype} onClick={() => setFilter(ftype)} style={{ height:26, padding:'0 11px', borderRadius:20, cursor:'pointer', userSelect:'none', fontSize:'.5rem', fontWeight: isActive ? 600 : 400, color: isActive ? '#fff' : 'var(--ink-2)', background: isActive ? (cfg ? cfg.color : 'var(--rose)') : 'var(--cream-2)', border:`1px solid ${isActive ? 'transparent' : 'var(--line2)'}`, transition:'all .15s', display:'inline-flex', alignItems:'center', justifyContent:'center', gap:4, lineHeight:1 }}>
               {cfg && <span style={{ fontSize:'.65rem' }}>{cfg.icon}</span>}
-              {ftype === 'all' ? t('home.viewAll','All') : getLabelFromType(ftype)}
+              {ftype === 'all' ? t('records.allDocuments','All') : getTypeLabel(ftype)}
               <span style={{ opacity:.65 }}>({count})</span>
             </div>
           );
@@ -304,7 +313,7 @@ export function RecordsModule({ activeChild, showModal, extraRecords = [] }) {
       {visible.length === 0 ? (
         <div className="card" style={{ textAlign:'center', padding:'32px 20px' }}>
           <div style={{ fontSize:'1.8rem', marginBottom:8 }}>🔍</div>
-          <div style={{ fontSize:'.64rem', fontWeight:500, color:'var(--ink)', marginBottom:4 }}>{t('records.noRecords','No records found')}</div>
+          <div style={{ fontSize:'.64rem', fontWeight:500, color:'var(--ink)', marginBottom:4 }}>{t('records.noRecordsFound','No records found')}</div>
           <div style={{ fontSize:'.54rem', color:'var(--ink-3)' }}>{search ? `No results for "${search}"` : `No ${getLabelFromType(filter)} documents yet`}</div>
           {!search && <button type="button" onClick={() => showModal('record')} className="pv-empty-btn" style={{ marginTop:14 }}>{t('records.uploadDocument','Upload Document')}</button>}
         </div>
