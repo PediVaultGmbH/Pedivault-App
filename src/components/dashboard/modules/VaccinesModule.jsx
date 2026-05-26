@@ -199,29 +199,29 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
       {/* Stat strip */}
       <div className="stat-strip" style={{ marginBottom:20 }}>
         <div className="stat-card sc-urgent" style={{ cursor:'pointer' }} onClick={() => setFilter('overdue')}>
-          {counts.overdue > 0 && <div className="sc-urgent-flag"><div className="sc-urgent-dot"/>Urgent</div>}
-          <div className="stat-label">Overdue</div>
+          {counts.overdue > 0 && <div className="sc-urgent-flag"><div className="sc-urgent-dot"/>{t('vaccines.urgent','Urgent')}</div>}
+          <div className="stat-label">{t('vaccines.overdue','Overdue')}</div>
           <div className="stat-val">{counts.overdue}</div>
-          <div className="stat-meta"><span className="pill red">{counts.overdue > 0 ? 'Action needed' : 'All clear'}</span></div>
-          <div className="stat-card-cta">View overdue →</div>
+          <div className="stat-meta"><span className="pill red">{counts.overdue > 0 ? t('vaccines.actionNeeded','Action needed') : t('vaccines.allClear','All clear')}</span></div>
+          <div className="stat-card-cta">{t('vaccines.viewOverdue','View overdue')} →</div>
         </div>
         <div className="stat-card sc-warning" style={{ cursor:'pointer' }} onClick={() => setFilter('due-soon')}>
-          <div className="stat-label">Due Soon</div>
+          <div className="stat-label">{t('vaccines.dueSoon','Due Soon')}</div>
           <div className="stat-val">{counts['due-soon']}</div>
-          <div className="stat-meta"><span className="pill amber">Schedule now</span></div>
-          <div className="stat-card-cta">View schedule →</div>
+          <div className="stat-meta"><span className="pill amber">{t('vaccines.scheduleNow','Schedule now')}</span></div>
+          <div className="stat-card-cta">{t('vaccines.viewSchedule','View schedule')} →</div>
         </div>
         <div className="stat-card sc-healthy" style={{ cursor:'pointer' }} onClick={() => setFilter('done')}>
-          <div className="stat-label">Completed</div>
+          <div className="stat-label">{t('vaccines.completed','Completed')}</div>
           <div className="stat-val">{counts.done}<span className="stat-unit"> /{counts.total}</span></div>
           <div className="stat-meta"><span className="pill green">{pct}% done</span></div>
-          <div className="stat-card-cta">View completed →</div>
+          <div className="stat-card-cta">{t('vaccines.viewCompleted','View completed')} →</div>
         </div>
         <div className="stat-card sc-info" style={{ cursor:'pointer' }} onClick={() => setFilter('upcoming')}>
-          <div className="stat-label">Upcoming</div>
+          <div className="stat-label">{t('vaccines.upcoming','Upcoming')}</div>
           <div className="stat-val">{counts.upcoming}</div>
-          <div className="stat-meta"><span className="pill blue">Not yet due</span></div>
-          <div className="stat-card-cta">View upcoming →</div>
+          <div className="stat-meta"><span className="pill blue">{t('vaccines.notYetDue','Not yet due')}</span></div>
+          <div className="stat-card-cta">{t('vaccines.viewUpcoming','View upcoming')} →</div>
         </div>
       </div>
 
@@ -231,14 +231,14 @@ export function VaccinesModule({ activeChild, showModal, extraVaccines = [], chi
           <div>
             <div className="eyebrow">STIKO 2026 Immunisation Schedule</div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'.95rem', color:'var(--ink)' }}>
-              {counts.done} of {counts.total} doses completed
+              {counts.done} of {counts.total} {t('vaccines.dosesCompleted','doses completed')}
             </div>
           </div>
           <div style={{ textAlign:'right' }}>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.85rem', color:'var(--rose)', lineHeight:1 }}>
               {pct}<span style={{ fontSize:'.9rem', fontFamily:"'DM Sans',sans-serif", color:'var(--ink-3)' }}>%</span>
             </div>
-            <div style={{ fontSize:'.44rem', color:'var(--ink-3)' }}>immunised</div>
+            <div style={{ fontSize:'.44rem', color:'var(--ink-3)' }}>{t('vaccines.immunised','immunised')}</div>
           </div>
         </div>
         <div style={{ display:'flex', gap:2, height:8, borderRadius:4, overflow:'hidden', marginBottom:10 }}>
