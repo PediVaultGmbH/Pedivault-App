@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Modal from '../ui/Modal';
-import { useState } from 'react';
-import Modal from '../ui/Modal';
 import ModalSuccess from '../ui/ModalSuccess';
 import { useFormValidation } from '../../../hooks/useFormValidation';
 import { useLoading } from '../../../hooks/useLoading';
