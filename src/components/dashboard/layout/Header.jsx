@@ -1,6 +1,7 @@
 import { a11yClick } from '../../../utils/a11y';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import ThemeToggle from '../ui/ThemeToggle';
 
 export function Header({
   active, activeChild, onChildSelect, extraChildren=[],
