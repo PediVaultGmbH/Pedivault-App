@@ -277,7 +277,7 @@ function TopicModal({topic, onClose}) {
                 <button type="button" className="fb fb-g" style={{flex:1}} onClick={()=>{onClose();setSearch('');}}>{t('common.close','Close')}</button>
                 <button type="button" style={{flex:1,height:38,background:topic.color,color:'#fff',border:'none',borderRadius:10,fontSize:'.6rem',fontWeight:500,cursor:'pointer',transition:'opacity .15s'}}
                   onMouseEnter={e=>e.currentTarget.style.opacity='.88'} onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
-                  Browse All →
+                  {t('support.browseAll','Browse All →')}
                 </button>
               </>
           }
