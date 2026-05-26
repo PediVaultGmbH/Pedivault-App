@@ -313,6 +313,12 @@
     "noArticles": "No articles match",
     "noResults": "clear filter",
     "titleStart": "How can we",
-    "titleEnd": "help?"
+    "titleEnd": "help?",
+    "topicStarted": "Getting Started",
+    "topicRecords": "Health Records",
+    "topicVaccines": "Vaccine Tracker",
+    "topicAccount": "Account & Privacy",
+    "topicAI": "AI Assistant",
+    "topicBilling": "Billing & Plans"
   }
 }

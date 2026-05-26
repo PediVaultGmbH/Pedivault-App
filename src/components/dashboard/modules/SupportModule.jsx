@@ -276,6 +276,14 @@ function TopicModal({topic, onClose}) {
 
 export function SupportModule({onNav, showToast=()=>{}}) {
   const { t } = useTranslation();
+  const topicLabel = (id) => ({
+    'started':  t('support.topicStarted','Getting Started'),
+    'records':  t('support.topicRecords','Health Records'),
+    'vaccines': t('support.topicVaccines','Vaccine Tracker'),
+    'account':  t('support.topicAccount','Account & Privacy'),
+    'ai':       t('support.topicAI','AI Assistant'),
+    'billing':  t('support.topicBilling','Billing & Plans'),
+  }[id] || id);
   const [openFaq,    setOpenFaq]    = useState(null);
   const [filter,     setFilter]     = useState('all');
   const [feedback,   setFeedback]   = useState({type:'Bug',message:'',rating:0});
@@ -339,7 +347,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             <div className="icon-hover" style={{width:44,height:44,borderRadius:13,background:`${topic.color}12`,border:`1px solid ${topic.color}20`,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:12}}>
               {topic.icon}
             </div>
-            <div style={{fontSize:'.66rem',fontWeight:600,color:'var(--ink)',marginBottom:3}}>{topic.label}</div>
+            <div style={{fontSize:'.66rem',fontWeight:600,color:'var(--ink)',marginBottom:3}}>{topicLabel(topic.id)}</div>
             <div style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{topic.articles} articles</div>
           </div>
         ))}

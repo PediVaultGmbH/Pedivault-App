@@ -313,6 +313,12 @@
     "noArticles": "Keine Artikel für",
     "noResults": "Filter zurücksetzen",
     "titleStart": "Wie können",
-    "titleEnd": "wir helfen?"
+    "titleEnd": "wir helfen?",
+    "topicStarted": "Erste Schritte",
+    "topicRecords": "Gesundheitsdokumente",
+    "topicVaccines": "Impfverfolgung",
+    "topicAccount": "Konto & Datenschutz",
+    "topicAI": "KI-Assistent",
+    "topicBilling": "Abonnement & Preise"
   }
 }
