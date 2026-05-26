@@ -272,6 +272,14 @@
     "enterToSend": "Enter to send · Shift+Enter for new line",
     "poweredBy": "Powered by Gemini · Always consult your paediatrician",
     "contextInfo": "I have full context of",
-    "contextInfo2": "health records — growth data, vaccine schedule, medications and more."
+    "contextInfo2": "health records — growth data, vaccine schedule, medications and more.",
+    "q1": "Is {name} behind on any vaccines?",
+    "q2": "How is {name}'s growth compared to WHO standards?",
+    "q3": "{name} has a fever of 38.5°C — what should I do?",
+    "q4": "How much sleep does a {age} need?",
+    "q5": "What foods support healthy development for a {age}?",
+    "q6": "What developmental milestones should I expect for a {age}?",
+    "q7": "When should {name} have their first dental visit?",
+    "q8": "Are there any medication interactions I should know about?"
   }
 }

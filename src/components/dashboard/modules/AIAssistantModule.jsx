@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../../../api/client';
 
-function buildSuggestedPrompts(childName, childData) {
+function buildSuggestedPrompts(childName, childData, t) {
   const ageStr = (() => {
     if (!childData?.dateOfBirth) return 'your child';
     const d = new Date(childData.dateOfBirth), now = new Date();
@@ -14,15 +14,16 @@ function buildSuggestedPrompts(childName, childData) {
     return `${years}-year-old`;
   })();
 
+  const r = (key, vars={}) => t(key, t(key,'?')).replace('{name}', vars.name||childName).replace('{age}', vars.age||ageStr);
   return [
-    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4zM14.5 5.5l4 4M12 8l-8 8 1 3 3 1 8-8"/></svg>, text:`Is ${childName} behind on any vaccines?` },
-    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, text:`How is ${childName}'s growth compared to WHO standards?` },
-    { icon:'🤒', text:`${childName} has a fever of 38.5°C — what should I do?` },
-    { icon:'😴', text:`How much sleep does a ${ageStr} need?` },
-    { icon:'🥦', text:`What foods support healthy development for a ${ageStr}?` },
-    { icon:'🧠', text:`What developmental milestones should I expect for a ${ageStr}?` },
-    { icon:'🦷', text:`When should ${childName} have their first dental visit?` },
-    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>, text:'Are there any medication interactions I should know about?' },
+    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M18 2l4 4-1 1-4-4zM14.5 5.5l4 4M12 8l-8 8 1 3 3 1 8-8"/></svg>, text:r('ai.q1') },
+    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, text:r('ai.q2') },
+    { icon:'🤒', text:r('ai.q3') },
+    { icon:'😴', text:r('ai.q4', {age:ageStr}) },
+    { icon:'🥦', text:r('ai.q5', {age:ageStr}) },
+    { icon:'🧠', text:r('ai.q6', {age:ageStr}) },
+    { icon:'🦷', text:r('ai.q7') },
+    { icon:<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.8" strokeLinecap="round"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>, text:r('ai.q8') },
   ];
 }
 
@@ -37,7 +38,7 @@ export function AIAssistantModule({ activeChild, activeChildData, growthData, va
   const textareaRef    = useRef(null);
 
   const childName = activeChildData?.name?.split(' ')[0] || 'your child';
-  const suggestedPrompts = buildSuggestedPrompts(childName, activeChildData);
+  const suggestedPrompts = buildSuggestedPrompts(childName, activeChildData, t);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior:'smooth' });

@@ -272,6 +272,14 @@
     "enterToSend": "Enter zum Senden · Shift+Enter für neue Zeile",
     "poweredBy": "Powered by Gemini · Immer einen Arzt konsultieren",
     "contextInfo": "Ich kenne alle Gesundheitsdaten von",
-    "contextInfo2": "— Wachstum, Impfplan, Medikamente und mehr."
+    "contextInfo2": "— Wachstum, Impfplan, Medikamente und mehr.",
+    "q1": "Hat {name} Impfrückstände?",
+    "q2": "Wie ist {name}s Wachstum im Vergleich zu WHO-Standards?",
+    "q3": "{name} hat 38,5°C Fieber — was soll ich tun?",
+    "q4": "Wie viel Schlaf braucht ein {age}?",
+    "q5": "Welche Lebensmittel fördern die Entwicklung eines {age}?",
+    "q6": "Welche Entwicklungsmeilensteine sollte ich bei einem {age} erwarten?",
+    "q7": "Wann sollte {name} zum ersten Zahnarzt?",
+    "q8": "Gibt es Wechselwirkungen zwischen den Medikamenten?"
   }
 }
