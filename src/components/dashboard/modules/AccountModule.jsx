@@ -337,7 +337,7 @@ useEffect(() => {
       {/* TABS */}
       <div style={{display:'flex',gap:6,marginBottom:18,flexWrap:'wrap'}}>
         {tabs.map(t=>(
-          <button key={t.k} type="button" onClick={()=>setTab(tab.k)} style={{height:32,padding:'0 14px',borderRadius:20,border:'none',cursor:'pointer',fontSize:'.56rem',fontWeight:tab===tab.k?600:400,color:tab===tab.k?'#fff':'var(--ink-2)',background:tab===tab.k?'var(--rose)':'var(--cream-2)',display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,transition:'all .15s',lineHeight:1,boxShadow:tab===tab.k?'0 2px 10px rgba(155,58,86,.28)':'none'}}>
+          <button key={t.k} type="button" onClick={()=>setTab(tabItem.k)} style={{height:32,padding:'0 14px',borderRadius:20,border:'none',cursor:'pointer',fontSize:'.56rem',fontWeight:tab===tabItem.k?600:400,color:tab===tabItem.k?'#fff':'var(--ink-2)',background:tab===tabItem.k?'var(--rose)':'var(--cream-2)',display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,transition:'all .15s',lineHeight:1,boxShadow:tab===tabItem.k?'0 2px 10px rgba(155,58,86,.28)':'none'}}>
             {t.icon}{t.label}
           </button>
         ))}
