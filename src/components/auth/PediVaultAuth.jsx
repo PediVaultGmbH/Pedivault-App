@@ -10,6 +10,7 @@ import CreateAccount from './screens/CreateAccount';
 import Forgot        from './screens/Forgot';
 import OTP           from './screens/OTP';
 import ResetPassword from './screens/ResetPassword';
+import LanguageSwitcher from './ui/LanguageSwitcher';
 
 export default function PediVaultAuth({ onLogin }) {
   const [screen, setScreen] = useState('signin');
