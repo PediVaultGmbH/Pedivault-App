@@ -329,7 +329,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
 
       <MobileNav active={active} onNav={navigate} onSignOut={() => showModal('signout')} />
 
-      <SignOutModal  open={modal === 'signout'}  onClose={closeModal} onConfirm={() => { closeModal(); onSignOut(); }} />
+      <SignOutModal  open={modal === 'signout'}  onClose={closeModal} onConfirm={() => { closeModal(); onSignOut(); }} userName={userName} />
       <AddChildModal open={modal === 'addchild'} onClose={closeModal} onSuccess={showToast} onChildAdded={handleChildAdded} />
 
       <BookVisitModal open={modal === 'book'} onClose={closeModal} onSuccess={async (entry) => {
