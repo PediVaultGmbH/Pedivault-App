@@ -3,6 +3,7 @@ import { NAV } from '../../../data/navConfig';
 import FlowerLogo from '../ui/FlowerLogo';
 import { a11yClick } from '../../../utils/a11y';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../ui/LanguageSwitcher';
 
 export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildren=[],userName='Lena'}) {
   const childCount = apiChildren.length + extraChildren.length;
@@ -38,6 +39,7 @@ export function Sidebar({active,onNav,onSignOut,open,extraChildren=[],apiChildre
         </div>
       ))}
       <div className="pv-sb-foot">
+        <div style={{marginBottom:8,display:'flex',gap:6}}><ThemeToggle compact={true}/><LanguageSwitcher compact={true}/></div>
         <div
           onClick={()=>onNav('account')}
           role="button"
