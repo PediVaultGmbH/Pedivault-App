@@ -44,7 +44,11 @@
     "upcoming": "bevorstehend",
     "upToDate": "Alle Impfungen sind aktuell",
     "tagline": "Kindergesundheitsakte",
-    "hello": "Hallo"
+    "hello": "Hallo",
+    "quickAccess": "Schnellzugriff",
+    "noResultsFor": "Keine Ergebnisse für",
+    "searchTip": "Versuche \"Impfung\", \"Wachstum\" oder \"MMR\"",
+    "searchPlaceholder": "Dokumente, Impfungen, Termine suchen…"
   },
   "auth": {
     "welcomeBack": "Willkommen zurück",

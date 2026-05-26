@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { a11yClick } from '../../../utils/a11y';
 
 const SIDX=[
@@ -22,6 +23,7 @@ function Highlight({text,query}) {
 
 
 export function SearchPanel({open,onClose,onNav}) {
+  const { t } = useTranslation();
   const [q,setQ] = useState('');
   const hits = q.trim() ? SIDX.filter(r=>r.text.toLowerCase().includes(q.toLowerCase())) : [];
   const modIcons = {
@@ -35,7 +37,7 @@ export function SearchPanel({open,onClose,onNav}) {
     <div className={`pv-panel${open?' open':''}`}>
       <div className="pv-srch-wrap">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input className="pv-srch-in" placeholder="Search records, vaccines, visits…" value={q} onChange={e=>setQ(e.target.value)} autoFocus={open}/>
+        <input className="pv-srch-in" placeholder={t('common.searchPlaceholder','Search records, vaccines, visits…')} value={q} onChange={e=>setQ(e.target.value)} autoFocus={open}/>
         {q
           ? <span style={{cursor:'pointer',color:'var(--ink-3)',fontSize:'.58rem',padding:4,flexShrink:0}} onClick={()=>setQ('')}>✕</span>
           : <span style={{cursor:'pointer',color:'var(--ink-3)',fontSize:'.58rem',padding:4,flexShrink:0}} onClick={()=>{onClose();setQ('');}}>✕</span>
@@ -44,7 +46,7 @@ export function SearchPanel({open,onClose,onNav}) {
       <div className="pv-panel-results">
         {!q.trim() && (
           <div style={{padding:'10px 15px'}}>
-            <div style={{fontSize:'.44rem',fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:8}}>Quick access</div>
+            <div style={{fontSize:'.44rem',fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:8}}>{t('common.quickAccess','Quick access')}</div>
             {['vaccines','growth','records','appointments'].map(mod=>(
               <div key={mod} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 0',cursor:'pointer',borderBottom:'1px solid var(--line2)',transition:'color .12s'}}
                 onClick={()=>{onNav(mod);onClose();}}>
@@ -57,8 +59,8 @@ export function SearchPanel({open,onClose,onNav}) {
         )}
         {q.trim() && !hits.length && (
           <div style={{padding:'20px 15px',textAlign:'center'}}>
-            <div style={{fontSize:'.56rem',color:'var(--ink-3)',marginBottom:4}}>No results for "<strong>{q}</strong>"</div>
-            <div style={{fontSize:'.48rem',color:'var(--ink-3)'}}>Try "vaccine", "growth" or "MMR"</div>
+            <div style={{fontSize:'.56rem',color:'var(--ink-3)',marginBottom:4}}>{t('common.noResultsFor','No results for')} "<strong>{q}</strong>"</div>
+            <div style={{fontSize:'.48rem',color:'var(--ink-3)'}}>{t('common.searchTip','Try "vaccine", "growth" or "MMR"')}</div>
           </div>
         )}
         {hits.map((r,i)=>(

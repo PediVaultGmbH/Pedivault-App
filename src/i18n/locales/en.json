@@ -44,7 +44,11 @@
     "upcoming": "upcoming",
     "upToDate": "All vaccines are up to date",
     "tagline": "Child Health Records",
-    "hello": "Hello"
+    "hello": "Hello",
+    "quickAccess": "Quick access",
+    "noResultsFor": "No results for",
+    "searchTip": "Try \"vaccine\", \"growth\" or \"MMR\"",
+    "searchPlaceholder": "Search records, vaccines, visits…"
   },
   "auth": {
     "welcomeBack": "Welcome back",
