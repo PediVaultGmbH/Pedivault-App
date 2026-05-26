@@ -528,7 +528,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <div style={{flex:1}}>
-            <div style={{fontSize:'.6rem',fontWeight:600,color:'var(--rose)',marginBottom:4}}>Privacy & Legal</div>
+            <div style={{fontSize:'.6rem',fontWeight:600,color:'var(--rose)',marginBottom:4}}>{t('support.privacyLegal','Privacy >Privacy & Legal</div> Legal')}</div>
             <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
               {[{label:t('support.privacyPolicy','Privacy Policy'),hash:'privacy'},{label:t('support.termsLink','Terms of Use'),hash:'terms'},{label:t('support.gdpr','DSGVO / GDPR'),hash:'privacy'},{label:t('support.faqLink','FAQ'),hash:'faq'},{label:t('support.imprint','Impressum'),hash:'imprint'}].map((l,i)=>(
                 <button key={i} type="button" onClick={()=>{ const w=window.open(`pedivault-legal.html#${l.hash}`,'pedivault_legal','noopener,width=900,height=700,scrollbars=yes'); if(!w) showToast('Please allow pop-ups to view legal documents'); }} style={{fontSize:'.5rem',fontWeight:400,color:'var(--rose)',background:'none',border:'none',borderBottom:'1px solid var(--rose-lt)',padding:0,cursor:'pointer',transition:'color .15s'}}>{l.label}</button>
