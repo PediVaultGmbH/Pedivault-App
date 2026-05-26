@@ -327,9 +327,9 @@ useEffect(() => {
               {isPremium?'✨ PREMIUM':'FREE PLAN'}
             </span>
             <span style={{fontSize:'.46rem',fontWeight:500,color:'var(--green)',background:'var(--green-bg)',border:'1px solid var(--green-lt)',borderRadius:20,padding:'2px 8px',display:'flex',alignItems:'center',gap:4}}>
-              <div style={{width:5,height:5,borderRadius:'50%',background:'var(--green)'}}/>Active
+              <div style={{width:5,height:5,borderRadius:'50%',background:'var(--green)'}}/>  {t('account.active','Active')}
             </span>
-            <span style={{fontSize:'.46rem',color:'var(--ink-3)',background:'var(--cream-2)',border:'1px solid var(--line2)',borderRadius:20,padding:'2px 8px'}}>{profile.language}</span>
+            <span style={{fontSize:'.46rem',color:'var(--ink-3)',background:'var(--cream-2)',border:'1px solid var(--line2)',borderRadius:20,padding:'2px 8px'}}>{t('account.language','Language')}</span>
           </div>
         </div>
       </div>
@@ -648,7 +648,7 @@ useEffect(() => {
           onMouseEnter={e=>{e.currentTarget.style.background='var(--red-bg)';e.currentTarget.style.borderColor='rgba(185,40,20,.2)';e.currentTarget.style.color='var(--red)';}}
           onMouseLeave={e=>{e.currentTarget.style.background='var(--cream-2)';e.currentTarget.style.borderColor='var(--line2)';e.currentTarget.style.color='var(--ink-2)';}}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Sign out of PediVault
+          {t('account.signOut','Sign out of PediVault')}
         </button>
       </div>
     </div>
