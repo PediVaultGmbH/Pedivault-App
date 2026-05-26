@@ -516,7 +516,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
               <div style={{fontSize:'.46rem',fontWeight:600,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--ink-3)',marginBottom:7}}>{t('support.feedbackType','Type')}</div>
               <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                 {[t('support.bug','Bug'), t('support.featureRequest','Feature Request'), t('support.question','Question'), t('support.compliment','Compliment')].map(ftype=>(
-                  <div key={t} onClick={()=>setFeedback(f=>({...f,type:ftype}))} style={{height:26,padding:'0 12px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.52rem',fontWeight:feedback.type===ftype||feedback.type===ftype?600:400,color:feedback.type===ftype?'#fff':'var(--ink-2)',background:feedback.type===ftype?'var(--rose)':'var(--cream-2)',border:`1px solid ${feedback.type===ftype?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{ftype}</div>
+                  <div key={ftype} onClick={()=>setFeedback(f=>({...f,type:ftype}))} style={{height:26,padding:'0 12px',borderRadius:20,cursor:'pointer',userSelect:'none',fontSize:'.52rem',fontWeight:feedback.type===ftype||feedback.type===ftype?600:400,color:feedback.type===ftype?'#fff':'var(--ink-2)',background:feedback.type===ftype?'var(--rose)':'var(--cream-2)',border:`1px solid ${feedback.type===ftype?'transparent':'var(--line2)'}`,transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>{ftype}</div>
                 ))}
               </div>
             </div>
