@@ -383,7 +383,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       <div className="sh" style={{marginBottom:12}}>
         <div className="sh-title">{t('support.faq','Frequently Asked Questions')}</div>
         <div style={{display:'flex',alignItems:'center',gap:8}}>
-          <span style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{FAQ_ITEMS.length} articles</span>
+          <span style={{fontSize:'.48rem',fontWeight:300,color:'var(--ink-3)'}}>{FAQ_ITEMS.length} {t('support.articles','articles')}</span>
           <button type="button" onClick={()=>setFilter('all')} style={{fontSize:'.46rem',fontWeight:500,color:'var(--rose)',background:'none',border:'none',cursor:'pointer',padding:0}}>{t('support.viewAll','VIEW ALL')}</button>
         </div>
       </div>
@@ -448,7 +448,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
       <div className="sh"><div className="sh-title">{t('support.appAccount','App & Account')}</div></div>
       <div style={{display:'flex',flexDirection:'column',gap:0,borderRadius:14,overflow:'hidden',boxShadow:'var(--shadow-card)',marginBottom:20}}>
         {[
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,   label:t('support.accountProfile','Account & Profile'), sub:t('support.accountProfileSub','Name, email, password, preferences'),       action:()=>onNav('account')},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,   label:t('support.accountProfile','Konto & Profil'), sub:t('support.accountProfileSub','Name, email, password, preferences'),       action:()=>onNav('account')},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                             label:t('support.privacyData','Privacy & Data'), sub:t('support.privacyDataSub','DSGVO rights, data export, deletion'),        legalHash:'privacy'},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('support.subscription','Subscription & Payments'), sub:t('support.subscriptionSub','Free plan · Upgrade to Premium €4.99/mo'), badge:'FREE'},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, label:t('support.termsOfUse','Terms of Use'), sub:t('support.termsSub','Usage rules and medical disclaimer'),        legalHash:'terms'},

@@ -329,6 +329,13 @@
     "privacyDataSub": "DSGVO-Rechte, Datenexport, Löschung",
     "subscriptionSub": "Kostenloses Abo · Upgrade auf Premium €4,99/Mo",
     "termsSub": "Nutzungsregeln und medizinischer Haftungsausschluss",
-    "documentation": "Dokumentation"
+    "documentation": "Dokumentation",
+    "accountProfile": "Konto & Profil",
+    "privacyData": "Datenschutz & Daten",
+    "subscription": "Abonnement & Zahlungen",
+    "termsOfUse": "Nutzungsbedingungen",
+    "aboutApp": "Über PediVault",
+    "liveStatus": "PediVault-Dienste laufen normal · Zuletzt geprüft vor 2 Min.",
+    "emailSupport": "E-Mail-Support"
   }
 }
