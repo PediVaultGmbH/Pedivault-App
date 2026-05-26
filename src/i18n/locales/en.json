@@ -191,8 +191,8 @@
     "reschedule": "Reschedule",
     "keepIt": "Keep it",
     "cancelVisit": "Cancel visit",
-    "viewUpcoming": "View upcoming",
-    "viewHistory": "View history"
+    "viewUpcoming": "View upcoming →",
+    "viewHistory": "View history →"
   },
   "medications": {
     "title": "Medications",

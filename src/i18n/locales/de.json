@@ -191,8 +191,8 @@
     "reschedule": "Verschieben",
     "keepIt": "Behalten",
     "cancelVisit": "Termin absagen",
-    "viewUpcoming": "Bevorstehende",
-    "viewHistory": "Verlauf"
+    "viewUpcoming": "Bevorstehende anzeigen →",
+    "viewHistory": "Verlauf anzeigen →"
   },
   "medications": {
     "title": "Medikamente",
