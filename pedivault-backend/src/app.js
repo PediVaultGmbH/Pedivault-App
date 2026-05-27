@@ -17,6 +17,7 @@ const medicationsRoutes  = require('./routes/medications.routes');
 const aiRoutes           = require('./routes/ai.routes');
 const paymentsRoutes     = require('./routes/payments.routes');
 const blockchainRoutes   = require('./services/blockchain.routes');
+const feedbackRoutes     = require('./routes/feedback.routes');
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.get('/api/health', (req, res) => {
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // ── Children (CRUD) ───────────────────────────────────────────────────────────
 app.use('/api/children', childrenRoutes);
