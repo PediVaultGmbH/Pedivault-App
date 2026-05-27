@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth.middleware');
+const { authenticateToken } = require('../middleware/auth');
 const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
