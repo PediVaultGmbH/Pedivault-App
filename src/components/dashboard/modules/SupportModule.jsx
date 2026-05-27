@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import api from '../../../api/client';
 import { useTranslation } from 'react-i18next';
 import { ARTICLE_CONTENT_DE } from '../../../i18n/locales/support_de';
 import Modal from '../ui/Modal';
@@ -325,10 +326,22 @@ export function SupportModule({onNav, showToast=()=>{}, userPlan='FREE'}) {
   const tags = ['all', ...new Set(FAQ_ITEMS.map(f=>f.tag))];
   const faqVisible = FAQ_ITEMS.filter(f=>(filter==='all'||f.tag===filter)&&(!search||f.q.toLowerCase().includes(search.toLowerCase())));
 
-  const submitFeedback = () => {
+  const submitFeedback = async () => {
     if(!feedback.message.trim()) return;
     setSubmitting(true);
-    setTimeout(()=>{ setSubmitting(false); setSubmitted(true); },1200);
+    try {
+      await api.post('/feedback', {
+        type: feedback.type,
+        message: feedback.message,
+        rating: feedback.rating,
+      });
+      setSubmitted(true);
+    } catch(e) {
+      // Still show success to user even if API fails
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
