@@ -319,7 +319,7 @@ export default function PediVaultDashboard({ onSignOut, activeChild, onChildSele
           medications={medications[activeChild] || []}
           />
         ) : active === 'support' ? (
-          <SupportModule onNav={navigate} showToast={showToast} />
+          <SupportModule onNav={navigate} showToast={showToast} userPlan={userProfile?.plan || 'FREE'} />
         ) : active === 'account' ? (
           <AccountModule userName={userName} userProfile={userProfile} onSignOut={() => showModal('signout')} />
         ) : (

@@ -288,7 +288,7 @@ function TopicModal({topic, onClose}) {
   );
 }
 
-export function SupportModule({onNav, showToast=()=>{}}) {
+export function SupportModule({onNav, showToast=()=>{}, userPlan='FREE'}) {
   const { t } = useTranslation();
   const faqT = (i, field) => {
     const keys = {
@@ -479,7 +479,7 @@ export function SupportModule({onNav, showToast=()=>{}}) {
         {[
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,   label:t('support.accountProfile','Konto & Profil'), sub:t('support.accountProfileSub','Name, email, password, preferences'),       action:()=>onNav('account')},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                             label:t('support.privacyData','Privacy & Data'), sub:t('support.privacyDataSub','DSGVO rights, data export, deletion'),        legalHash:'privacy'},
-          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('support.subscription','Subscription & Payments'), sub:t('support.subscriptionSub','Free plan · Upgrade to Premium €4.99/mo'), badge:'FREE'},
+          {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>, label:t('support.subscription','Subscription & Payments'), sub:userPlan==='PREMIUM'?t('account.premiumPlan','Premium'):t('support.subscriptionSub','Free plan · Upgrade to Premium €4.99/mo'), badge:userPlan==='PREMIUM'?'✨ PREMIUM':'FREE'},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, label:t('support.termsOfUse','Terms of Use'), sub:t('support.termsSub','Usage rules and medical disclaimer'),        legalHash:'terms'},
           {icon:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>,                       label:t('support.aboutApp','About PediVault'), sub:'Version 1.0.0 · PediVault GmbH Berlin'},
         ].map((item,i,arr)=>(
